@@ -91,7 +91,7 @@ function M.install_colorschemes()
 
       process = Process:new(
         'git',
-        {'clone', table.concat({'https://github.com/', colorscheme_info.repository}), colorscheme_info.path, '--progress'},
+        {'clone', table.concat({'https://github.com/', colorscheme_info.repository}), colorscheme_info.path, '--filter=blob:none', '--progress'},
 
         function (code)
           M.tasks = M.tasks - 1
