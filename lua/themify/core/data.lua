@@ -1,7 +1,7 @@
 local M = {
-  data_path = table.concat({vim.fn.stdpath('data'), 'themify'}, '/'),
+  themify_path = table.concat({vim.fn.stdpath('data'), 'themify'}, '/'),
   colorschemes_path = table.concat({vim.fn.stdpath('data'), 'themify/colorschemes'}, '/'),
-  state_path = table.concat({vim.fn.stdpath('data'), 'themify/state.json'}, '/')
+  data_path = table.concat({vim.fn.stdpath('data'), 'themify/data.json'}, '/')
 }
 
 -- Join Paths
@@ -18,30 +18,26 @@ end
 
 -- Check The Data Files
 function M.check_data_files()
+  if not M.path_exist(M.themify_path) then
+    os.execute(table.concat({'mkdir', M.themify_path}, ' '))
+  end
+
   if not M.path_exist(M.colorschemes_path) then
     os.execute(table.concat({'mkdir', M.colorschemes_path}, ' '))
   end
 
---  if not M.path_exist(M.join_paths(M.data_path, 'state.json')) then
---    local file = io.open(M.join_paths(M.data_path, 'state.json'), 'w')
---
---    if (file == nil) then
---      error('Themify: Cannot write to file "' .. M.join_paths(M.data_path, 'state.json') .. '"')
---    end
---
---    file:write('{}')
---
---    io.close(file)
---  end
+  if not M.path_exist(M.data_path) then
+    M.write_data({ state = nil, colorschemes = {} })
+  end
 end
 
 -- Get The Data
-function M.get_state()
-  if M.path_exist(M.state_path) then
-    local file = io.open(M.state_path)
+function M.read_data()
+  if M.path_exist(M.data_path) then
+    local file = io.open(M.data_path, 'r')
 
     if (file == nil) then
-      error('Themify: Cannot read the file "' .. M.state_path .. '"')
+      error('Themify: Cannot read the file "' .. M.data_path .. '"')
     end
 
     local json = file:read('*a')
@@ -50,6 +46,19 @@ function M.get_state()
 
     return vim.json.decode(json)
   end
+end
+
+-- Write Data
+function M.write_data(data)
+  local file = io.open(M.data_path, 'w')
+
+  if (file == nil) then
+    error('Themify: Cannot write the file "' .. M.data_path .. '"')
+  end
+
+  file:write(vim.json.encode(data))
+
+  file:close()
 end
 
 return M

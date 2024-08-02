@@ -6,15 +6,15 @@ local M = {}
 local loaded_colorschemes = {}
 
 -- Load A Colorscheme
-function M.load_colorscheme(colorscheme_repository, theme)
-  if loaded_colorschemes[colorscheme_repository] == nil then
+function M.load_colorscheme(name, theme)
+  if loaded_colorschemes[name] == nil then
     -- Check the colorscheme and theme exists.
 
-    local colorscheme_info = Manager.colorschemes_info[colorscheme_repository]
+    local colorscheme_info = Manager.colorschemes_info[name]
 
---    if colorscheme_info == nil or not Data.path_exist(table.concat({colorscheme_info.path, 'colors', table.concat({theme, 'lua'}, '.')}, '/')) then
---      return false
---    end
+    if colorscheme_info == nil or not Data.path_exist(table.concat({colorscheme_info.path, 'colors', table.concat({theme, 'lua'}, '.')}, '/')) then
+      return false
+    end
 
     -- Load the colorscheme.
 
@@ -24,11 +24,11 @@ function M.load_colorscheme(colorscheme_repository, theme)
       colorscheme_info.config()
     end
 
-    loaded_colorschemes[colorscheme_repository] = true
+    loaded_colorschemes[name] = true
   end
 
   vim.cmd(table.concat({'colorscheme', theme}, ' '))
-  
+
   return true
 end
 

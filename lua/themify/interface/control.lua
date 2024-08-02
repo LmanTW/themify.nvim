@@ -1,12 +1,14 @@
+local Manager = require('themify.core.manager')
+
 local Control = {}
 
 Control.__index = Control
 
 local mappings = {
   k = 'scroll(-1)',
-  ['<Up>'] = 'scroll(-1)',
+  ['<Up>'] = 'scroll("up")',
   j = 'scroll(1)',
-  ['<Down>'] = 'scroll(1)',
+  ['<Down>'] = 'scroll("down")',
 
   ['<Left>'] = 'scroll(0)',
   ['<Right>'] = 'scroll(0)',
@@ -36,7 +38,38 @@ end
 
 -- Scroll
 function Control:scroll(direction)
-  print(direction)
+  local lines = self.interface.get_page().get_content()
+
+  if direction == 'up' then
+    for i = 1, self.cursor_y - 1 do
+      if lines[self.cursor_y - i].selectable then
+        self.cursor_y = self.cursor_y - i
+
+        break
+      end
+    end
+  elseif direction == 'down' then
+    for i = self.cursor_y + 1, #lines do
+      if lines[i].selectable then
+        self.cursor_y = i
+
+        break
+      end
+    end
+  end
+
+  if lines[self.cursor_y].type ~= 'theme' then
+    self.cursor_y = 0
+
+    Control.scroll(self, 'down')
+  end
+
+  self.interface:render()
+end
+
+-- Install
+function Control:install()
+  Manager.install_colorschemes()
 end
 
 return Control

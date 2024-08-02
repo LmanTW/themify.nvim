@@ -4,12 +4,12 @@ A colorscheme manager for [Neovim](https://neovim.io) written in [Lua](https://w
 > [!NOTE]
 > Still in early development, the plugin **Will Not Work** (For now).
 
-## Features
+## ✨ Features
 * 🎨 Easily install and manage your colorschemes.
 * 🔍 Quickly switch between colorschemes with a live preview.
 * ⚡️ Optimized startup time with lazy-loaded colorschemes.
 
-## Installation
+## 📦 Installation
 Choose the package manager of your choice to install Theminify:
 
 * [Lazy.nvim](https://github.com/folke/lazy.nvim)
@@ -33,8 +33,8 @@ use {
 }
 ```
 
-## Configuration
-The configuration is really easier and stright forward, just call the setup function and add the colorschemes you want.
+## 🛠 Configuration
+The configuration is really easier and stright forward, just call the setup function and add the colorschemes you want:
 
 ```lua
 require("themery").setup({

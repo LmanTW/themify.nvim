@@ -19,10 +19,10 @@ function M.setup(colorschemes)
   local thread
 
   thread = coroutine.create(vim.schedule_wrap(function()
-    local state = Data.get_state()
+    local data = Data.read_data()
 
-    if state ~= nil then
-      local success = Loader.load_colorscheme(state.colorscheme, state.theme)
+    if data ~= nil and data.state ~= nil then
+      local success = Loader.load_colorscheme(data.state.colorscheme, data.state.theme)
 
       if not success then
         -- Fallback to other colorschemes.
@@ -33,8 +33,8 @@ function M.setup(colorschemes)
   end))
 
   coroutine.resume(thread)
-
-  vim.cmd('command! Themify lua require("themify.commands").open()')
 end
+
+vim.cmd('command! Themify lua require("themify.commands").open()')
 
 return M

@@ -11,7 +11,7 @@ local highlight_groups = {
   Description = 'Comment',
 
   Icon = 'Operator',
-  Progress = 'IncSearch'
+  Progress = 'DiagnosticInfo'
 }
 
 for highlight_group, link in pairs(highlight_groups) do

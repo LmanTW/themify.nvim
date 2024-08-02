@@ -1,5 +1,3 @@
-local Utilities = require('themify.utilities')
-
 local Text = {}
 
 Text.__index = Text

@@ -39,4 +39,19 @@ function M.size(table)
   return size
 end
 
+-- Execute A Command
+function M.execute(command)
+  local handle = io.popen(command)
+
+  if handle == nil then
+    error('Themify: Failed to execute command "' .. command .. '"')
+  end
+
+  local result = handle:read('*a')
+
+  handle:close()
+
+  return result
+end
+
 return M
