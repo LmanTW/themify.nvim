@@ -1,8 +1,8 @@
 # Themify
-A lightweight colorscheme manager for [Neovim](https://neovim.io) written in [Lua](https://www.lua.org). Inspired by [Themery.nvim](https://github.com/zaldih/themery.nvim) and [Lazy.nvim](https://github.com/folke/lazy.nvim).
+A lightweight colorscheme designed manager for [Neovim](https://neovim.io) written in [Lua](https://www.lua.org). Inspired by [Themery.nvim](https://github.com/zaldih/themery.nvim) and [Lazy.nvim](https://github.com/folke/lazy.nvim).
 
-> [!WANRING]
-> Still in early development, the plugin **Will Not Work** (For now).
+> [!WARNING]
+> Still in early development, the plugin **May Not Work** (For now).
 
 ## ✨ Features
 * 🎨 Easily install and manage your colorschemes.
@@ -34,7 +34,7 @@ use {
 ```
 
 ## 🛠 Configuration
-The configuration is really easy and stright forward, just call the setup function and add the colorschemes you want to install / manage:
+The configuration for Themify is really easy and stright forward, just call the setup function or use the "config" options in your package manager, and add the colorschemes you want to install / manage:
 
 ```lua
 require("themery").setup({
