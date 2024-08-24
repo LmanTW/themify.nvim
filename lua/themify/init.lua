@@ -1,7 +1,6 @@
-local Content = require('themify.interface.content')
 local Window = require('themify.interface.window')
 local Manager = require('themify.core.manager')
-local Utilities = require('themify.utilities')
+local Loader = require('themify.core.loader')
 
 local M = {}
 
@@ -36,15 +35,14 @@ function M.setup(colorschemes)
 
   local async
 
-  async = vim.uv.new_async(function()
+  async = vim.uv.new_async(vim.schedule_wrap(function()
     Manager.check_colorschemes()
+    Loader.load_state()
 
     async:close()
-  end)
+  end))
 
-  if async == nil then
-    Manager.check_colorschemes()
-  else
+  if async ~= nil then
     async:send()
   end
 end

@@ -1,7 +1,8 @@
 local Content = require('themify.interface.content')
 local Utilities = require('themify.utilities')
 local Manager = require('themify.core.manager')
-
+local Loader = require('themify.core.loader')
+local Data = require('themify.core.data')
 
 local Control = {}
 
@@ -16,6 +17,8 @@ local mappings = {
 
   ['<Left>'] = 'move_cursor(nil, "previous_title")',
   ['<Right>'] = 'move_cursor(nil, "next_title")',
+
+  ['<CR>'] = 'select()',
 
   I = 'install_colorschemes()',
   U = 'update_colorschemes()'
@@ -50,7 +53,7 @@ function Control:new(window)
 end
 
 --- Move The Cursor
---- @param lines nil|{ content: Text, tags: Tags[] }[]
+--- @param lines nil|{ content: Text, tags: Tags[], extra?: any }[]
 --- @param direction 'up' | 'down' | 'next_title' | 'previous_title' | 'none'
 --- @return boolean
 function Control:move_cursor(lines, direction)
@@ -74,6 +77,10 @@ function Control:move_cursor(lines, direction)
 
         self.window:update(lines)
 
+        if (Utilities.contains(lines[self.cursor_y].tags, {'selectable', 'theme'})) then
+          Loader.load_theme(lines[self.cursor_y].extra.colorscheme_path, lines[self.cursor_y].extra.theme)
+        end
+
         return true
       end
     end
@@ -93,6 +100,10 @@ function Control:move_cursor(lines, direction)
 
         self.window:update(lines)
 
+        if (Utilities.contains(lines[self.cursor_y].tags, {'selectable', 'theme'})) then
+          Loader.load_theme(lines[self.cursor_y].extra.colorscheme_path, lines[self.cursor_y].extra.theme)
+        end
+
         return true
       end
     end
@@ -102,7 +113,7 @@ function Control:move_cursor(lines, direction)
 end
 
 --- Check The Cursor
---- @param lines { content: Text, tags: Tags[] }[]
+--- @param lines { content: Text, tags: Tags[], extra?: any }[]
 --- @return nil
 function Control:check_cursor(lines)
   if lines[self.cursor_y] == nil
@@ -117,12 +128,29 @@ function Control:check_cursor(lines)
   end
 end
 
+--- Select The Current Element
+function Control:select()
+  local lines = Content.get_content()
+
+  if Utilities.contains(lines[self.cursor_y].tags, {'selectable', 'theme'}) then
+    local lock_data = Data.read_lock_data()
+
+    lock_data.state = lines[self.cursor_y].extra
+
+    Data.write_lock_data(lock_data)
+
+    vim.api.nvim_win_close(self.window.window, false)
+  end
+end
+
 --- Install The Colorschemes
+--- @return nil
 function Control:install_colorschemes()
   Manager.install_colorschemes()
 end
 
 --- Update The Colorschemes
+--- @return nil
 function Control:update_colorschemes()
   Manager.update_colorschemes()
 end

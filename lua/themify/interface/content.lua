@@ -21,7 +21,7 @@ local function get_progress_icon(progress)
 end
 
 --- Get The Content
---- @return { content: Text, tags: Tags[] }[]
+--- @return { content: Text, tags: Tags[], extra?: any }[]
 function M.get_content()
   local group = Group:new()
 
@@ -138,7 +138,7 @@ function M.get_content()
         group:add_element('installed', Text.combine({
           Text:new('      - '),
           Text:new(colorscheme_data.themes[i])
-        }), {'selectable', 'theme'}, colorscheme_data.themes[i])
+        }), {'selectable', 'theme'}, { colorscheme_path = colorscheme_data.path, theme = colorscheme_data.themes[i] })
       end
     end
   end

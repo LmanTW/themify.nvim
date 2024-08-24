@@ -2,6 +2,7 @@ local Text = require('themify.interface.components.text')
 local Control = require('themify.interface.control')
 local Content = require('themify.interface.content')
 local Color = require('themify.interface.color')
+local Loader = require('themify.core.loader')
 local Event = require('themify.core.event')
 
 local Window = {}
@@ -16,6 +17,8 @@ vim.api.nvim_create_autocmd('WinClosed', {
     local window_id = tonumber(args.match)
 
     if window_id ~= nil and windows[window_id] ~= nil then
+      Loader.load_state()
+
       if windows[window_id].timer ~= nil then
         local timer = windows[window_id].timer
 
@@ -30,7 +33,7 @@ vim.api.nvim_create_autocmd('WinClosed', {
 
 Event.listen('update', function()
   for _, window in pairs(windows) do
-    window.update_cooldown = 3
+    window.update_cooldown = window.update_cooldown + 3
   end
 end)
 
@@ -115,7 +118,9 @@ function Window:start_render_loop()
     if (self.update_cooldown > 0) then
       self.update_cooldown = self.update_cooldown - 1
 
-      if self.update_cooldown == 0 then
+      if self.update_cooldown == 0 or self.update_cooldown > 9 then
+        self.update_cooldown = 0
+
         local ok, error = pcall(function()
           local lines = Content.get_content()
 

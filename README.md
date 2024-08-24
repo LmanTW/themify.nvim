@@ -34,14 +34,22 @@ use {
 ```
 
 ## 🛠 Configuration
-The configuration for Themify is really easy and stright forward, just call the setup function or use the "config" options in your package manager, and add the colorschemes you want to install / manage:
+The configuration for Themify is really easy and stright forward, just call the `setup` function or use the `config` option in your package manager, and add the colorschemes you want to install / manage:
 
 ```lua
 require("themery").setup({
   -- Your list of colorschemes.
 
-  'Yazeed1s/minimal.nvim',
-  'folke/tokyonight.nvim'
+  'folke/tokyonight.nvim',
+  'sho-87/kanagawa-paper.nvim',
+  {
+    'Yazeed1s/minimal.nvim'
+
+    config = function()
+      vim.g.minimal_italic_functions = true
+      vim.g.minimal_italic_comments = true
+    end
+  }
 })
 ```
 
@@ -49,7 +57,20 @@ require("themery").setup({
 > The colorschemes will not be installed automatically due to performance considerations. Please use the command `:Themify` to open the interface, then press `I` to install all the colorschemes.
 
 <details>
-    <summary>Advance Configuration</summary>
+  <summary>Advance Configuration</summary>
 
-    You can use advance
+  ```lua
+    {
+      'folke/tokyonight.nvim',
+
+      config = function()
+        -- The function run after the colorscheme is loaded.
+      end,
+
+      -- A colorscheme can have multiple themes, you can use the option below to only show the themes you want.
+
+      whitelist = {},
+      blacklist = {} -- Not implemented yet.
+    }
+  ```
 </details> 

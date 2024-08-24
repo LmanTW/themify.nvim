@@ -1,5 +1,5 @@
 --- @class LockData
---- @field state nil|{ colorscheme: string, theme: string }
+--- @field state nil|{ colorscheme_path: string, theme: string }
 --- @field colorschemes table<string, { branch: string, commit: string }>
 
 local Utilities = require('themify.utilities')
