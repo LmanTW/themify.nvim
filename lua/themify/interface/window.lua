@@ -1,30 +1,44 @@
+--- @class Window
+--- @field buffer integer
+--- @field window integer
+--- @field page string
+--- @field control Control
+--- @field updater Updater
+--- @field width number
+--- @field height number
+
 local Text = require('themify.interface.components.text')
 local Control = require('themify.interface.control')
-local Content = require('themify.interface.content')
-local Color = require('themify.interface.color')
-local Loader = require('themify.core.loader')
+local Updater = require('themify.interface.updater')
+local Colors = require('themify.interface.colors')
+local Pages = require('themify.interface.pages')
+local Manager = require('themify.core.manager')
+local Utilities = require('themify.utilities')
 local Event = require('themify.core.event')
 
 local Window = {}
-
 Window.__index = Window
 
---- @type table<number, Window>
+--- @type table<integer, Window>
 local windows = {}
+
+--- Get A Window
+--- @param id integer
+function Window.get_window(id)
+  Utilities.error(windows[id] == nil, {'Themify: Window not found: "', tostring(id), '"'})
+
+  return windows[id]
+end
 
 vim.api.nvim_create_autocmd('WinClosed', {
   callback = function(args)
     local window_id = tonumber(args.match)
 
     if window_id ~= nil and windows[window_id] ~= nil then
-      Loader.load_state()
+      local window = windows[window_id]
 
-      if windows[window_id].timer ~= nil then
-        local timer = windows[window_id].timer
-
-        timer:stop()
-        timer:close()
-      end
+      Pages.get_page(window.page).leave()
+      windows[window_id].updater:stop()
 
       windows[window_id] = nil
     end
@@ -32,16 +46,16 @@ vim.api.nvim_create_autocmd('WinClosed', {
 })
 
 Event.listen('update', function()
-  for _, window in pairs(windows) do
-    window.update_cooldown = window.update_cooldown + 3
+  for id in pairs(windows) do
+    windows[id].updater:update()
   end
 end)
 
 --- Get The Transformation Of The Window
 --- @return { x: number, y: number, width: number, height: number } 
 local function get_window_transformation()
-  local total_width = vim.api.nvim_get_option('columns')
-  local total_height = vim.api.nvim_get_option('lines')
+  local total_width = vim.api.nvim_get_option_value('columns', { scope = 'global' })
+  local total_height = vim.api.nvim_get_option_value('lines', { scope = 'global' })
 
   local window_width = math.ceil(total_width * 0.5)
   local window_height = math.ceil(total_height * 0.5)
@@ -56,33 +70,13 @@ local function get_window_transformation()
   }
 end
 
---- @class Window
---- @field buffer any
---- @field window any
---- @field timer any
---- @field control Control
---- @field width number
---- @field height number
---- @field update_cooldown number
-
---- Get The Window
---- @param window_id number
---- @return Window
-function Window. get_window(window_id)
-  assert(windows[window_id] ~= nil, table.concat({'Themify: Interface not found "', window_id, '"'}))
-
-  return windows[window_id]
-end
-
---- Create A Windowr
+--- Create A New Windowr
 function Window:new()
   self = setmetatable({}, Window)
 
-  self.buffer = vim.api.nvim_create_buf(false, true)
-  vim.api.nvim_set_option_value('modifiable', false, { buf = self.buffer })
-
   local transformation = get_window_transformation()
 
+  self.buffer = vim.api.nvim_create_buf(false, true)
   self.window = vim.api.nvim_open_win(self.buffer, true, {
     relative = 'editor',
     col = transformation.x,
@@ -94,75 +88,121 @@ function Window:new()
     border = 'rounded'
   })
 
-  self.control = Control:new(self)
+  self.page = 'home'
+  self.control = Control:new(self.window)
+  self.updater = Updater:new(function()
+    Pages.update_page(self.page)
+    self:update()
+  end)
 
   self.width = transformation.width
   self.height = transformation.height
-  self.update_cooldown = -1
+
+  vim.api.nvim_set_option_value('modifiable', false, { buf = self.buffer })
+  vim.api.nvim_set_option_value('cursorline', true, { win = self.window })
 
   windows[self.window] = self
 
-  local lines = Content.get_content()
-
-  self.control:check_cursor(lines)
-  self:update(lines)
+  self.control:enter_page(self.page)
 
   return self
 end
 
---- Start The Render Loop
-function Window:start_render_loop()
-  self.timer = vim.uv.new_timer()
+--- Move The Cursor
+--- @param direction 'up'|'down'
+--- @return nil
+function Window:move_cursor(direction)
+  local content = Pages.update_page(self.page)
+  local control = self.control:get_page_control(self.page)
 
-  self.timer:start(10, 10, vim.schedule_wrap(function()
-    if (self.update_cooldown > 0) then
-      self.update_cooldown = self.update_cooldown - 1
+  self.control:move_cursor(self.page, direction)
+  Pages.get_page(self.page).hover(content[control.cursor_y])
 
-      if self.update_cooldown == 0 or self.update_cooldown > 9 then
-        self.update_cooldown = 0
+  self:update()
+end
 
-        local ok, error = pcall(function()
-          local lines = Content.get_content()
+--- Select The Current Line
+--- @return nil
+function Window:select()
+  self.control:check_cursor(self.page)
 
-          self.control:check_cursor(lines)
-          self:update(lines)
-        end)
+  local content = Pages.update_page(self.page)
+  local control = self.control:get_page_control(self.page)
 
-        if not ok then
-          self.timer:stop()
-          self.timer:close()
+  local result = Pages.get_page(self.page).select(content[control.cursor_y])
 
-          self.timer = nil
+  if result.close then
+    vim.api.nvim_win_close(self.window, false)
+  end
+end
 
-          assert(false, error)
-        end
-      end
-    end
-  end))
+--- Switch The Page
+--- @param direction 'left'|'right'
+--- @return nil
+function Window:switch_page(direction)
+  self.page = self.control:switch_page(self.page, direction)
+
+  self.control:check_cursor(self.page)
+
+  self:update()
+end
+
+--- Install The Colorschemes
+--- @return nil
+function Window:install_colorschemes()
+  Manager.install_colorschemes()
+end
+
+--- Update The Colorschemes
+--- @return nil
+function Window:update_colorschemes()
+  Manager.update_colorschemes()
 end
 
 --- Update The Window
---- @param lines { content: Text, tags: Tags[] }[]
 --- @return nil
-function Window:update(lines)
+function Window:update()
   vim.api.nvim_set_option_value('modifiable', true, { buf = self.buffer })
 
   -- Clear the buffer.
   vim.api.nvim_buf_set_lines(self.buffer, 0, -1, false, {})
 
-  for i = 1, #lines do
-    if i - self.control.scroll_y >= 0 and i - self.control.scroll_y < self.height - 6 then
-      lines[i].content:render(self.buffer, 2 + (i - self.control.scroll_y))
+  local content = Pages.get_page_content(self.page)
+  local control = self.control:get_page_control(self.page)
+
+  for i = 1, #content do
+    if i - control.scroll_y >= 0 and i - control.scroll_y < self.height - 6 then
+      content[i].content:render(self.buffer, 2 + (i - control.scroll_y))
     end
   end
 
-  Text:new('- Themery -', Color.title):center(self.width):render(self.buffer, 1)
-  Text:new('Install (I)  Update (U)', Color.description):center(self.width):render(self.buffer, self.height - 2)
+  local left = table.concat({'  < ', Pages.pages[Pages.get_neighbor_page(self.page, -1)].name})
+  local current = table.concat({'- ', Pages.pages[self.page].name, ' -'})
+  local right = table.concat({Pages.pages[Pages.get_neighbor_page(self.page, -1)].name, ' >  '})
 
-  vim.api.nvim_set_option_value('modifiable', false, { buf = self.buffer }) 
+  Text.combine({
+    Text:new(left, Colors.description),
+    Text:new(string.rep(' ', math.floor((self.width / 2) - (current:len() / 2)) - left:len())),
+    Text:new(current, Colors.title),
+    Text:new(string.rep(' ', math.floor((self.width / 2) - (current:len() / 2)) - right:len())),
+    Text:new(right, Colors.description)
+  }):render(self.buffer, 1)
+
+  local amount = Manager.count_colorscheme_amount()
+
+  local actions = '  (I) Install  (U) Update  '
+  local info = table.concat({amount.installed == nil and '0' or tostring(amount.installed), ' / ', tostring(#Manager.colorschemes_repository), '  '})
+
+  Text.combine({
+    Text:new(actions, Colors.description),
+    Text:new(string.rep(' ', (self.width - actions:len()) - info:len())),
+    Text:new(info)
+  }):render(self.buffer, self.height - 2)
+
+  vim.api.nvim_set_option_value('modifiable', false, { buf = self.buffer })
 
   -- Move the cursor.
-  vim.api.nvim_win_set_cursor(self.window, {4 + (self.control.cursor_y - self.control.scroll_y), 0})
+  vim.api.nvim_win_set_cursor(self.window, {4 + (control.cursor_y - control.scroll_y), 0})
 end
 
 return Window

@@ -1,28 +1,24 @@
-local Text = {}
+--- @class Text
+--- @field parts { content: string, hightlight_group?: string }[]
 
+local Text = {}
 Text.__index = Text
 
 local namespace = vim.api.nvim_create_namespace('themify')
 
---- @class Text
---- @field parts { content: string, hightlight_group?: string }[]
-
 --- Combine The Texts
 --- @param texts Text[]
---- @return Text
 function Text.combine(texts)
   local text = Text:new()
 
   for i = 1, #texts do
-    for i2 = 1, #texts[i].parts do
-      text.parts[#text.parts + 1] = texts[i].parts[i2]
-    end
+    vim.list_extend(text.parts, texts[i].parts)
   end
 
   return text
 end
 
---- Create A Text
+--- Create A New Text
 --- @param content string?
 --- @param hightlight_group string?
 function Text:new(content, hightlight_group)
@@ -35,7 +31,6 @@ end
 
 --- Center The Text
 --- @param width number
---- @return Text
 function Text:center(width)
   local text_width = 0
 
@@ -44,13 +39,14 @@ function Text:center(width)
   end
 
   table.insert(self.parts, 1, { content = string.rep(' ', (width - text_width) / 2) })
+  self.parts[#self.parts + 1] = { content = string.rep(' ', (width - text_width) / 2) }
 
   return self
 end
 
 --- Render The Text
---- @param buffer any
---- @param line any
+--- @param buffer integer
+--- @param line number
 --- @return nil
 function Text:render(buffer, line)
   local content_chunks = {}

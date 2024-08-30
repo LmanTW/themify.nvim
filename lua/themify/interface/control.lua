@@ -1,22 +1,22 @@
-local Content = require('themify.interface.content')
+--- @class Control
+--- @field window integer
+--- @field height number
+--- @field pages table<string, { cursor_y: number, scroll_y: number }>
+
+local Pages = require('themify.interface.pages')
 local Utilities = require('themify.utilities')
-local Manager = require('themify.core.manager')
-local Loader = require('themify.core.loader')
-local Data = require('themify.core.data')
 
 local Control = {}
-
 Control.__index = Control
 
---- @type table<string, string>
-local mappings = {
-  k = 'move_cursor(nil, "up")',
-  ['<Up>'] = 'move_cursor(nil, "up")',
-  j = 'move_cursor(nil, "down")',
-  ['<Down>'] = 'move_cursor(nil, "down")',
+local mapping = {
+  k = 'move_cursor("up")',
+  ['<Up>'] = 'move_cursor("up")',
+  j = 'move_cursor("down")',
+  ['<Down>'] = 'move_cursor("down")',
 
-  ['<Left>'] = 'move_cursor(nil, "previous_title")',
-  ['<Right>'] = 'move_cursor(nil, "next_title")',
+  ['<Left>'] = 'switch_page("left")',
+  ['<Right>'] = 'switch_page("right")',
 
   ['<CR>'] = 'select()',
 
@@ -24,84 +24,68 @@ local mappings = {
   U = 'update_colorschemes()'
 }
 
---- @class Control
---- @field window Window
---- @field cursor_y number
---- @field scroll_y number
-
---- Create A New Controller
---- @param window Window
+--- Create A New Control
+--- @param window integer
 function Control:new(window)
   self = setmetatable({}, Control)
 
   self.window = window
+  self.height = vim.api.nvim_win_get_height(window)
+  self.pages = {}
 
-  self.cursor_y = 1
-  self.scroll_y = 1
+  local buffer = vim.api.nvim_win_get_buf(window)
 
-  for lhs, rhs in pairs(mappings) do
-  	vim.api.nvim_buf_set_keymap(window.buffer, 'n', lhs, table.concat({':lua require("themify.interface.window").get_window(', window.window, ').control:', rhs, '<CR>'}), {
+  for lhs, rhs in pairs(mapping) do
+  	vim.api.nvim_buf_set_keymap(buffer, 'n', lhs, table.concat({':lua require("themify.interface.window").get_window(', window, '):', rhs, '<CR>'}), {
 		  nowait = true,
 	  	noremap = true,
   		silent = true
 	  })
   end
 
-  vim.api.nvim_set_option_value('cursorline', true, { win = window.window })
+  for i = 1, #Pages.pages_id do
+    self.pages[Pages.pages_id[i]] = { cursor_y = 1, scroll_y = 1 }
+  end
 
   return self
 end
 
+--- Get Page Control
+--- @param page string
+--- @return { cursor_y: number, scroll_y: number }
+function Control:get_page_control(page)
+  Utilities.error(self.pages[page] == nil, {'Themify: Page not found: "', page, '"'})
+
+  return self.pages[page]
+end
+
 --- Move The Cursor
---- @param lines nil|{ content: Text, tags: Tags[], extra?: any }[]
---- @param direction 'up' | 'down' | 'next_title' | 'previous_title' | 'none'
+--- @param page string
+--- @param direction 'up'|'down'
 --- @return boolean
-function Control:move_cursor(lines, direction)
-  if lines == nil then
-    lines = Content.get_content()
-  end
+function Control:move_cursor(page, direction)
+  local content = Pages.get_page_content(page)
+  local control = self:get_page_control(page)
 
-  if direction == 'down' or direction == 'next_title' then
-    for i = self.cursor_y + 1, #lines do
-      if lines[i] ~= nil
-        and (
-          (direction == 'down' and Utilities.contains(lines[i].tags, {'selectable'}))
-          or (direction == 'next_title' and Utilities.contains(lines[i].tags, {'title'}))
-        )
-      then
-        self.cursor_y = i
+  if direction == 'up' then
+    for i = 1, control.cursor_y - 1 do
+      if content[control.cursor_y - i] ~= nil and vim.list_contains(content[control.cursor_y - i].tags, 'selectable') then
+        control.cursor_y = control.cursor_y - i
 
-        if self.cursor_y - self.scroll_y > self.window.height - 7 then
-          self.scroll_y = self.cursor_y - (self.window.height - 7)
-        end
-
-        self.window:update(lines)
-
-        if (Utilities.contains(lines[self.cursor_y].tags, {'selectable', 'theme'})) then
-          Loader.load_theme(lines[self.cursor_y].extra.colorscheme_path, lines[self.cursor_y].extra.theme)
+        if control.cursor_y - control.scroll_y < 1 then
+          control.scroll_y = control.cursor_y
         end
 
         return true
       end
     end
-  elseif direction == 'up' or direction == 'previous_title' then
-    for i = 1, self.cursor_y - 1 do
-      if lines[self.cursor_y - i] ~= nil
-        and (
-          (direction == 'up' and Utilities.contains(lines[self.cursor_y - i].tags, {'selectable'}))
-          or (direction == 'previous_title' and Utilities.contains(lines[self.cursor_y - i].tags, {'title'}))
-        )
-      then
-        self.cursor_y = self.cursor_y - i
+  elseif direction == 'down' then
+    for i = control.cursor_y + 1, #content do
+      if content[i] ~= nil and vim.list_contains(content[i].tags, 'selectable') then
+        control.cursor_y = i
 
-        if self.cursor_y - self.scroll_y < 1 then
-          self.scroll_y = self.cursor_y
-        end
-
-        self.window:update(lines)
-
-        if (Utilities.contains(lines[self.cursor_y].tags, {'selectable', 'theme'})) then
-          Loader.load_theme(lines[self.cursor_y].extra.colorscheme_path, lines[self.cursor_y].extra.theme)
+        if control.cursor_y - control.scroll_y > self.height - 7 then
+          control.scroll_y = control.cursor_y - (self.height - 7)
         end
 
         return true
@@ -113,46 +97,53 @@ function Control:move_cursor(lines, direction)
 end
 
 --- Check The Cursor
---- @param lines { content: Text, tags: Tags[], extra?: any }[]
+--- @param page string
 --- @return nil
-function Control:check_cursor(lines)
-  if lines[self.cursor_y] == nil
-    or (
-      not Utilities.contains(lines[self.cursor_y].tags, {'selectable'})
-      and not Utilities.contains(lines[self.cursor_y].tags, {'title'})
-    )
-  then
-    if not self:move_cursor(lines, 'down') then
-      self:move_cursor(lines, 'up')
+function Control:check_cursor(page)
+  local content = Pages.get_page_content(page)
+  local control = self:get_page_control(page)
+
+  if (content[control.cursor_y] == nil or not vim.list_contains(content[control.cursor_y].tags, 'selectable')) then
+    if not self:move_cursor(page, 'up') then
+      self:move_cursor(page, 'down')
     end
   end
 end
 
---- Select The Current Element
-function Control:select()
-  local lines = Content.get_content()
+--- Check The Scrolling
+--- @param page string
+--- @return nil
+function Control:check_scroll(page)
+  local control = self:get_page_control(page)
 
-  if Utilities.contains(lines[self.cursor_y].tags, {'selectable', 'theme'}) then
-    local lock_data = Data.read_lock_data()
-
-    lock_data.state = lines[self.cursor_y].extra
-
-    Data.write_lock_data(lock_data)
-
-    vim.api.nvim_win_close(self.window.window, false)
+  if control.cursor_y - control.scroll_y > self.height - 7 then
+    control.scroll_y = control.cursor_y - (self.height - 7)
   end
 end
 
---- Install The Colorschemes
+--- Switch The Page
+--- @param page string
+--- @param direction 'left'|'right'
 --- @return nil
-function Control:install_colorschemes()
-  Manager.install_colorschemes()
+function Control:switch_page(page, direction)
+  local new_page = Pages.get_neighbor_page(page, direction == 'left' and -1 or 1)
+
+  Pages.get_page(page).leave(Pages.get_page_content(page))
+  self:enter_page(new_page)
+
+  return new_page
 end
 
---- Update The Colorschemes
+--- Enter A Page
+--- @param page string
 --- @return nil
-function Control:update_colorschemes()
-  Manager.update_colorschemes()
+function Control:enter_page(page)
+  local control = self:get_page_control(page)
+
+  Pages.update_page(page)
+
+  control.cursor_y = Pages.get_page(page).enter(Pages.get_page_content(page))
+  self:check_scroll(page)
 end
 
 return Control

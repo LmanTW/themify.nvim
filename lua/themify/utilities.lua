@@ -8,51 +8,16 @@ function M.stringify(data)
     local text = '{ '
 
     for key, value in pairs(data) do
-      text = text .. '[' .. M.stringify(key) ..'] = ' .. M.stringify(value) .. ','
-    end 
+      text = table.concat({text, '[', M.stringify(key), ']=',  M.stringify(value),  ', '})
+    end
 
-    return string.sub(text, 0, string.len(text) - 1) .. ' }'
+    return text:sub(0, text:len() - 1) .. ' }'
   else
-    return type(data) == 'string' and '"' .. data .. '"' or tostring(data)
+    return type(data) == 'string' and table.concat({'"', data, '"'}) or tostring(data)
   end
 end
 
---- Split A Text
---- @param text string
---- @param separator string
---- @return string[]
-function M.split(text, separator)
-   local chunks = {}
-
-   for chunk in string.gmatch(text, "([^" .. separator .. "]+)") do
-      table.insert(chunks, chunk)
-   end
-
-   return chunks
- end
-
- --- Center A Text
- --- @param text string
- --- @param width number
- --- @return string
- function M.center(text, width)
-  return table.concat({string.rep(' ', (width - string.len(text)) / 2), text})
- end
-
---- Get The Size Of A Table
---- @param table table
---- @return number
-function M.size(table)
-  local size = 0
-
-  for _ in pairs(table) do
-    size = size + 1
-  end
-
-  return size
-end
-
---- Check If A List Contains A Value (T = Type)
+--- Check If A List Contains A Set Of Values (T = Type)
 --- @generic T
 --- @param list T[]
 --- @param values T[]
@@ -75,27 +40,55 @@ function M.contains(list, values)
   return false
 end
 
+--- Get The Index Of An Element (T = Type)
+--- @generic T
+--- @param list T[]
+--- @param element T
+--- @return number
+function M.index(list, element)
+  for i = 1, #list do
+    if list[i] == element then
+      return i
+    end
+  end
+
+  return -1
+end
+
 --- Check If A Path Exist
 --- @param path string
 --- @return boolean 
-function M.is_path_exist(path)
+function M.path_exist(path)
   local stats = vim.loop.fs_stat(path)
 
   return stats ~= nil
 end
 
---- Execute A Command
---- @param command string
---- @return any
-function M.execute(command)
-  local handle = io.popen(command)
+--- Execute A Function In Async
+--- @param callback function
+--- @return nil 
+function M.execute_async(callback)
+  local async
 
-  assert(handle ~= nil, table.concat({'Themify: Failed to execute command "', command, '"'}))
+  async = vim.uv.new_async(function()
+    callback()
 
-  local result = handle:read('*a')
-  handle:close()
+    M.error(async == nil, {'Themify: Failed close the async'})
+    async:close()
+  end)
 
-  return result
+  M.error(async == nil, {'Themify: Failed close the async'})
+  async:send()
+end
+
+--- Throw An Error If The Condition Is Met
+--- @param condition boolean
+--- @param message string[]
+--- @return nil
+function M.error(condition, message)
+  if condition then
+    error(table.concat(message, ''))
+  end
 end
 
 return M

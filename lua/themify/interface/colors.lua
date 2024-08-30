@@ -2,7 +2,6 @@
 local M = {
   title = 'ThemifyTitle',
   description = 'ThemifyDescription',
-
   icon = 'ThemifyIcon',
 
   info = 'ThemifyInfo',
@@ -13,7 +12,6 @@ local M = {
 local highlight_groups = {
   Title = 'Bold',
   Description = 'Comment',
-
   Icon = 'Operator',
 
   info = 'DiagnosticVirtualTextInfo',

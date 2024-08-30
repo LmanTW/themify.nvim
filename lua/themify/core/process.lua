@@ -1,34 +1,52 @@
+--- @class Process
+--- @field handle any
+--- @field stdout any
+--- @field stderr any
+
+local Utilities = require('themify.utilities')
 local Process = {}
+
 Process.__index = Process
 
---- @class Process
---- @field private _stdout any
---- @field private _stderr any
---- @field private _handle any
-
 --- Execute A Command
+--- @param command string
+--- @return any
+function Process.execute(command)
+  local handle = io.popen(command)
+
+  Utilities.error(handle == nil, {'Themify: Failed to execute command "', command, '"'})
+
+  local result = handle:read('*a')
+  handle:close()
+
+  return result
+end
+
+--- Execute A Command Asynchrony
 --- @param cwd string
 --- @param command string
 --- @param args string[]
 --- @param callback function
-function Process.execute(cwd, command, args, callback)
-  local stdout
-  local stderr
+function Process.execute_async(cwd, command, args, callback)
+  local output_stdout, output_stderr
 
   local process = Process:new(cwd, command, args, function(code)
-    callback(code, stdout, stderr)
+    callback(code, output_stdout, output_stderr)
   end)
 
-  process:on_stdout(function(data)
-    stdout = data
-  end)
+  process:listen(function(stdout, stderr)
+    if stdout ~= nil then
+      output_stdout = stdout
+    end
 
-  process:on_stderr(function(data)
-    stderr = data
+    if stderr ~= nil then
+      output_stderr = stderr
+    end
   end)
 end
 
---- Create A Process
+
+--- Create A New Process
 --- @param cwd string
 --- @param command string
 --- @param args string[]
@@ -36,43 +54,38 @@ end
 function Process:new(cwd, command, args, callback)
   self = setmetatable({}, Process)
 
-  self._stdout = vim.loop.new_pipe(false)
-  self._stderr = vim.loop.new_pipe(false)
+  self.stdout = vim.loop.new_pipe(false)
+  self.stderr = vim.loop.new_pipe(false)
 
-  self._handle = vim.loop.spawn(command, {
+  self.handle = vim.loop.spawn(command, {
     cwd = cwd,
     args = args,
 
-    stdio = {nil, self._stdout, self._stderr}
-  }, function(code, signal)
-    self._handle:close()
-    self._stdout:close()
-    self._stderr:close()
+    stdio = {nil, self.stdout, self.stderr}
+  }, function(code)
+    self.handle:close()
+    self.stdout:close()
+    self.stderr:close()
 
-    callback(code, signal)
+    callback(code)
   end)
 
   return self
 end
 
---- Listen To Stdout
+--- Listen To The Output
 --- @param callback function
 --- @return nil
-function Process:on_stdout(callback)
-  self._stdout:read_start(function(_, data)
+function Process:listen(callback)
+  self.stdout:read_start(function(_, data)
     if data ~= nil then
-      callback(data)
+      callback(data, nil)
     end
   end)
-end
 
---- Listen To Stderr
---- @param callback function
---- @return nil
-function Process:on_stderr(callback)
-  self._stderr:read_start(function(_, data)
+  self.stderr:read_start(function(_, data)
     if data ~= nil then
-      callback(data)
+      callback(nil, data)
     end
   end)
 end

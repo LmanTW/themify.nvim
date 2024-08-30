@@ -1,25 +1,30 @@
-local M = {}
-
---- @type table<string, function[]>
-local events = {}
+local M = {
+  --- @type table<string, function[]>
+  listeners = {}
+}
 
 --- Listen To An Event
 --- @param event string
 --- @param callback function
 --- @return nil
 function M.listen(event, callback)
-  if events[event] == nil then
-    events[event] = {}
+  if M.listeners[event] == nil then
+    M.listeners[event] = {}
   end
 
-  events[event][#events[event] + 1] = callback
+  local group = M.listeners[event]
+
+  group[#group + 1] = callback
 end
 
--- Call An Event
-function M.call(event)
-  if events[event] ~= nil then
-    for i = 1, #events[event] do
-      events[event][i]()
+--- Emit An Event
+--- @param event string
+function M.emit(event)
+  if M.listeners[event] ~= nil then
+    local group = M.listeners[event]
+
+    for i = 1, #group do
+      group[i]()
     end
   end
 end
