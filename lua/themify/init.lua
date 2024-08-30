@@ -1,7 +1,5 @@
 --- @alias Colorscheme string|{ [1]: string, branch?: string, config?: function, whitelist?: string[], blacklist?: string[] }
 
-local Window = require('themify.interface.window')
-local Pages = require('themify.interface.pages')
 local Manager = require('themify.core.manager')
 local Utilities = require('themify.utilities')
 local Data = require('themify.core.data')
@@ -66,21 +64,13 @@ function M.setup(colorschemes)
         Data.write_state_data(nil)
 
         M.open()
+
+        vim.cmd('Themify')
       end
     end
   end))
 end
 
---- Open The Menu
---- @return nil
-function M.open()
-  Pages.load_pages()
-
-  local window = Window:new()
-
-  window:update()
-end
-
-vim.cmd('command! Themify lua require("themify").open()')
+vim.cmd('command! Themify lua require("themify.commands").open()')
 
 return M

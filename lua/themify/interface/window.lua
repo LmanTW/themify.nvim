@@ -103,7 +103,7 @@ function Window:new()
 
   windows[self.window] = self
 
-  self.control:enter_page(self.page)
+  self.control:enter_page(nil, self.page)
 
   return self
 end
@@ -151,12 +151,16 @@ end
 --- @return nil
 function Window:install_colorschemes()
   Manager.install_colorschemes()
+
+  self.page = self.control:enter_page(self.page, 'manager')
 end
 
 --- Update The Colorschemes
 --- @return nil
 function Window:update_colorschemes()
   Manager.update_colorschemes()
+
+  self.page = self.control:enter_page(self.page, 'manager')
 end
 
 --- Update The Window

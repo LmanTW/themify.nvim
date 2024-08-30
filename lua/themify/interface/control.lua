@@ -128,22 +128,28 @@ end
 function Control:switch_page(page, direction)
   local new_page = Pages.get_neighbor_page(page, direction == 'left' and -1 or 1)
 
-  Pages.get_page(page).leave(Pages.get_page_content(page))
-  self:enter_page(new_page)
+  self:enter_page(page, new_page)
 
   return new_page
 end
 
 --- Enter A Page
---- @param page string
---- @return nil
-function Control:enter_page(page)
-  local control = self:get_page_control(page)
+--- @param old_page nil|string
+--- @param new_page string
+--- @return string
+function Control:enter_page(old_page, new_page)
+  if old_page ~= nil then
+    Pages.get_page(old_page).leave(Pages.get_page_content(old_page))
+  end
 
-  Pages.update_page(page)
+  Pages.update_page(new_page)
 
-  control.cursor_y = Pages.get_page(page).enter(Pages.get_page_content(page))
-  self:check_scroll(page)
+  local control = self:get_page_control(new_page)
+  control.cursor_y = Pages.get_page(new_page).enter(Pages.get_page_content(new_page))
+
+  self:check_scroll(new_page)
+
+  return new_page
 end
 
 return Control
