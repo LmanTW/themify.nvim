@@ -33,7 +33,7 @@ use {
 ```
 
 ## 🛠 Configuration
-The configuration for Themify is really easy and stright forward, just call the `setup` function or use the `config` option in your package manager, and add the colorschemes you want to install / manage:
+The configuration for Themify is really easy and stright forward, just call the `setup` function or use the `config` option in your package manager and add the colorschemes you want to install / manage:
 
 ```lua
 require("themery").setup({
