@@ -19,7 +19,7 @@ Pages.create_page({
         content[#content + 1] = { content = Text:new(table.concat({'   ', Manager.colorschemes_repository[i]})), tags = {} }
 
         for i2 = 1, #colorscheme_data.themes do
-          local selected = state ~= nil and (Manager.colorschemes_repository[i] == state.colorscheme_repository and colorscheme_data.themes[i2] == state.theme)
+          local selected = (state ~= nil and state ~= vim.NIL) and (Manager.colorschemes_repository[i] == state.colorscheme_repository and colorscheme_data.themes[i2] == state.theme)
 
           content[#content + 1] = { content = Text:new(table.concat({selected and '    > ' or '    - ', colorscheme_data.themes[i2]})), tags = {'selectable', 'theme'}, extra = { colorscheme_repository = Manager.colorschemes_repository[i], theme = colorscheme_data.themes[i2] }}
         end

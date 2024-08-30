@@ -123,7 +123,7 @@ function M.clean_colorschemes()
       if colorscheme_repository == nil
         -- The colorschemes is not being used.
         or not Utilities.path_exist(table.concat({M.colorschemes_data[colorscheme_repository].path, '.git', 'HEAD'}, '/'))
-        or M.colorschemes_data[colorscheme_repository].branch ~= normalize_branch(Data.read_colorscheme_repository_head(repository_folders[i]).branch)
+        or normalize_branch(M.colorschemes_data[colorscheme_repository].branch) ~= normalize_branch(Data.read_colorscheme_repository_head(repository_folders[i]).branch)
         -- The repository is on a different branch.
       then
         local colorscheme_path = table.concat({Data.colorschemes_path, repository_folders[i]}, '/')
@@ -166,14 +166,20 @@ function M.check_colorscheme(colorscheme_repository)
       if Utilities.path_exist(themes_path) then
         local theme_files = vim.split(Process.execute(table.concat({'ls', themes_path}, ' ')), '\n')
         local theme_name
+        local theme_type
 
         for i = 1, #theme_files do
-          theme_name = string.match(theme_files[i], '(.*).lua')
+          if theme_files[i]:len() > 0 then
+            theme_name = string.match(theme_files[i], '([^%.]*)')
+            theme_type = string.match(theme_files[i], '%.(.*)')
 
-          if (colorscheme_data.whitelist == nil or vim.list_contains(colorscheme_data.whitelist, theme_name))
-            and (colorscheme_data.blacklist == nil or not vim.list_contains(colorscheme_data.blacklist, theme_name))
-          then
-            colorscheme_data.themes[#colorscheme_data.themes + 1] = theme_name
+            if theme_type == 'lua' or theme_type == 'vim' then
+              if (colorscheme_data.whitelist == nil or vim.list_contains(colorscheme_data.whitelist, theme_name))
+                and (colorscheme_data.blacklist == nil or not vim.list_contains(colorscheme_data.blacklist, theme_name))
+              then
+                colorscheme_data.themes[#colorscheme_data.themes + 1] = theme_name
+              end
+            end
           end
         end
       end
