@@ -4,6 +4,7 @@ local M = {
   description = 'ThemifyDescription',
   icon = 'ThemifyIcon',
 
+
   info = 'ThemifyInfo',
   error = 'ThemifyError'
 }

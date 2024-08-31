@@ -30,7 +30,10 @@ local M = {
   colorschemes_repository = {},
 
   --- @type string[]
-  loaded_colorschemes = {}
+  loaded_colorschemes = {},
+
+  --- @type table<string, number>
+  colorschemes_amount = {}
 }
 
 --- Get The Name Of The Colorscheme 
@@ -156,6 +159,8 @@ function M.check_colorscheme(colorscheme_repository)
   if colorscheme_data.status ~= 'installing' and colorscheme_data.status ~= 'updating' then
     colorscheme_data.status = Utilities.path_exist(colorscheme_data.path) and 'installed' or 'not_installed'
 
+    Event.emit('state_update')
+
     if colorscheme_data.status == 'installed' then
       -- Check the themes under the colorscheme.
 
@@ -206,33 +211,35 @@ function M.install_colorscheme(colorscheme_repository)
   local colorscheme_data = M.colorschemes_data[colorscheme_repository]
 
   if colorscheme_data.status == 'not_installed' then
-    Event.emit('update')
-
     colorscheme_data.status = 'installing'
     colorscheme_data.progress = 0
     colorscheme_data.info = 'Fetching...'
 
+    Event.emit('update')
+    Event.emit('state_update')
+
     local pipeline = Pipeline:new({
       Tasks.clone(Data.colorschemes_path, colorscheme_repository, colorscheme_data.branch, function(progress, info)
-        Event.emit('update')
-
         colorscheme_data.progress = progress
         colorscheme_data.info = info
+
+        Event.emit('update')
       end),
       Tasks.checkout(colorscheme_data.path, colorscheme_data.branch, function()
-        Event.emit('update')
-
         colorscheme_data.progress = 100
         colorscheme_data.info = 'Checking Out...'
+
+        Event.emit('update')
       end)
     })
 
     pipeline:start(function(code, _, stderr)
-      Event.emit('update')
-
       colorscheme_data.status = code == 0 and 'installed' or 'failed'
       colorscheme_data.progress = 0
       colorscheme_data.info = code == 0 and '' or vim.split(stderr, '\n')[1]
+
+      Event.emit('update')
+      Event.emit('state_update')
 
       if code == 0 then
         M.check_colorscheme(colorscheme_repository)
@@ -258,11 +265,12 @@ function M.update_colorscheme(colorscheme_repository)
   local colorscheme_data = M.colorschemes_data[colorscheme_repository]
 
   if colorscheme_data.status == 'installed' then
-    Event.emit('update')
-
     colorscheme_data.status = 'updating'
     colorscheme_data.progress = 0
     colorscheme_data.info = 'Fetching...'
+
+    Event.emit('update')
+    Event.emit('state_update')
 
     M.check_colorscheme_commit(colorscheme_repository, function(error, local_commit, remote_commit)
       Event.emit('update')
@@ -271,11 +279,15 @@ function M.update_colorscheme(colorscheme_repository)
         colorscheme_data.status = 'failed'
         colorscheme_data.progress = 0
         colorscheme_data.info = error
+
+        Event.emit('state_update')
       else
         if local_commit == remote_commit then
           colorscheme_data.status = 'installed'
           colorscheme_data.progress = 0
           colorscheme_data.info = 'Up To Date'
+
+          Event.emit('state_update')
         else
           local pipeline = Pipeline:new({
             Tasks.reset(colorscheme_data.path, colorscheme_data.branch, function()
@@ -293,17 +305,17 @@ function M.update_colorscheme(colorscheme_repository)
           })
 
           pipeline:start(function(code, _, stderr)
-            Event.emit('update')
+            colorscheme_data.status = code == 0 and 'installed' or 'failed'
+            colorscheme_data.progress = 0
 
-            if code == 0 then
-              colorscheme_data.status = 'installed'
-              colorscheme_data.progress = 0
+            if code == 0 then 
               colorscheme_data.info = table.concat({'Updated ', local_commit:sub(0, 7), ' -> ', remote_commit:sub(0, 7)})
             else
-              colorscheme_data.status = 'failed'
-              colorscheme_data.progress = 0
               colorscheme_data.info = vim.split(stderr, '\n')[1]
             end
+
+            Event.emit('state_update')
+            Event.emit('update')
           end)
         end
       end
@@ -339,18 +351,19 @@ function M.check_colorscheme_commit(colorscheme_repository, callback)
 end
 
 --- Count Colorscheme Amount
---- @return table<string, number>
+--- @return nil
 function M.count_colorscheme_amount()
-  local amount = {}
+  M.colorschemes_amount = {}
   local status
 
   for i = 1, #M.colorschemes_repository do
     status = M.colorschemes_data[M.colorschemes_repository[i]].status
 
-    amount[status] = amount[status] == nil and 1 or amount[status] + 1
+    M.colorschemes_amount[status] = M.colorschemes_amount[status] == nil and 1 or M.colorschemes_amount[status] + 1
   end
-
-  return amount
 end
+
+M.count_colorscheme_amount()
+Event.listen('state_update', M.count_colorscheme_amount)
 
 return M

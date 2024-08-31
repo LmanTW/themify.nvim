@@ -4,6 +4,7 @@ local Manager = require('themify.core.manager')
 local Data = require('themify.core.data')
 
 local state = Data.read_state_data()
+local current = (state == nil or state == vim.NIL) and {} or { colorscheme_repository = state.colorscheme_repository, theme = state.theme }
 
 Pages.create_page({
   id = 'home',
@@ -45,16 +46,20 @@ Pages.create_page({
     return 1
   end,
   leave = function()
-    local state = Data.read_state_data()
-
     if state ~= nil and state ~= vim.NIL then
-      Manager.load_theme(state.colorscheme_repository, state.theme)
+      if state.colorscheme_repository ~= current.colorscheme_repository or state.theme ~= current.theme then
+        Manager.load_theme(state.colorscheme_repository, state.theme)
+      end
     end
   end,
 
   hover = function(line)
     if vim.list_contains(line.tags, 'theme') then
-      Manager.load_theme(line.extra.colorscheme_repository, line.extra.theme)
+      if line.extra.colorscheme_repository ~= current.colorscheme_repository or line.extra.theme ~= current.theme then
+        Manager.load_theme(line.extra.colorscheme_repository, line.extra.theme)
+
+        current = line.extra
+      end
     end
   end,
   select = function(line)

@@ -192,13 +192,15 @@ function Window:update()
     Text:new(right, Colors.description)
   }):render(self.buffer, 1)
 
-  local amount = Manager.count_colorscheme_amount()
+  local amount = Manager.colorschemes_amount
 
   local actions = '  (I) Install  (U) Update  '
   local info = table.concat({amount.installed == nil and '0' or tostring(amount.installed), ' / ', tostring(#Manager.colorschemes_repository), '  '})
 
   Text.combine({
-    Text:new(actions, Colors.description),
+    Text:new('  '),
+    Text:new('(I) Install', amount.not_installed == nil and Colors.description or nil),
+    Text:new('  (U) Update  ', Colors.description),
     Text:new(string.rep(' ', (self.width - actions:len()) - info:len())),
     Text:new(info)
   }):render(self.buffer, self.height - 2)

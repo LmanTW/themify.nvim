@@ -63,8 +63,6 @@ function M.setup(colorschemes)
       if not ok then
         Data.write_state_data(nil)
 
-        M.open()
-
         vim.cmd('Themify')
       end
     end

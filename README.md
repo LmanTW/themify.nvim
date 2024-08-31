@@ -3,7 +3,6 @@ A colorscheme manager designed for [Neovim](https://neovim.io) written in [Lua](
 
 ![A screenshot of Themify](./documents/assets/screenshot.png)
 
-## ✨ Features
 * 🎨 Easily install and manage your colorschemes.
 * 🔍 Quickly switch between colorschemes with a live preview.
 * ⚡️ Optimized startup time with lazy-loaded colorschemes.
@@ -69,7 +68,7 @@ require("themery").setup({
       -- A colorscheme can have multiple themes, you can use the option below to only show the themes you want.
 
       whitelist = {},
-      blacklist = {} -- Not implemented yet.
+      blacklist = {}
     }
   ```
 </details> 

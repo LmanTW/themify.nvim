@@ -25,7 +25,7 @@ Pages.create_page({
   update = function()
     local list = List:new()
 
-    local amount = Manager.count_colorscheme_amount()
+    local amount = Manager.colorschemes_amount
 
     if amount.not_installed ~= nil then
       list:create_section('not_installed', { content = Text.combine({
