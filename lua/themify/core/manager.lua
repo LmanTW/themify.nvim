@@ -164,7 +164,7 @@ function M.check_colorscheme(colorscheme_repository)
   Utilities.error(colorscheme_data == nil, {'Themify: Colorscheme not found: "', colorscheme_repository, '"'})
 
   if colorscheme_data.status ~= 'installing' and colorscheme_data.status ~= 'updating' then
-    colorscheme_data.status = Utilities.path_exist(colorscheme_data.path) and 'installed' or 'not_installed'
+    colorscheme_data.status = Utilities.path_exist(colorscheme_data.path) and 'installed' or 'not_installed' 
 
     Event.emit('state_update')
 

@@ -15,7 +15,12 @@ Pages.create_page({
     local content = {}
 
     if Manager.colorschemes_amount.installed == nil then
-      content[#content + 1] = { content = Text:new('  󰘥 Press [I] to install the colorschemes.', Colors.description), tags = {} }
+      content[#content + 1] = { content = Text:new('  Welcome to Themify!', Colors.description), tags = {'selectable'} }
+      content[#content + 1] = { content = Text:new(''), tags = {} }
+      content[#content + 1] = { content = Text:new('  Use <Up> <Down> to move the cursor, <CR> to select.', Colors.description), tags = {'selectable'} }
+      content[#content + 1] = { content = Text:new('  Use <Left> <Right> to switch between pages.', Colors.description), tags = {'selectable'} }
+      content[#content + 1] = { content = Text:new(''), tags = {} }
+      content[#content + 1] = { content = Text:new('  Finally, use [I] to install the colorschemes!', Colors.description), tags = {'selectable'} }
     end
 
     for i = 1, #Manager.colorschemes_repository do
