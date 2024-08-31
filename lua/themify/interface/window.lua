@@ -116,7 +116,10 @@ function Window:move_cursor(direction)
   local control = self.control:get_page_control(self.page)
 
   self.control:move_cursor(self.page, direction)
-  Pages.get_page(self.page).hover(content[control.cursor_y])
+
+  if content[control.cursor_y] ~= nil then
+    Pages.get_page(self.page).hover(content[control.cursor_y])
+  end
 
   self:update()
 end
@@ -129,10 +132,12 @@ function Window:select()
   local content = Pages.update_page(self.page)
   local control = self.control:get_page_control(self.page)
 
-  local result = Pages.get_page(self.page).select(content[control.cursor_y])
+  if content[control.cursor_y] ~= nil then
+    local result = Pages.get_page(self.page).select(content[control.cursor_y])
 
-  if result.close then
-    vim.api.nvim_win_close(self.window, false)
+    if result.close then
+      vim.api.nvim_win_close(self.window, false)
+    end
   end
 end
 

@@ -1,4 +1,5 @@
 local Text = require('themify.interface.components.text')
+local Colors = require('themify.interface.colors')
 local Pages = require('themify.interface.pages')
 local Manager = require('themify.core.manager')
 local Data = require('themify.core.data')
@@ -12,6 +13,10 @@ Pages.create_page({
 
   update = function()
     local content = {}
+
+    if Manager.colorschemes_amount.installed == nil then
+      content[#content + 1] = { content = Text:new('  󰘥 Press [I] to install the colorschemes.', Colors.description), tags = {} }
+    end
 
     for i = 1, #Manager.colorschemes_repository do
       local colorscheme_data = Manager.colorschemes_data[Manager.colorschemes_repository[i]]
