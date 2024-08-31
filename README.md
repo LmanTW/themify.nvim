@@ -1,5 +1,5 @@
 # Themify
-A colorscheme manager designed for [Neovim](https://neovim.io) written in [Lua](https://www.lua.org). Inspired by [Themery.nvim](https://github.com/zaldih/themery.nvim) and [Lazy.nvim](https://github.com/folke/lazy.nvim).
+A colorscheme manager and switcher designed for [Neovim](https://neovim.io) written in [Lua](https://www.lua.org). Inspired by [Themery.nvim](https://github.com/zaldih/themery.nvim) and [Lazy.nvim](https://github.com/folke/lazy.nvim).
 
 ![A screenshot of Themify](./documents/assets/screenshot.png)
 
@@ -40,14 +40,7 @@ require("themery").setup({
 
   'folke/tokyonight.nvim',
   'sho-87/kanagawa-paper.nvim',
-  {
-    'Yazeed1s/minimal.nvim'
-
-    config = function()
-      vim.g.minimal_italic_functions = true
-      vim.g.minimal_italic_comments = true
-    end
-  }
+  'Yazeed1s/minimal.nvim'
 })
 ```
 
@@ -60,14 +53,17 @@ require("themery").setup({
   ```lua
     {
       'folke/tokyonight.nvim',
+      branch = 'main',
 
-      config = function()
+      before = function()
+        -- The function run before the colorscheme is loaded.
+      end,
+      after = function()
         -- The function run after the colorscheme is loaded.
       end,
 
-      -- A colorscheme can have multiple themes, you can use the option below to only show the themes you want.
-
-      whitelist = {},
+      -- A colorscheme can have multiple themes, you can use the options below to only show the themes you want.
+      whitelist = {'tokyonight-night', 'tokyonight-day'},
       blacklist = {}
     }
   ```

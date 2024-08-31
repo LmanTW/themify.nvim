@@ -1,6 +1,7 @@
 --- @class Colorscheme_Info
 --- @field branch string
---- @field config? function
+--- @field before? function
+--- @field after? function
 --- @field whitelist? string[]
 --- @field blacklist? string[]
 
@@ -10,7 +11,8 @@
 --- @field progress number
 --- @field info string
 --- @field branch string
---- @field config? function
+--- @field before? function
+--- @field after? function
 --- @field themes string[]
 --- @field whitelist? string[]
 --- @field blacklist? string[]
@@ -63,7 +65,8 @@ function M.add_colorscheme(colorscheme_repository, colorscheme_info)
     progress = 0,
     info = '',
     branch = colorscheme_info.branch,
-    config = colorscheme_info.config,
+    before = colorscheme_info.before,
+    after = colorscheme_info.after,
     themes = {},
     whitelist = colorscheme_info.whitelist,
     blacklist = colorscheme_info.blacklist,
@@ -82,17 +85,21 @@ function M.load_theme(colorscheme_repository, theme)
 
   if not vim.list_contains(M.loaded_colorschemes, colorscheme_repository) then
     vim.o.runtimepath = table.concat({vim.o.runtimepath, ',', colorscheme_data.path})
-
-    local ok = pcall(vim.cmd.colorscheme, theme)
-
-    if ok then
-      if colorscheme_data.config ~= nil then
-        colorscheme_data.config()
-      end
-    end
-
-    return ok
   end
+
+  if colorscheme_data.before ~= nil then
+    colorscheme_data.before()
+  end
+
+  local ok = pcall(vim.cmd.colorscheme, theme)
+
+  if ok then
+    if colorscheme_data.after ~= nil then
+      colorscheme_data.after()
+    end
+  end
+
+  return ok
 end
 
 --- Get The Repository Of The Colorscheme

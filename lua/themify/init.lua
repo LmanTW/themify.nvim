@@ -1,4 +1,4 @@
---- @alias Colorscheme string|{ [1]: string, branch?: string, config?: function, whitelist?: string[], blacklist?: string[] }
+--- @alias Colorscheme string|{ [1]: string, branch?: string, before?: function, after?: function, whitelist?: string[], blacklist?: string[] }
 
 local Manager = require('themify.core.manager')
 local Utilities = require('themify.utilities')
@@ -19,7 +19,8 @@ end
 --- @param colorscheme Colorscheme
 local function check_colorscheme_config(colorscheme_repository, colorscheme)
   if colorscheme.branch ~= nil and type(colorscheme.branch) ~= 'string' then throw_colorscheme_config_error(colorscheme_repository, 'branch', 'string') end
-  if colorscheme.config ~= nil and type(colorscheme.config) ~= 'function' then throw_colorscheme_config_error(colorscheme_repository, 'config', 'function') end
+  if colorscheme.before ~= nil and type(colorscheme.before) ~= 'function' then throw_colorscheme_config_error(colorscheme_repository, 'before', 'function') end
+  if colorscheme.after ~= nil and type(colorscheme.after) ~= 'function' then throw_colorscheme_config_error(colorscheme_repository, 'after', 'function') end
   if colorscheme.whitelist ~= nil and type(colorscheme.whitelist) ~= 'table' then throw_colorscheme_config_error(colorscheme_repository, 'whitelist', 'table') end
   if colorscheme.blacklist ~= nil and type(colorscheme.blacklist) ~= 'table' then throw_colorscheme_config_error(colorscheme_repository, 'blacklist', 'table') end
 end
@@ -44,7 +45,8 @@ function M.setup(colorschemes)
 
       Manager.add_colorscheme(colorscheme[1], {
         branch = colorscheme.branch or 'main',
-        config = colorscheme.config,
+        before = colorscheme.before,
+        after = colorscheme.after,
         whitelist = colorscheme.whitelist,
         blacklist = colorscheme.blacklist
       })
@@ -54,19 +56,19 @@ function M.setup(colorschemes)
   -- Run the checking process in async to avoid blocking the thread.
   Utilities.execute_async(vim.schedule_wrap(function()
     Manager.check_colorschemes()
-
-    local state = Data.read_state_data()
-
-    if state ~= nil and state ~= vim.NIL then
-      local ok = Manager.load_theme(state.colorscheme_repository, state.theme)
-
-      if not ok then
-        Data.write_state_data(nil)
-
-        vim.cmd('Themify')
-      end
-    end
   end))
+
+  local state = Data.read_state_data()
+
+  if state ~= nil and state ~= vim.NIL then
+    local ok = Manager.load_theme(state.colorscheme_repository, state.theme)
+
+    if not ok then
+      Data.write_state_data(nil)
+
+      vim.cmd('Themify')
+    end
+  end
 end
 
 vim.cmd('command! Themify lua require("themify.commands").open()')
