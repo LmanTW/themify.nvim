@@ -1,5 +1,5 @@
 # Themify
-![A screenshot of Themify](./documents/assets/screenshot.png)
+![A screenshot of Themify](./documents/assets/screenshot.jpeg)
 
 A colorscheme manager and switcher designed for [Neovim](https://neovim.io) written in [Lua](https://www.lua.org). Inspired by [Themery.nvim](https://github.com/zaldih/themery.nvim) and [Lazy.nvim](https://github.com/folke/lazy.nvim).
 
