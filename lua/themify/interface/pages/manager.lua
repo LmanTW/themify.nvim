@@ -117,6 +117,6 @@ Pages.create_page({
   hover = function()
   end,
   select = function()
-    return { close = false }
+    return {}
   end
 })

@@ -68,3 +68,6 @@ require("themery").setup({
     }
   ```
 </details>
+
+## 📎 Other
+* [API Documentation](./documents/api.md)

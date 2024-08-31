@@ -77,6 +77,6 @@ Pages.create_page({
 
     state = line.extra
 
-    return { close = true }
+    return {'close'} 
   end
 })

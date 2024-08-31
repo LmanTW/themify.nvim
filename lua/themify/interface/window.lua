@@ -133,9 +133,13 @@ function Window:select()
   local control = self.control:get_page_control(self.page)
 
   if content[control.cursor_y] ~= nil then
-    local result = Pages.get_page(self.page).select(content[control.cursor_y])
+    local flags = Pages.get_page(self.page).select(content[control.cursor_y])
 
-    if result.close then
+    if vim.list_contains(flags, 'update') then
+      Pages.update_page(self.page)
+      self:update()
+    end
+    if vim.list_contains(flags, 'close') then
       vim.api.nvim_win_close(self.window, false)
     end
   end
@@ -187,7 +191,7 @@ function Window:update()
 
   local left = table.concat({'  < ', Pages.pages[Pages.get_neighbor_page(self.page, -1)].name})
   local current = table.concat({'- ', Pages.pages[self.page].name, ' -'})
-  local right = table.concat({Pages.pages[Pages.get_neighbor_page(self.page, -1)].name, ' >  '})
+  local right = table.concat({Pages.pages[Pages.get_neighbor_page(self.page, 1)].name, ' >  '})
 
   Text.combine({
     Text:new(left, Colors.description),
