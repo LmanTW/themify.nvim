@@ -39,8 +39,12 @@ require("themery").setup({
   -- Your list of colorschemes.
 
   'folke/tokyonight.nvim',
-  'sho-87/kanagawa-paper.nvim',
-  'Yazeed1s/minimal.nvim'
+  'Yazeed1s/minimal.nvim',
+  {
+    'sho-87/kanagawa-paper.nvim',
+
+    branch = 'master'
+  }
 })
 ```
 
