@@ -70,7 +70,7 @@ function M.add_colorscheme(colorscheme_repository, colorscheme_info)
     themes = {},
     whitelist = colorscheme_info.whitelist,
     blacklist = colorscheme_info.blacklist,
-    path = table.concat({Data.colorschemes_path, colorscheme_name}, '/')
+    path = vim.fs.joinpath(Data.colorschemes_path, colorscheme_name)
   }
 end
 
@@ -123,7 +123,7 @@ end
 --- Clean Unused Colorschemes
 --- @return nil
 function M.clean_colorschemes()
-  local repository_folders = vim.split(Process.execute(table.concat({'ls', Data.colorschemes_path}, ' ')), '\n')
+  local repository_folders = Utilities.scan_directory(Data.colorschemes_path)
   local colorscheme_repository
 
   for i = 1, #repository_folders do
@@ -136,7 +136,7 @@ function M.clean_colorschemes()
         or normalize_branch(M.colorschemes_data[colorscheme_repository].branch) ~= normalize_branch(Data.read_colorscheme_repository_head(repository_folders[i]).branch)
         -- The repository is on a different branch.
       then
-        local colorscheme_path = table.concat({Data.colorschemes_path, repository_folders[i]}, '/')
+        local colorscheme_path = vim.fs.joinpath(Data.colorschemes_path, repository_folders[i])
 
         os.execute(table.concat({'chmod -R +w', colorscheme_path}, ' '))
         os.execute(table.concat({'rm -rf', colorscheme_path}, ' '))
@@ -164,7 +164,7 @@ function M.check_colorscheme(colorscheme_repository)
   Utilities.error(colorscheme_data == nil, {'Themify: Colorscheme not found: "', colorscheme_repository, '"'})
 
   if colorscheme_data.status ~= 'installing' and colorscheme_data.status ~= 'updating' then
-    colorscheme_data.status = Utilities.path_exist(colorscheme_data.path) and 'installed' or 'not_installed' 
+    colorscheme_data.status = Utilities.path_exist(colorscheme_data.path) and 'installed' or 'not_installed'
 
     Event.emit('state_update')
 
@@ -173,10 +173,10 @@ function M.check_colorscheme(colorscheme_repository)
 
       colorscheme_data.themes = {}
 
-      local themes_path = table.concat({colorscheme_data.path, 'colors'}, '/')
+      local themes_path = vim.fs.joinpath(colorscheme_data.path, 'colors')
 
       if Utilities.path_exist(themes_path) then
-        local theme_files = vim.split(Process.execute(table.concat({'ls', themes_path}, ' ')), '\n')
+        local theme_files = Utilities.scan_directory(themes_path)
         local theme_name
         local theme_type
 
