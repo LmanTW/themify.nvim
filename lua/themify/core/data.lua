@@ -1,4 +1,4 @@
---- @alias StateData nil|{ colorscheme_repository: string, theme: string }
+--- @alias StateData vim.NIL|{ colorscheme_repository: string, theme: string }
 
 local Utilities = require('themify.utilities')
 
@@ -20,7 +20,7 @@ function M.check_data_files()
   if not Utilities.path_exist(M.themify_path) then vim.fn.mkdir(M.themify_path, 'p') end
   if not Utilities.path_exist(M.colorschemes_path) then vim.fn.mkdir(M.colorschemes_path, 'p') end
   if not Utilities.path_exist(M.state_data_path) then
-    M.write_state_data(nil)
+    M.write_state_data(vim.NIL)
   end
 end
 

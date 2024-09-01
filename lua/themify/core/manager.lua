@@ -19,7 +19,6 @@
 --- @field path string
 
 local Pipeline = require('themify.core.pipeline')
-local Process = require('themify.core.process')
 local Utilities = require('themify.utilities')
 local Tasks = require('themify.core.tasks')
 local Event = require('themify.core.event')
@@ -87,14 +86,14 @@ function M.load_theme(colorscheme_repository, theme)
     vim.o.runtimepath = table.concat({vim.o.runtimepath, ',', colorscheme_data.path})
   end
 
-  if colorscheme_data.before ~= nil then
+  if type(colorscheme_data.before) == 'function' then
     colorscheme_data.before()
   end
 
   local ok = pcall(vim.cmd.colorscheme, theme)
 
   if ok then
-    if colorscheme_data.after ~= nil then
+    if type(colorscheme_data.after) == 'function' then
       colorscheme_data.after()
     end
   end
@@ -182,8 +181,8 @@ function M.check_colorscheme(colorscheme_repository)
 
         for i = 1, #theme_files do
           if theme_files[i]:len() > 0 then
-            theme_name = string.match(theme_files[i], '([^%.]*)')
-            theme_type = string.match(theme_files[i], '%.(.*)')
+            theme_name = vim.fn.fnamemodify(theme_files[i], ':r')
+            theme_type = vim.fn.fnamemodify(theme_files[i], ':e')
 
             if theme_type == 'lua' or theme_type == 'vim' then
               if (colorscheme_data.whitelist == nil or vim.list_contains(colorscheme_data.whitelist, theme_name))

@@ -5,7 +5,7 @@ local Manager = require('themify.core.manager')
 local Data = require('themify.core.data')
 
 local state = Data.read_state_data()
-local current = (state == nil or state == vim.NIL) and {} or { colorscheme_repository = state.colorscheme_repository, theme = state.theme }
+local current = state == vim.NIL and {} or { colorscheme_repository = state.colorscheme_repository, theme = state.theme }
 
 Pages.create_page({
   id = 'home',
@@ -30,7 +30,7 @@ Pages.create_page({
         content[#content + 1] = { content = Text:new(table.concat({'   ', Manager.colorschemes_repository[i]})), tags = {} }
 
         for i2 = 1, #colorscheme_data.themes do
-          local selected = (state ~= nil and state ~= vim.NIL) and (Manager.colorschemes_repository[i] == state.colorscheme_repository and colorscheme_data.themes[i2] == state.theme)
+          local selected = state ~= vim.NIL and (Manager.colorschemes_repository[i] == state.colorscheme_repository and colorscheme_data.themes[i2] == state.theme)
 
           content[#content + 1] = { content = Text:new(table.concat({selected and '    > ' or '    - ', colorscheme_data.themes[i2]})), tags = {'selectable', 'theme'}, extra = { colorscheme_repository = Manager.colorschemes_repository[i], theme = colorscheme_data.themes[i2] }}
         end
@@ -43,7 +43,7 @@ Pages.create_page({
   enter = function(content)
     local state = Data.read_state_data()
 
-    if state ~= nil and state ~= vim.NIL then
+    if state ~= vim.NIL then
       for i = 1, #content do
         if vim.list_contains(content[i].tags, 'theme') then
           if content[i].extra.colorscheme_repository == state.colorscheme_repository and content[i].extra.theme == state.theme then
@@ -56,7 +56,7 @@ Pages.create_page({
     return 1
   end,
   leave = function()
-    if state ~= nil and state ~= vim.NIL then
+    if state ~= vim.NIL then
       if state.colorscheme_repository ~= current.colorscheme_repository or state.theme ~= current.theme then
         Manager.load_theme(state.colorscheme_repository, state.theme)
       end
@@ -77,6 +77,6 @@ Pages.create_page({
 
     state = line.extra
 
-    return {'close'} 
+    return {'close'}
   end
 })

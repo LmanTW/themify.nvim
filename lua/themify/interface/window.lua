@@ -100,6 +100,7 @@ function Window:new()
 
   vim.api.nvim_set_option_value('modifiable', false, { buf = self.buffer })
   vim.api.nvim_set_option_value('cursorline', true, { win = self.window })
+  vim.api.nvim_set_current_win(self.window)
 
   windows[self.window] = self
 

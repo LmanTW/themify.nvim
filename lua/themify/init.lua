@@ -20,14 +20,6 @@ local M = {
   listen = Event.listen
 }
 
---- Throw An Colorscheme Config Error
---- @param colorscheme_repository string
---- @param option_name string
---- @param type_name string
-local function throw_colorscheme_config_error(colorscheme_repository, option_name, type_name)
-  error(table.concat({'Themify: The "', option_name, '" option for the colorscheme "', colorscheme_repository, '" must be a <', type_name, '>'}))
-end
-
 --- Check The Config Of A Colorscheme
 --- @param colorscheme_repository string
 --- @param colorscheme Colorscheme
@@ -55,10 +47,8 @@ function M.setup(colorschemes)
         branch = 'main'
       })
     elseif type(colorscheme[1]) == 'string' then
-      check_colorscheme_config(colorscheme[1], colorscheme)
-
       Manager.add_colorscheme(colorscheme[1], {
-        branch = colorscheme.branch or 'main',
+        branch = colorschemes.branch or 'main',
         before = colorscheme.before,
         after = colorscheme.after,
         whitelist = colorscheme.whitelist,
@@ -69,12 +59,20 @@ function M.setup(colorschemes)
 
   -- Run the checking process in async to avoid blocking the thread.
   Utilities.execute_async(vim.schedule_wrap(function()
+    for i = 1, #colorschemes do
+      colorscheme = colorschemes[i]
+
+      if type(colorscheme[1]) == 'string' then
+        check_colorscheme_config(colorscheme[1], colorscheme)
+      end
+    end
+
     Manager.check_colorschemes()
   end))
 
   local state = Data.read_state_data()
 
-  if state ~= nil and state ~= vim.NIL then
+  if state ~= vim.NIL then
     local ok = Manager.load_theme(state.colorscheme_repository, state.theme)
 
     if not ok then
