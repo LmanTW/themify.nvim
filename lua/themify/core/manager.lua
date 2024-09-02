@@ -62,7 +62,7 @@ function M.add_colorscheme(colorscheme_id, colorscheme_info)
   M.colorschemes_data[colorscheme_id] = {
     type = colorscheme_name.type,
     name = colorscheme_name.name,
-    status = 'unknown',
+    status = colorscheme_name.type == 'github' and 'unknown' or 'installed',
     progress = 0,
     info = '',
     branch = colorscheme_info.branch,
@@ -76,10 +76,16 @@ function M.add_colorscheme(colorscheme_id, colorscheme_info)
 end
 
 --- Load A Theme
---- @param colorscheme_id string
+--- @param colorscheme_id nil|string
 --- @param theme string
 --- @return nil
 function M.load_theme(colorscheme_id, theme)
+  if colorscheme_id == nil then
+    -- If the colorscheme type is "local", it won't pass the colorscheme_id when loading the theme.
+
+    colorscheme_id = theme
+  end
+
   Utilities.error(M.colorschemes_data[colorscheme_id] == nil, {'Themify: Colorscheme not found: "', colorscheme_id, '"'})
 
   local colorscheme_data = M.colorschemes_data[colorscheme_id]
@@ -169,42 +175,38 @@ function M.check_colorscheme(colorscheme_id)
 
   Utilities.error(colorscheme_data == nil, {'Themify: Colorscheme not found: "', colorscheme_id, '"'})
 
-  if colorscheme_data.type == 'github' then
-    if (colorscheme_data.status ~= 'installing' and colorscheme_data.status ~= 'updating') then
-      colorscheme_data.status = Utilities.path_exist(colorscheme_data.path) and 'installed' or 'not_installed'
-      colorscheme_data.info = ''
+  if colorscheme_data.type == 'github' and (colorscheme_data.status ~= 'installing' and colorscheme_data.status ~= 'updating') then
+    colorscheme_data.status = Utilities.path_exist(colorscheme_data.path) and 'installed' or 'not_installed'
+    colorscheme_data.info = ''
 
-      Event.emit('state_update')
+    Event.emit('state_update')
 
-      if colorscheme_data.status == 'installed' then
-        -- Check the themes under the colorscheme.
+    if colorscheme_data.status == 'installed' then
+      -- Check the themes under the colorscheme.
 
-        colorscheme_data.themes = {}
+      colorscheme_data.themes = {}
 
-        local themes_path = vim.fs.joinpath(colorscheme_data.path, 'colors')
+      local themes_path = vim.fs.joinpath(colorscheme_data.path, 'colors')
 
-        if Utilities.path_exist(themes_path) then
-          local theme_files = Utilities.scan_directory(themes_path)
-          local theme_name
-          local theme_type
+      if Utilities.path_exist(themes_path) then
+        local theme_files = Utilities.scan_directory(themes_path)
+        local theme_name
+        local theme_type
 
-          for i = 1, #theme_files do
-            if theme_files[i]:len() > 0 then
-              theme_name = vim.fn.fnamemodify(theme_files[i], ':r')
-              theme_type = vim.fn.fnamemodify(theme_files[i], ':e')
+        for i = 1, #theme_files do
+          if theme_files[i]:len() > 0 then
+            theme_name = vim.fn.fnamemodify(theme_files[i], ':r')
+            theme_type = vim.fn.fnamemodify(theme_files[i], ':e')
 
-              if theme_type == 'lua' or theme_type == 'vim' then
-                if (colorscheme_data.whitelist == nil or vim.list_contains(colorscheme_data.whitelist, theme_name))
-                  and (colorscheme_data.blacklist == nil or not vim.list_contains(colorscheme_data.blacklist, theme_name))
-                then
-                  colorscheme_data.themes[#colorscheme_data.themes + 1] = theme_name
-                end
+            if theme_type == 'lua' or theme_type == 'vim' then
+              if (colorscheme_data.whitelist == nil or vim.list_contains(colorscheme_data.whitelist, theme_name))
+                and (colorscheme_data.blacklist == nil or not vim.list_contains(colorscheme_data.blacklist, theme_name))
+              then
+                colorscheme_data.themes[#colorscheme_data.themes + 1] = theme_name
               end
             end
           end
         end
-      else
-        colorscheme_data.status = 'installed'
       end
     end
   end
@@ -282,7 +284,7 @@ function M.update_colorscheme(colorscheme_id)
 
   local colorscheme_data = M.colorschemes_data[colorscheme_id]
 
-  if colorscheme_data.status == 'installed' then
+  if colorscheme_data.type == 'github' and colorscheme_data.status == 'installed' then
     colorscheme_data.status = 'updating'
     colorscheme_data.progress = 0
     colorscheme_data.info = 'Fetching...'
