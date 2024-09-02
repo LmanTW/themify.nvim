@@ -14,15 +14,17 @@ local mapping = {
   ['<Up>'] = 'move_cursor("up")',
   j = 'move_cursor("down")',
   ['<Down>'] = 'move_cursor("down")',
+  ['<CR>'] = 'select()',
 
   ['<Left>'] = 'switch_page("left")',
   ['<Right>'] = 'switch_page("right")',
 
-  ['<CR>'] = 'select()',
-
   C = 'check_colorschemes()',
   I = 'install_colorschemes()',
-  U = 'update_colorschemes()'
+  U = 'update_colorschemes()',
+
+  q = 'close()',
+  ['<ESC>'] = 'close()'
 }
 
 --- Create A New Control

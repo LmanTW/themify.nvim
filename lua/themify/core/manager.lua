@@ -138,9 +138,10 @@ function M.clean_colorschemes()
         or normalize_branch(M.colorschemes_data[colorscheme_repository].branch) ~= normalize_branch(Data.read_colorscheme_repository_head(repository_folders[i]).branch)
         -- The repository is on a different branch.
       then
-        local colorscheme_path = vim.fs.joinpath(Data.colorschemes_path, repository_folders[i])
-
-        Utilities.delete_directory(colorscheme_path)
+        -- Remove the colorscheme in async because it might take a long time.
+        Utilities.execute_async(function()
+          Utilities.delete_directory(vim.fs.joinpath(Data.colorschemes_path, repository_folders[i]))
+        end)
       end
     end
   end
@@ -166,6 +167,7 @@ function M.check_colorscheme(colorscheme_repository)
 
   if colorscheme_data.status ~= 'installing' and colorscheme_data.status ~= 'updating' then
     colorscheme_data.status = Utilities.path_exist(colorscheme_data.path) and 'installed' or 'not_installed'
+    colorscheme_data.info = ''
 
     Event.emit('state_update')
 

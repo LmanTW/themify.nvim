@@ -204,6 +204,8 @@ function Window:update()
     end
   end
 
+  -- Render the page tab.
+
   local left = table.concat({'  < ', Pages.pages[Pages.get_neighbor_page(self.page, -1)].name})
   local current = table.concat({'- ', Pages.pages[self.page].name, ' -'})
   local right = table.concat({Pages.pages[Pages.get_neighbor_page(self.page, 1)].name, ' >  '})
@@ -215,6 +217,8 @@ function Window:update()
     Text:new(string.rep(' ', math.floor((self.width / 2) - (current:len() / 2)) - right:len())),
     Text:new(right, Colors.description)
   }):render(self.buffer, 1)
+
+  -- Render the actions and info.
 
   local amount = Manager.colorschemes_amount
 
@@ -237,6 +241,11 @@ function Window:update()
 
   -- Move the cursor.
   vim.api.nvim_win_set_cursor(self.window, {4 + (control.cursor_y - control.scroll_y), 0})
+end
+
+--- Close The Window
+function Window:close()
+  vim.api.nvim_win_close(self.window, false)
 end
 
 return Window
