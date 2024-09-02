@@ -9,7 +9,7 @@
 
 --- @class Line
 --- @field content Text
---- @field tags Tags[]
+--- @field tags Tag[]
 --- @field extra any
 
 --- @alias Tag 'selectable'|string

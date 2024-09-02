@@ -48,7 +48,7 @@ function M.setup(colorschemes)
       })
     elseif type(colorscheme[1]) == 'string' then
       Manager.add_colorscheme(colorscheme[1], {
-        branch = colorschemes.branch or 'main',
+        branch = colorscheme.branch or 'main',
         before = colorscheme.before,
         after = colorscheme.after,
         whitelist = colorscheme.whitelist,

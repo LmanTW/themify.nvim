@@ -20,6 +20,7 @@ local mapping = {
 
   ['<CR>'] = 'select()',
 
+  C = 'check_colorschemes()',
   I = 'install_colorschemes()',
   U = 'update_colorschemes()'
 }

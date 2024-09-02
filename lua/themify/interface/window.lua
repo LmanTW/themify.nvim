@@ -157,12 +157,24 @@ function Window:switch_page(direction)
   self:update()
 end
 
+--- Check The Colorschemes
+--- @return nil
+function Window:check_colorschemes()
+  Manager.check_colorschemes()
+
+  self.page = self.control:enter_page(self.page, 'manager')
+
+  self:update()
+end
+
 --- Install The Colorschemes
 --- @return nil
 function Window:install_colorschemes()
   Manager.install_colorschemes()
 
   self.page = self.control:enter_page(self.page, 'manager')
+
+  self:update()
 end
 
 --- Update The Colorschemes
@@ -171,6 +183,8 @@ function Window:update_colorschemes()
   Manager.update_colorschemes()
 
   self.page = self.control:enter_page(self.page, 'manager')
+
+  self:update()
 end
 
 --- Update The Window
@@ -204,13 +218,17 @@ function Window:update()
 
   local amount = Manager.colorschemes_amount
 
-  local actions = '  (I) Install  (U) Update  '
+  local actions = '  (I) Install  (U) Update  (C) Check  '
   local info = table.concat({amount.installed == nil and '0' or tostring(amount.installed), ' / ', tostring(#Manager.colorschemes_repository), '  '})
 
   Text.combine({
     Text:new('  '),
     Text:new('(I) Install', amount.not_installed == nil and Colors.description or nil),
-    Text:new('  (U) Update  ', Colors.description),
+    Text:new('  '),
+    Text:new('(U) Update', Colors.description),
+    Text:new('  '),
+    Text:new('(C) Check', Colors.description),
+    Text:new('  '),
     Text:new(string.rep(' ', (self.width - actions:len()) - info:len())),
     Text:new(info)
   }):render(self.buffer, self.height - 2)

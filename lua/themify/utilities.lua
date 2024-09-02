@@ -116,6 +116,31 @@ function M.scan_directory(path)
   return files
 end
 
+--- Delete A Directory
+--- @param path string
+--- @return nil
+function M.delete_directory(path)
+  local files_name = M.scan_directory(path)
+  local file_path
+
+  for i = 1, #files_name do
+
+    file_path = vim.fs.joinpath(path, files_name[i])
+
+    local stat = vim.loop.fs_stat(file_path)
+    M.error(stat == nil, {'Themify: Cannot stat the file: "', file_path, '"'})
+
+
+    if stat.type == 'directory' then
+      M.delete_directory(file_path)
+    else
+      vim.loop.fs_unlink(file_path)
+    end
+  end
+
+  vim.loop.fs_rmdir(path)
+end
+
 --- Execute A Function In Async
 --- @param callback function
 --- @return nil 

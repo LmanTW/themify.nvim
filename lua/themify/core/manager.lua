@@ -123,10 +123,13 @@ end
 --- @return nil
 function M.clean_colorschemes()
   local repository_folders = Utilities.scan_directory(Data.colorschemes_path)
+  local file_name
   local colorscheme_repository
 
   for i = 1, #repository_folders do
-    if repository_folders[i]:len() > 0 then
+    file_name = repository_folders[i]
+
+    if file_name:len() > 0 and file_name:sub(0, 1) ~= '.' then
       colorscheme_repository = get_colorscheme_repository(repository_folders[i])
 
       if colorscheme_repository == nil
@@ -137,8 +140,7 @@ function M.clean_colorschemes()
       then
         local colorscheme_path = vim.fs.joinpath(Data.colorschemes_path, repository_folders[i])
 
-        os.execute(table.concat({'chmod -R +w', colorscheme_path}, ' '))
-        os.execute(table.concat({'rm -rf', colorscheme_path}, ' '))
+        Utilities.delete_directory(colorscheme_path)
       end
     end
   end

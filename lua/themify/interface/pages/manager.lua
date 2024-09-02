@@ -68,13 +68,13 @@ Pages.create_page({
           Text:new('    '),
           Text:new('󱑥 ', Colors.icon),
           Text:new(Manager.colorschemes_repository[i])
-        }), tags = {} })
+        }), tags = {'selectable', 'install'}, extra = Manager.colorschemes_repository[i] })
       elseif colorscheme_data.status == 'failed' then
         list:add_item('failed', { content = Text.combine({
           Text:new('    '),
           Text:new('󰗖 ', Colors.icon),
           Text:new(Manager.colorschemes_repository[i])
-        }), tags = {} })
+        }), tags = {'selectable', 'check'}, extra = Manager.colorschemes_repository[i] })
         list:add_item('failed', { content = Text.combine({
           Text:new('    '),
           Text:new(table.concat({' ', colorscheme_data.info, ' '}), Colors.error)
@@ -101,7 +101,7 @@ Pages.create_page({
           })
         end
 
-        list:add_item('installed', { content = Text.combine(parts), tags = {} })
+        list:add_item('installed', { content = Text.combine(parts), tags = {'selectable', 'update'}, extra = Manager.colorschemes_repository[i] })
       end
     end
 
@@ -116,7 +116,10 @@ Pages.create_page({
 
   hover = function()
   end,
-  select = function()
+  select = function(line)
+    if vim.list_contains(line.tags, 'check') then Manager.check_colorscheme(line.extra)
+    elseif vim.list_contains(line.tags, 'install') then Manager.install_colorscheme(line.extra)
+    elseif vim.list_contains(line.tags, 'update') then Manager.update_colorscheme(line.extra) end
     return {}
   end
 })
