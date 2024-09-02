@@ -223,7 +223,7 @@ function Window:update()
   local amount = Manager.colorschemes_amount
 
   local actions = '  (I) Install  (U) Update  (C) Check  '
-  local info = table.concat({amount.installed == nil and '0' or tostring(amount.installed), ' / ', tostring(#Manager.colorschemes_repository), '  '})
+  local info = table.concat({amount.installed == nil and '0' or tostring(amount.installed), ' / ', tostring(#Manager.colorschemes_id), '  '})
 
   Text.combine({
     Text:new('  '),

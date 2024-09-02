@@ -6,6 +6,7 @@
 --- @field blacklist? string[]
 
 --- @class Colorscheme_Data
+--- @field type 'github'|'local'
 --- @field name string
 --- @field status 'unknown'|'not_installed'|'installed'|'installing'|'updating'|'failed'
 --- @field progress number
@@ -28,7 +29,7 @@ local M = {
   --- @type table<string, Colorscheme_Data>
   colorschemes_data = {},
   --- @type string[]
-  colorschemes_repository = {},
+  colorschemes_id = {},
 
   --- @type string[]
   loaded_colorschemes = {},
@@ -37,29 +38,30 @@ local M = {
   colorschemes_amount = {}
 }
 
---- Get The Name Of The Colorscheme 
+--- Get The Name Of The Colorscheme
 --- @param repository string
---- @return string
+--- @return { type: 'github'|'local', name: string }
 local function get_colorscheme_name(repository)
   local chunks = vim.split(repository, '/')
 
-  Utilities.error(#chunks ~= 2, {'Themify: Invalid repository name: "', repository, '"'})
+  Utilities.error(#chunks > 2, {'Themify: Invalid colorscheme name: "', repository, '"'})
 
-  return chunks[2]
+  return #chunks == 1 and { type = 'local', name = chunks[1] } or { type = 'github', name = chunks[2] }
 end
 
 --- Add A Colorscheme To Manage
---- @param colorscheme_repository string
+--- @param colorscheme_id string
 --- @param colorscheme_info Colorscheme_Info
 --- @return nil
-function M.add_colorscheme(colorscheme_repository, colorscheme_info)
-  Utilities.error(M.colorschemes_data[colorscheme_repository] ~= nil, {'Themify: Duplicate colorscheme: "', colorscheme_repository, '"'})
+function M.add_colorscheme(colorscheme_id, colorscheme_info)
+  Utilities.error(M.colorschemes_data[colorscheme_id] ~= nil, {'Themify: Duplicate colorscheme: "', colorscheme_id, '"'})
 
-  local colorscheme_name = get_colorscheme_name(colorscheme_repository)
+  local colorscheme_name = get_colorscheme_name(colorscheme_id)
 
-  M.colorschemes_repository[#M.colorschemes_repository + 1] = colorscheme_repository
-  M.colorschemes_data[colorscheme_repository] = {
-    name = colorscheme_name,
+  M.colorschemes_id[#M.colorschemes_id + 1] = colorscheme_id
+  M.colorschemes_data[colorscheme_id] = {
+    type = colorscheme_name.type,
+    name = colorscheme_name.name,
     status = 'unknown',
     progress = 0,
     info = '',
@@ -69,21 +71,23 @@ function M.add_colorscheme(colorscheme_repository, colorscheme_info)
     themes = {},
     whitelist = colorscheme_info.whitelist,
     blacklist = colorscheme_info.blacklist,
-    path = vim.fs.joinpath(Data.colorschemes_path, colorscheme_name)
+    path = vim.fs.joinpath(Data.colorschemes_path, colorscheme_name.name)
   }
 end
 
 --- Load A Theme
---- @param colorscheme_repository string
+--- @param colorscheme_id string
 --- @param theme string
 --- @return nil
-function M.load_theme(colorscheme_repository, theme)
-  Utilities.error(M.colorschemes_data[colorscheme_repository] == nil, {'Themify: Colorscheme not found: "', colorscheme_repository, '"'})
+function M.load_theme(colorscheme_id, theme)
+  Utilities.error(M.colorschemes_data[colorscheme_id] == nil, {'Themify: Colorscheme not found: "', colorscheme_id, '"'})
 
-  local colorscheme_data = M.colorschemes_data[colorscheme_repository]
+  local colorscheme_data = M.colorschemes_data[colorscheme_id]
 
-  if not vim.list_contains(M.loaded_colorschemes, colorscheme_repository) then
-    vim.o.runtimepath = table.concat({vim.o.runtimepath, ',', colorscheme_data.path})
+  if colorscheme_data.type == 'github' then
+    if not vim.list_contains(M.loaded_colorschemes, colorscheme_id) then
+      vim.o.runtimepath = table.concat({vim.o.runtimepath, ',', colorscheme_data.path})
+    end
   end
 
   if type(colorscheme_data.before) == 'function' then
@@ -104,10 +108,10 @@ end
 --- Get The Repository Of The Colorscheme
 --- @param colorscheme_name string
 --- @return string|nil
-local function get_colorscheme_repository(colorscheme_name)
-  for colorscheme_repository, colorscheme_data in pairs(M.colorschemes_data) do
+local function get_colorscheme_id(colorscheme_name)
+  for colorscheme_id, colorscheme_data in pairs(M.colorschemes_data) do
     if colorscheme_data.name == colorscheme_name then
-      return colorscheme_repository
+      return colorscheme_id
     end
   end
 end
@@ -124,18 +128,18 @@ end
 function M.clean_colorschemes()
   local repository_folders = Utilities.scan_directory(Data.colorschemes_path)
   local file_name
-  local colorscheme_repository
+  local colorscheme_id
 
   for i = 1, #repository_folders do
     file_name = repository_folders[i]
 
     if file_name:len() > 0 and file_name:sub(0, 1) ~= '.' then
-      colorscheme_repository = get_colorscheme_repository(repository_folders[i])
+      colorscheme_id = get_colorscheme_id(repository_folders[i])
 
-      if colorscheme_repository == nil
+      if colorscheme_id == nil
         -- The colorschemes is not being used.
-        or not Utilities.path_exist(table.concat({M.colorschemes_data[colorscheme_repository].path, '.git', 'HEAD'}, '/'))
-        or normalize_branch(M.colorschemes_data[colorscheme_repository].branch) ~= normalize_branch(Data.read_colorscheme_repository_head(repository_folders[i]).branch)
+        or not Utilities.path_exist(table.concat({M.colorschemes_data[colorscheme_id].path, '.git', 'HEAD'}, '/'))
+        or normalize_branch(M.colorschemes_data[colorscheme_id].branch) ~= normalize_branch(Data.read_colorscheme_repository_head(repository_folders[i]).branch)
         -- The repository is on a different branch.
       then
         -- Remove the colorscheme in async because it might take a long time.
@@ -152,51 +156,55 @@ function M.check_colorschemes()
   Data.check_data_files()
   M.clean_colorschemes()
 
-  for i = 1, #M.colorschemes_repository do
-    M.check_colorscheme(M.colorschemes_repository[i])
+  for i = 1, #M.colorschemes_id do
+    M.check_colorscheme(M.colorschemes_id[i])
   end
 end
 
 --- Check A Colorscheme
---- @param colorscheme_repository string
+--- @param colorscheme_id string
 --- @return nil
-function M.check_colorscheme(colorscheme_repository)
-  local colorscheme_data = M.colorschemes_data[colorscheme_repository]
+function M.check_colorscheme(colorscheme_id)
+  local colorscheme_data = M.colorschemes_data[colorscheme_id]
 
-  Utilities.error(colorscheme_data == nil, {'Themify: Colorscheme not found: "', colorscheme_repository, '"'})
+  Utilities.error(colorscheme_data == nil, {'Themify: Colorscheme not found: "', colorscheme_id, '"'})
 
-  if colorscheme_data.status ~= 'installing' and colorscheme_data.status ~= 'updating' then
-    colorscheme_data.status = Utilities.path_exist(colorscheme_data.path) and 'installed' or 'not_installed'
-    colorscheme_data.info = ''
+  if colorscheme_data.type == 'github' then
+    if (colorscheme_data.status ~= 'installing' and colorscheme_data.status ~= 'updating') then
+      colorscheme_data.status = Utilities.path_exist(colorscheme_data.path) and 'installed' or 'not_installed'
+      colorscheme_data.info = ''
 
-    Event.emit('state_update')
+      Event.emit('state_update')
 
-    if colorscheme_data.status == 'installed' then
-      -- Check the themes under the colorscheme.
+      if colorscheme_data.status == 'installed' then
+        -- Check the themes under the colorscheme.
 
-      colorscheme_data.themes = {}
+        colorscheme_data.themes = {}
 
-      local themes_path = vim.fs.joinpath(colorscheme_data.path, 'colors')
+        local themes_path = vim.fs.joinpath(colorscheme_data.path, 'colors')
 
-      if Utilities.path_exist(themes_path) then
-        local theme_files = Utilities.scan_directory(themes_path)
-        local theme_name
-        local theme_type
+        if Utilities.path_exist(themes_path) then
+          local theme_files = Utilities.scan_directory(themes_path)
+          local theme_name
+          local theme_type
 
-        for i = 1, #theme_files do
-          if theme_files[i]:len() > 0 then
-            theme_name = vim.fn.fnamemodify(theme_files[i], ':r')
-            theme_type = vim.fn.fnamemodify(theme_files[i], ':e')
+          for i = 1, #theme_files do
+            if theme_files[i]:len() > 0 then
+              theme_name = vim.fn.fnamemodify(theme_files[i], ':r')
+              theme_type = vim.fn.fnamemodify(theme_files[i], ':e')
 
-            if theme_type == 'lua' or theme_type == 'vim' then
-              if (colorscheme_data.whitelist == nil or vim.list_contains(colorscheme_data.whitelist, theme_name))
-                and (colorscheme_data.blacklist == nil or not vim.list_contains(colorscheme_data.blacklist, theme_name))
-              then
-                colorscheme_data.themes[#colorscheme_data.themes + 1] = theme_name
+              if theme_type == 'lua' or theme_type == 'vim' then
+                if (colorscheme_data.whitelist == nil or vim.list_contains(colorscheme_data.whitelist, theme_name))
+                  and (colorscheme_data.blacklist == nil or not vim.list_contains(colorscheme_data.blacklist, theme_name))
+                then
+                  colorscheme_data.themes[#colorscheme_data.themes + 1] = theme_name
+                end
               end
             end
           end
         end
+      else
+        colorscheme_data.status = 'installed'
       end
     end
   end
@@ -207,18 +215,18 @@ end
 function M.install_colorschemes()
   Data.check_data_files()
 
-  for i = 1, #M.colorschemes_repository do
-    M.install_colorscheme(M.colorschemes_repository[i])
+  for i = 1, #M.colorschemes_id do
+    M.install_colorscheme(M.colorschemes_id[i])
   end
 end
 
 --- Install A Colorscheme
---- @param colorscheme_repository string
+--- @param colorscheme_id string
 --- @return nil
-function M.install_colorscheme(colorscheme_repository)
-  M.check_colorscheme(colorscheme_repository)
+function M.install_colorscheme(colorscheme_id)
+  M.check_colorscheme(colorscheme_id)
 
-  local colorscheme_data = M.colorschemes_data[colorscheme_repository]
+  local colorscheme_data = M.colorschemes_data[colorscheme_id]
 
   if colorscheme_data.status == 'not_installed' then
     colorscheme_data.status = 'installing'
@@ -229,7 +237,7 @@ function M.install_colorscheme(colorscheme_repository)
     Event.emit('state_update')
 
     local pipeline = Pipeline:new({
-      Tasks.clone(Data.colorschemes_path, colorscheme_repository, colorscheme_data.branch, function(progress, info)
+      Tasks.clone(Data.colorschemes_path, colorscheme_id, colorscheme_data.branch, function(progress, info)
         colorscheme_data.progress = progress
         colorscheme_data.info = info
 
@@ -252,7 +260,7 @@ function M.install_colorscheme(colorscheme_repository)
       Event.emit('state_update')
 
       if code == 0 then
-        M.check_colorscheme(colorscheme_repository)
+        M.check_colorscheme(colorscheme_id)
       end
     end)
   end
@@ -261,18 +269,18 @@ end
 --- Update The Colorscheme
 --- @return nil
 function M.update_colorschemes()
-  for i = 1, #M.colorschemes_repository do
-    M.update_colorscheme(M.colorschemes_repository[i])
+  for i = 1, #M.colorschemes_id do
+    M.update_colorscheme(M.colorschemes_id[i])
   end
 end
 
 --- Update A Colorscheme
---- @param colorscheme_repository string
+--- @param colorscheme_id string
 --- @return nil
-function M.update_colorscheme(colorscheme_repository)
-  M.check_colorscheme(colorscheme_repository)
+function M.update_colorscheme(colorscheme_id)
+  M.check_colorscheme(colorscheme_id)
 
-  local colorscheme_data = M.colorschemes_data[colorscheme_repository]
+  local colorscheme_data = M.colorschemes_data[colorscheme_id]
 
   if colorscheme_data.status == 'installed' then
     colorscheme_data.status = 'updating'
@@ -282,7 +290,7 @@ function M.update_colorscheme(colorscheme_repository)
     Event.emit('update')
     Event.emit('state_update')
 
-    M.check_colorscheme_commit(colorscheme_repository, function(error, local_commit, remote_commit)
+    M.check_colorscheme_commit(colorscheme_id, function(error, local_commit, remote_commit)
       Event.emit('update')
 
       if error ~= nil then
@@ -334,11 +342,11 @@ function M.update_colorscheme(colorscheme_repository)
 end
 
 --- Check The Commit Of The Colorscheme
---- @param colorscheme_repository string
+--- @param colorscheme_id string
 --- @param callback function
 --- @return nil 
-function M.check_colorscheme_commit(colorscheme_repository, callback)
-  local colorscheme_data = M.colorschemes_data[colorscheme_repository]
+function M.check_colorscheme_commit(colorscheme_id, callback)
+  local colorscheme_data = M.colorschemes_data[colorscheme_id]
   local local_commit, remote_commit
 
   local pipeline = Pipeline:new({
@@ -366,8 +374,8 @@ function M.count_colorscheme_amount()
   M.colorschemes_amount = {}
   local status
 
-  for i = 1, #M.colorschemes_repository do
-    status = M.colorschemes_data[M.colorschemes_repository[i]].status
+  for i = 1, #M.colorschemes_id do
+    status = M.colorschemes_data[M.colorschemes_id[i]].status
 
     M.colorschemes_amount[status] = M.colorschemes_amount[status] == nil and 1 or M.colorschemes_amount[status] + 1
   end

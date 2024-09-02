@@ -60,21 +60,21 @@ Pages.create_page({
 
     local colorscheme_data
 
-    for i = 1, #Manager.colorschemes_repository do
-      colorscheme_data = Manager.colorschemes_data[Manager.colorschemes_repository[i]]
+    for i = 1, #Manager.colorschemes_id do
+      colorscheme_data = Manager.colorschemes_data[Manager.colorschemes_id[i]]
 
       if colorscheme_data.status == 'not_installed' then
         list:add_item(colorscheme_data.status, { content = Text.combine({
           Text:new('    '),
           Text:new('󱑥 ', Colors.icon),
-          Text:new(Manager.colorschemes_repository[i])
-        }), tags = {'selectable', 'install'}, extra = Manager.colorschemes_repository[i] })
+          Text:new(Manager.colorschemes_id[i])
+        }), tags = {'selectable', 'install'}, extra = Manager.colorschemes_id[i] })
       elseif colorscheme_data.status == 'failed' then
         list:add_item('failed', { content = Text.combine({
           Text:new('    '),
           Text:new('󰗖 ', Colors.icon),
-          Text:new(Manager.colorschemes_repository[i])
-        }), tags = {'selectable', 'check'}, extra = Manager.colorschemes_repository[i] })
+          Text:new(Manager.colorschemes_id[i])
+        }), tags = {'selectable', 'check'}, extra = Manager.colorschemes_id[i] })
         list:add_item('failed', { content = Text.combine({
           Text:new('    '),
           Text:new(table.concat({' ', colorscheme_data.info, ' '}), Colors.error)
@@ -83,7 +83,7 @@ Pages.create_page({
         list:add_item(colorscheme_data.status, { content = Text.combine({
           Text:new('    '),
           Text:new(get_progress_icon(colorscheme_data.progress), Colors.icon),
-          Text:new(Manager.colorschemes_repository[i]),
+          Text:new(Manager.colorschemes_id[i]),
           Text:new(' '),
           Text:new(table.concat({' ', colorscheme_data.info, ' '}), Colors.info)
         }), tags = {} })
@@ -91,7 +91,7 @@ Pages.create_page({
         local parts = {
           Text:new('    '),
           Text:new('󰸡 ', Colors.icon),
-          Text:new(Manager.colorschemes_repository[i]),
+          Text:new(Manager.colorschemes_id[i]),
         }
 
         if colorscheme_data.info:len() > 0 then
@@ -101,7 +101,7 @@ Pages.create_page({
           })
         end
 
-        list:add_item('installed', { content = Text.combine(parts), tags = {'selectable', 'update'}, extra = Manager.colorschemes_repository[i] })
+        list:add_item('installed', { content = Text.combine(parts), tags = {'selectable', 'update'}, extra = Manager.colorschemes_id[i] })
       end
     end
 

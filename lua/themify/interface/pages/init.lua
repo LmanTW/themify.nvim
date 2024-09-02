@@ -45,7 +45,7 @@ end
 
 --- Create A Page
 --- @param page Page
---- @return Page
+--- @return nil
 function M.create_page(page)
   M.pages[page.id] = page
   M.pages_id[#M.pages_id + 1] = page.id

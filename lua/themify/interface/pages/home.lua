@@ -23,16 +23,16 @@ Pages.create_page({
       content[#content + 1] = { content = Text:new('  Finally, use [I] to install the colorschemes!', Colors.description), tags = {'selectable'} }
     end
 
-    for i = 1, #Manager.colorschemes_repository do
-      local colorscheme_data = Manager.colorschemes_data[Manager.colorschemes_repository[i]]
+    for i = 1, #Manager.colorschemes_id do
+      local colorscheme_data = Manager.colorschemes_data[Manager.colorschemes_id[i]]
 
       if colorscheme_data.status == 'installed' then
-        content[#content + 1] = { content = Text:new(table.concat({'   ', Manager.colorschemes_repository[i]})), tags = {} }
+        content[#content + 1] = { content = Text:new(table.concat({'   ', Manager.colorschemes_id[i]})), tags = {} }
 
         for i2 = 1, #colorscheme_data.themes do
-          local selected = state ~= vim.NIL and (Manager.colorschemes_repository[i] == state.colorscheme_repository and colorscheme_data.themes[i2] == state.theme)
+          local selected = state ~= vim.NIL and (Manager.colorschemes_id[i] == state.colorscheme_repository and colorscheme_data.themes[i2] == state.theme)
 
-          content[#content + 1] = { content = Text:new(table.concat({selected and '    > ' or '    - ', colorscheme_data.themes[i2]})), tags = {'selectable', 'theme'}, extra = { colorscheme_repository = Manager.colorschemes_repository[i], theme = colorscheme_data.themes[i2] }}
+          content[#content + 1] = { content = Text:new(table.concat({selected and '    > ' or '    - ', colorscheme_data.themes[i2]})), tags = {'selectable', 'theme'}, extra = { colorscheme_repository = Manager.colorschemes_id[i], theme = colorscheme_data.themes[i2] }}
         end
       end
     end
@@ -41,8 +41,6 @@ Pages.create_page({
   end,
 
   enter = function(content)
-    local state = Data.read_state_data()
-
     if state ~= vim.NIL then
       for i = 1, #content do
         if vim.list_contains(content[i].tags, 'theme') then

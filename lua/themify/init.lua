@@ -20,6 +20,14 @@ local M = {
   listen = Event.listen
 }
 
+--- Throw An Colorscheme Config Error
+--- @param colorscheme_repository string
+--- @param option_name string
+--- @param type_name string
+local function throw_colorscheme_config_error(colorscheme_repository, option_name, type_name)
+  error(table.concat({'Themify: The "', option_name, '" option for the colorscheme "', colorscheme_repository, '" must be a <', type_name, '>'}))
+end
+
 --- Check The Config Of A Colorscheme
 --- @param colorscheme_repository string
 --- @param colorscheme Colorscheme
@@ -76,7 +84,7 @@ function M.setup(colorschemes)
     local ok = Manager.load_theme(state.colorscheme_repository, state.theme)
 
     if not ok then
-      Data.write_state_data(nil)
+      Data.write_state_data(vim.NIL)
 
       vim.cmd('Themify')
     end
