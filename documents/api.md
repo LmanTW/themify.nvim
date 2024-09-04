@@ -126,6 +126,7 @@ Some type annotations for Themify.
 ## Colorscheme_Data
 ```lua
 --- @class Colorscheme_Data
+--- @field type 'github'|'local'
 --- @field name string
 --- @field status 'unknown'|'not_installed'|'installed'|'installing'|'updating'|'failed'
 --- @field progress number
