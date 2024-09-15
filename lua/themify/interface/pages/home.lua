@@ -14,7 +14,7 @@ Pages.create_page({
   update = function()
     local content = {}
 
-    if Manager.colorschemes_amount.installed == nil then
+    if Manager.colorschemes_amount.installed == nil and Manager.colorschemes_amount.updating == nil then
       content[#content + 1] = { content = Text:new('  Welcome to Themify!', Colors.description), tags = {'selectable'} }
       content[#content + 1] = { content = Text:new(''), tags = {} }
       content[#content + 1] = { content = Text:new('  Use <Up> <Down> to move the cursor, <CR> to select.', Colors.description), tags = {'selectable'} }
@@ -28,7 +28,7 @@ Pages.create_page({
 
       if colorscheme_data.type == 'github' then
 
-        if colorscheme_data.status == 'installed' then
+        if colorscheme_data.status == 'installed' or colorscheme_data.status == 'updating' then
           content[#content + 1] = { content = Text:new(table.concat({'   ', Manager.colorschemes_id[i]})), tags = {} }
 
           for i2 = 1, #colorscheme_data.themes do

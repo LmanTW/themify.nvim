@@ -19,9 +19,9 @@ local mapping = {
   ['<Left>'] = 'switch_page("left")',
   ['<Right>'] = 'switch_page("right")',
 
-  C = 'check_colorschemes()',
   I = 'install_colorschemes()',
   U = 'update_colorschemes()',
+  C = 'check_colorschemes()',
 
   q = 'close()',
   ['<ESC>'] = 'close()'

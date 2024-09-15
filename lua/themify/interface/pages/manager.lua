@@ -108,14 +108,12 @@ Pages.create_page({
     return list:get_content()
   end,
 
-  enter = function(content)
+  enter = function()
     return 1
   end,
-  leave = function(content)
-  end,
+  leave = function() end,
 
-  hover = function()
-  end,
+  hover = function() end,
   select = function(line)
     if vim.list_contains(line.tags, 'check') then Manager.check_colorscheme(line.extra)
     elseif vim.list_contains(line.tags, 'install') then Manager.install_colorscheme(line.extra)

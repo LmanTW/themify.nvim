@@ -24,7 +24,7 @@ function M.check_data_files()
   end
 end
 
---- Get The State Data
+--- Read The State Data
 --- @return StateData
 function M.read_state_data()
   M.check_data_files()
@@ -36,7 +36,11 @@ end
 --- @param data StateData
 --- @return nil
 function M.write_state_data(data)
-  Utilities.write_file(M.state_data_path, vim.json.encode(data))
+  local json = vim.json.encode(data)
+
+  Utilities.error(json == nil, {'Themify: Failed to encode the state data'})
+
+  Utilities.write_file(M.state_data_path, json)
 end
 
 --- Read The Head Of The Colorscheme Repository

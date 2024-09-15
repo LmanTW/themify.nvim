@@ -157,16 +157,6 @@ function Window:switch_page(direction)
   self:update()
 end
 
---- Check The Colorschemes
---- @return nil
-function Window:check_colorschemes()
-  Manager.check_colorschemes()
-
-  self.page = self.control:enter_page(self.page, 'manager')
-
-  self:update()
-end
-
 --- Install The Colorschemes
 --- @return nil
 function Window:install_colorschemes()
@@ -181,6 +171,16 @@ end
 --- @return nil
 function Window:update_colorschemes()
   Manager.update_colorschemes()
+
+  self.page = self.control:enter_page(self.page, 'manager')
+
+  self:update()
+end
+
+--- Check The Colorschemes
+--- @return nil
+function Window:check_colorschemes()
+  Manager.check_colorschemes()
 
   self.page = self.control:enter_page(self.page, 'manager')
 
