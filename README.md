@@ -59,8 +59,13 @@ require("themery").setup({
   <summary>Advance Configuration</summary>
 
   ```lua
+  {
+    async = true,
+    -- Enable this might improve your startup time. (Default: false)
+
     {
       'folke/tokyonight.nvim',
+
       branch = 'main',
 
       before = function()
@@ -74,6 +79,7 @@ require("themery").setup({
       whitelist = {'tokyonight-night', 'tokyonight-day'},
       blacklist = {}
     }
+  }
   ```
 </details>
 

@@ -24,6 +24,7 @@ local M = {
 --- @param colorscheme_repository string
 --- @param option_name string
 --- @param type_name string
+--- @return nil
 local function throw_colorscheme_config_error(colorscheme_repository, option_name, type_name)
   error(table.concat({'Themify: The "', option_name, '" option for the colorscheme "', colorscheme_repository, '" must be a <', type_name, '>'}))
 end
@@ -31,6 +32,7 @@ end
 --- Check The Config Of A Colorscheme
 --- @param colorscheme_repository string
 --- @param colorscheme Colorscheme
+--- @return nil
 local function check_colorscheme_config(colorscheme_repository, colorscheme)
   if colorscheme.branch ~= nil and type(colorscheme.branch) ~= 'string' then throw_colorscheme_config_error(colorscheme_repository, 'branch', 'string') end
   if colorscheme.before ~= nil and type(colorscheme.before) ~= 'function' then throw_colorscheme_config_error(colorscheme_repository, 'before', 'function') end
@@ -39,16 +41,32 @@ local function check_colorscheme_config(colorscheme_repository, colorscheme)
   if colorscheme.blacklist ~= nil and type(colorscheme.blacklist) ~= 'table' then throw_colorscheme_config_error(colorscheme_repository, 'blacklist', 'table') end
 end
 
---- Setup Themify
---- @param colorschemes Colorscheme[]
+--- Load The State
 --- @return nil
-function M.setup(colorschemes)
-  Utilities.error(type(colorschemes) ~= 'table', {'Themify: "colorschemes" must be a <table>'})
+local function load_state()
+  local state = Data.read_state_data()
+
+  if state ~= vim.NIL then
+    local ok = Manager.load_theme(state.colorscheme_repository, state.theme)
+
+    if not ok then
+      Data.write_state_data(vim.NIL)
+
+      vim.cmd('Themify')
+    end
+  end
+end
+
+--- Setup Themify
+--- @param config Colorscheme[]|table<string, boolean>
+--- @return nil
+function M.setup(config)
+  Utilities.error(type(config) ~= 'table', {'Themify: "config" must be a <table>'})
 
   local colorscheme
 
-  for i = 1, #colorschemes do
-    colorscheme = colorschemes[i]
+  for i = 1, #config do
+    colorscheme = config[i]
 
     if type(colorscheme) == 'string' then
       Manager.add_colorscheme(colorscheme, {
@@ -67,8 +85,8 @@ function M.setup(colorschemes)
 
   -- Run the checking process in async to avoid blocking the thread.
   Utilities.execute_async(vim.schedule_wrap(function()
-    for i = 1, #colorschemes do
-      colorscheme = colorschemes[i]
+    for i = 1, #config do
+      colorscheme = config[i]
 
       if type(colorscheme[1]) == 'string' then
         check_colorscheme_config(colorscheme[1], colorscheme)
@@ -78,16 +96,10 @@ function M.setup(colorschemes)
     Manager.check_colorschemes()
   end))
 
-  local state = Data.read_state_data()
-
-  if state ~= vim.NIL then
-    local ok = Manager.load_theme(state.colorscheme_repository, state.theme)
-
-    if not ok then
-      Data.write_state_data(vim.NIL)
-
-      vim.cmd('Themify')
-    end
+  if config.async == true then
+    Utilities.execute_async(vim.schedule_wrap(load_state))
+  else
+    load_state()
   end
 end
 
