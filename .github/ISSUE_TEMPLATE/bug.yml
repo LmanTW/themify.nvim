@@ -14,3 +14,5 @@ body:
     attributes:
       label: Operating System
       options: ['Windows', 'MacOS', 'Linux', 'Other']
+    validations:
+      required: true
