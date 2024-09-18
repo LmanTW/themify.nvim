@@ -3,14 +3,14 @@
 
 A colorscheme manager and switcher designed for [Neovim](https://neovim.io) written in [Lua](https://www.lua.org). Inspired by [Themery.nvim](https://github.com/zaldih/themery.nvim) and [Lazy.nvim](https://github.com/folke/lazy.nvim).
 
-* 🎨 Easily install and manage your colorschemes.
-* 🔍 Quickly switch between colorschemes with a live preview.
-* ⚡️ Optimized startup time with lazy-loaded colorschemes.
+- 🎨 Easily install and manage your colorschemes.
+- 🔍 Quickly switch between colorschemes with a live preview.
+- ⚡️ Optimized startup time with lazy-loaded colorschemes.
 
 ## 📦 Installation
 Use the package manager of your choice to install Theminify:
 
-* [Lazy.nvim](https://github.com/folke/lazy.nvim)
+- [Lazy.nvim](https://github.com/folke/lazy.nvim)
 ```lua
 {
   'lmantw/themify.nvim',
@@ -22,7 +22,7 @@ Use the package manager of your choice to install Theminify:
 }
 ```
 
-* [Packer](https://github.com/wbthomason/packer.nvim)
+- [Packer](https://github.com/wbthomason/packer.nvim)
 ```lua
 use {
   'lmantw/themify.nvim',
@@ -60,8 +60,8 @@ require("themery").setup({
 
   ```lua
   {
-    async = true,
-    -- Enable this might improve your startup time. (Default: false)
+    async = false,
+    --- Enable this would load the colorscheme asynchronously, which might improve your startup time.
 
     {
       'folke/tokyonight.nvim',
@@ -84,4 +84,5 @@ require("themery").setup({
 </details>
 
 ## 📎 Other
-* [API Documentation](./documents/api.md)
+- [API Documentation](./documents/api.md)
+- [Highlight Groups](./documents/highlight.md)

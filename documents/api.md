@@ -2,22 +2,22 @@
 
 Themify exposes an API that allows developers to interact with the Themify core.
 
-* [Themify](#themify)
-  * [colorschemes_data](#colorschemes_data)
-  * [colorschemes_repository](#colorschemes_repository)
-* [add_colorscheme()](#add_colorscheme)
-  * [load_theme()](#load_theme)
-  * [clean_colorschemes()](#clean_colorschemes)
-  * [check_colorschemes()](#check_colorschemes)
-  * [check_colorscheme()](#check_colorscheme)
-  * [install_colorschemes()](#install_colorschemes)
-  * [install_colorscheme()](#install_colorscheme)
-  * [update_colorschemes()](#update_colorschemes)
-  * [update_colorscheme()](#update_colorscheme)
-  * [listen()](#listen)
-* [Types](#types)
-  * [Colorscheme_Info](#colorscheme_info)
-  * [Colorscheme_Data](#colorscheme_data)
+- [Themify](#themify)
+  - [colorschemes_data](#colorschemes_data)
+  - [colorschemes_repository](#colorschemes_repository)
+- [add_colorscheme()](#add_colorscheme)
+  - [load_theme()](#load_theme)
+  - [clean_colorschemes()](#clean_colorschemes)
+  - [check_colorschemes()](#check_colorschemes)
+  - [check_colorscheme()](#check_colorscheme)
+  - [install_colorschemes()](#install_colorschemes)
+  - [install_colorscheme()](#install_colorscheme)
+  - [update_colorschemes()](#update_colorschemes)
+  - [update_colorscheme()](#update_colorscheme)
+  - [listen()](#listen)
+- [Types](#types)
+  - [Colorscheme_Info](#colorscheme_info)
+  - [Colorscheme_Data](#colorscheme_data)
 
 # Themify
 
@@ -32,7 +32,7 @@ local Themify = require('themify')
 Themify.colorschemes_data
 ```
 
-* `table<string, Colorscheme_Data>`
+- `table<string, Colorscheme_Data>`
 
 ## colorscheme_repository
 
@@ -41,7 +41,7 @@ Themify.colorschemes_data
 Themify.colorscheme_repository
 ```
 
-* `string[]`
+- `string[]`
 
 ## add_colorscheme()
 
@@ -50,8 +50,8 @@ Themify.colorscheme_repository
 Themify.add_colorscheme(<colorscheme_id>, <colorscheme_info>)
 ```
 
-* `colorscheme_id: string` | The id the colorscheme. `Example: 'folke/tokyonight.nvim' or 'default'`
-* `colorscheme_info: Colorscheme_Info` | The info of the colorscheme.
+- `colorscheme_id: string` | The id the colorscheme. `Example: 'folke/tokyonight.nvim' or 'default'`
+- `colorscheme_info: Colorscheme_Info` | The info of the colorscheme.
 
 ## load_theme()
 
@@ -60,8 +60,8 @@ Themify.add_colorscheme(<colorscheme_id>, <colorscheme_info>)
 Themify.load_theme(<colorscheme_id>, <theme>)
 ```
 
-* `colorscheme_id: string` | The id of the colorscheme. `Example: 'folke/tokyonight.nvim' or 'default'`
-* `theme: string` | The theme. `Example: tokyonight-night
+- `colorscheme_id: string` | The id of the colorscheme. `Example: 'folke/tokyonight.nvim' or 'default'`
+- `theme: string` | The theme. `Example: tokyonight-night
 
 ## clean_colorschemes()
 
@@ -84,7 +84,7 @@ Themify.check_colorschemes()
 Themify.check_colorscheme(<colorscheme_id>)
 ```
 
-* `colorscheme_id: string` | The id of the colorscheme. `Example: 'folke/tokyonight.nvim' or 'default'`
+- `colorscheme_id: string` | The id of the colorscheme. `Example: 'folke/tokyonight.nvim' or 'default'`
 
 ## install_colorschemes()
 
@@ -100,7 +100,7 @@ Themify.install_colorschemes()
 Themify.install_colorscheme(<colorscheme_id>)
 ```
 
-* `colorscheme_id: string` | The id of the colorscheme. `Example: 'folke/tokyonight.nvim' or 'default'`
+- `colorscheme_id: string` | The id of the colorscheme. `Example: 'folke/tokyonight.nvim' or 'default'`
 
 ## update_colorschemes()
 
@@ -115,7 +115,7 @@ Themify.update_colorschemes()
 --- Update a colorscheme.
 Themify.update_colorscheme(<colorscheme_repository>)
 ```
-* `colorscheme_repository: string` | The repository of the colorscheme. `Example: 'folke/tokyonight.nvim' or 'default'`
+- `colorscheme_repository: string` | The repository of the colorscheme. `Example: 'folke/tokyonight.nvim' or 'default'`
 
 ## listen()
 
@@ -124,13 +124,13 @@ Themify.update_colorscheme(<colorscheme_repository>)
 Themify.listen(<event>, <callback>)
 ```
 
-* `event: string` | The name of the event.
-* `calblack: string` | The callback of the listener.
+- `event: string` | The name of the event.
+- `calblack: string` | The callback of the listener.
 
 ### Events
 
-* `update` | When something is updated that requires an interface update.
-* `state_update` | When the state of any of the colorscheme is updated.
+- `update` | When something is updated that requires an interface update.
+- `state_update` | When the state of any of the colorscheme is updated.
 
 # Types
 

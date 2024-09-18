@@ -26,7 +26,7 @@ local M = {
 --- @param type_name string
 --- @return nil
 local function throw_colorscheme_config_error(colorscheme_repository, option_name, type_name)
-  error(table.concat({'Themify: The "', option_name, '" option for the colorscheme "', colorscheme_repository, '" must be a <', type_name, '>'}))
+ error(table.concat({'Themify: The "', option_name, '" option for the colorscheme "', colorscheme_repository, '" must be a <', type_name, '>'}))
 end
 
 --- Check The Config Of A Colorscheme
@@ -84,7 +84,7 @@ function M.setup(config)
   end
 
   -- Run the checking process in async to avoid blocking the thread.
-  Utilities.execute_async(vim.schedule_wrap(function()
+  Utilities.execute_asymc(vim.schedule_wrap(function()
     for i = 1, #config do
       colorscheme = config[i]
 
