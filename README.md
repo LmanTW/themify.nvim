@@ -61,7 +61,7 @@ require("themery").setup({
   ```lua
   {
     async = false,
-    --- Enable this would load the colorscheme asynchronously, which might improve your startup time.
+    -- Enable this would load the colorscheme asynchronously, which might improve your startup time.
 
     {
       'folke/tokyonight.nvim',
@@ -84,5 +84,5 @@ require("themery").setup({
 </details>
 
 ## 📎 Other
-- [API Documentation](./documents/api.md)
 - [Highlight Groups](./documents/highlight.md)
+- [API Documentation](./documents/api.md)

@@ -33,7 +33,6 @@ local M = {
 
   --- @type string[]
   loaded_colorschemes = {},
-
   --- @type table<string, number>
   colorschemes_amount = {}
 }
@@ -86,9 +85,13 @@ function M.load_theme(colorscheme_id, theme)
     colorscheme_id = theme
   end
 
-  Utilities.error(M.colorschemes_data[colorscheme_id] == nil, {'Themify: Colorscheme not found: "', colorscheme_id, '"'})
-
   local colorscheme_data = M.colorschemes_data[colorscheme_id]
+
+  if colorscheme_data == nil
+    or (colorscheme_data.type == 'github' and not vim.list_contains(colorscheme_data.themes, theme))
+  then
+    return false
+  end
 
   if colorscheme_data.type == 'github' then
     if not vim.list_contains(M.loaded_colorschemes, colorscheme_id) then

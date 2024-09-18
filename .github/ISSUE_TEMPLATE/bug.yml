@@ -1,0 +1,16 @@
+name: Bug Report
+description: Report a bug.
+
+labels: ['Type: Bug']
+
+body:
+  - type: textarea
+    attributes:
+      label: Bug Description
+      description: Describe the bug and how to reproduce it.
+    validations:
+      required: true
+  - type: dropdown
+    attributes:
+      label: Operating System
+      options: ['Windows', 'MacOS', 'Linux', 'Other']
