@@ -1,13 +1,13 @@
-name: Bug Report
-description: Report a bug.
+name: Performance Report
+description: Report a performance issue.
 
-labels: ['Type: Bug']
+labels: ['Type: Performance']
 
 body:
   - type: textarea
     attributes:
-      label: Bug Description
-      description: Describe the bug like how to reproduce it.
+      label: Performance Issue Description
+      description: Describe the performance issue.
     validations:
       required: true
   - type: dropdown
