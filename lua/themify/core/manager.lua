@@ -88,7 +88,7 @@ function M.load_theme(colorscheme_id, theme)
   local colorscheme_data = M.colorschemes_data[colorscheme_id]
 
   if colorscheme_data == nil
-    or (colorscheme_data.type == 'github' and not vim.list_contains(colorscheme_data.themes, theme))
+    -- or (colorscheme_data.type == 'github' and not vim.list_contains(colorscheme_data.themes, theme))
   then
     return false
   end

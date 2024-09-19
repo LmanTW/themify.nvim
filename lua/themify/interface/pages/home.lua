@@ -5,7 +5,7 @@ local Manager = require('themify.core.manager')
 local Data = require('themify.core.data')
 
 local state = Data.read_state_data()
-local current = state == vim.NIL and {} or { colorscheme_id = state.colorscheme_id, theme = state.theme }
+local current = state == vim.NIL and {} or { colorscheme_repository = state.colorscheme_repository, theme = state.theme }
 
 Pages.create_page({
   id = 'home',
@@ -32,13 +32,13 @@ Pages.create_page({
           content[#content + 1] = { content = Text:new(table.concat({'   ', Manager.colorschemes_id[i]})), tags = {} }
 
           for i2 = 1, #colorscheme_data.themes do
-            local selected = state ~= vim.NIL and (Manager.colorschemes_id[i] == state.colorscheme_id and colorscheme_data.themes[i2] == state.theme)
+            local selected = state ~= vim.NIL and (Manager.colorschemes_id[i] == state.colorscheme_repository and colorscheme_data.themes[i2] == state.theme)
 
-            content[#content + 1] = { content = Text:new(table.concat({selected and '    > ' or '    - ', colorscheme_data.themes[i2]})), tags = {'selectable', 'theme'}, extra = { colorscheme_id = Manager.colorschemes_id[i], theme = colorscheme_data.themes[i2] }}
+            content[#content + 1] = { content = Text:new(table.concat({selected and '    > ' or '    - ', colorscheme_data.themes[i2]})), tags = {'selectable', 'theme'}, extra = { colorscheme_repository = Manager.colorschemes_id[i], theme = colorscheme_data.themes[i2] }}
           end
         end
       else
-        local selected = state ~= vim.NIL and (state.colorscheme_id == nil and state.theme == colorscheme_data.name)
+        local selected = state ~= vim.NIL and (state.colorscheme_repository == nil and state.theme == colorscheme_data.name)
 
         content[#content + 1] = { content = Text:new(table.concat({selected and '  > ' or '  - ', colorscheme_data.name})), tags = {'selectable', 'theme'}, extra = { theme = colorscheme_data.name }}
       end
@@ -51,7 +51,7 @@ Pages.create_page({
     if state ~= vim.NIL then
       for i = 1, #content do
         if vim.list_contains(content[i].tags, 'theme') then
-          if content[i].extra.colorscheme_id == state.colorscheme_id and content[i].extra.theme == state.theme then
+          if content[i].extra.colorscheme_repository == state.colorscheme_repository and content[i].extra.theme == state.theme then
             return i
           end
         end
@@ -62,22 +62,22 @@ Pages.create_page({
   end,
   leave = function()
     if state ~= vim.NIL then
-      if state.colorscheme_id ~= current.colorscheme_id or state.theme ~= current.theme then
-        Manager.load_theme(state.colorscheme_id, state.theme)
+      if state.colorscheme_repository ~= current.colorscheme_repository or state.theme ~= current.theme then
+        Manager.load_theme(state.colorscheme_repository, state.theme)
 
         current = line.extra
       end
     else
       vim.cmd.colorscheme('default')
 
-      current = { colorscheme_id = nil, theme = 'default' }
+      current = { colorscheme_repository = nil, theme = 'default' }
     end
   end,
 
   hover = function(line)
     if vim.list_contains(line.tags, 'theme') then
-      if line.extra.colorscheme_id ~= current.colorscheme_id or line.extra.theme ~= current.theme then
-        Manager.load_theme(line.extra.colorscheme_id, line.extra.theme)
+      if line.extra.colorscheme_repository ~= current.colorscheme_repository or line.extra.theme ~= current.theme then
+        Manager.load_theme(line.extra.colorscheme_repository, line.extra.theme)
 
         current = line.extra
       end
