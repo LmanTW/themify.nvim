@@ -84,7 +84,7 @@ function M.setup(config)
   end
 
   -- Run the checking process in async to avoid blocking the thread.
-  Utilities.execute_asymc(vim.schedule_wrap(function()
+  Utilities.execute_async(vim.schedule_wrap(function()
     for i = 1, #config do
       colorscheme = config[i]
 

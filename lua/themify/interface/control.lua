@@ -145,11 +145,12 @@ function Control:enter_page(old_page, new_page)
     Pages.get_page(old_page).leave(Pages.get_page_content(old_page))
   end
 
-  Pages.update_page(new_page)
+  local content = Pages.update_page(new_page)
 
   local control = self:get_page_control(new_page)
-  control.cursor_y = Pages.get_page(new_page).enter(Pages.get_page_content(new_page))
+  control.cursor_y = Pages.get_page(new_page).enter(content)
 
+  self:check_cursor(new_page)
   self:check_scroll(new_page)
 
   return new_page

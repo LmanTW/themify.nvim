@@ -106,6 +106,14 @@ function Window:new()
 
   self.control:enter_page(nil, self.page)
 
+  local content = Pages.update_page(self.page)
+  local control = self.control:get_page_control(self.page)
+  
+  if content[control.cursor_y] ~= nil and vim.list_contains(content[control.cursor_y].tags, 'selectable') then
+    Pages.get_page(self.page).hover(content[control.cursor_y])
+  end
+
+
   return self
 end
 
@@ -118,7 +126,7 @@ function Window:move_cursor(direction)
 
   self.control:move_cursor(self.page, direction)
 
-  if content[control.cursor_y] ~= nil then
+  if content[control.cursor_y] ~= nil and vim.list_contains(content[control.cursor_y].tags, 'selectable') then
     Pages.get_page(self.page).hover(content[control.cursor_y])
   end
 
@@ -152,7 +160,12 @@ end
 function Window:switch_page(direction)
   self.page = self.control:switch_page(self.page, direction)
 
-  self.control:check_cursor(self.page)
+  local content = Pages.update_page(self.page)
+  local control = self.control:get_page_control(self.page)
+
+  if content[control.cursor_y] ~= nil and vim.list_contains(content[control.cursor_y].tags, 'selectable') then
+    Pages.get_page(self.page).hover(content[control.cursor_y])
+  end 
 
   self:update()
 end
