@@ -1,4 +1,4 @@
---- @alias StateData vim.NIL|{ colorscheme_repository: string, theme: string }
+--- @alias StateData vim.NIL|{ colorscheme_id: string, theme: string }
 
 local Utilities = require('themify.utilities')
 
@@ -29,7 +29,18 @@ end
 function M.read_state_data()
   M.check_data_files()
 
-  return vim.json.decode(Utilities.read_file(M.state_data_path))
+  local data = vim.json.decode(Utilities.read_file(M.state_data_path))
+
+  --- Just for backward compatibility, might remove this later.
+  --- Added 2024/9/14.
+
+  if data ~= vim.NIl and data.colorscheme_repository ~= nil then
+    M.write_state_data({ colorscheme_id = data.colorscheme_repository, theme = data.theme })
+
+    return { colorscheme_id = data.colorscheme_repository, theme = data.theme }
+  end
+
+  return data
 end
 
 --- Write The State Data

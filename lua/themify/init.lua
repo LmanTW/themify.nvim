@@ -47,7 +47,7 @@ local function load_state()
   local state = Data.read_state_data()
 
   if state ~= vim.NIL then
-    local ok = Manager.load_theme(state.colorscheme_repository, state.theme)
+    local ok = Manager.load_theme(state.colorscheme_id, state.theme)
 
     if not ok then
       Data.write_state_data(vim.NIL)
