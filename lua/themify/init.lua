@@ -52,7 +52,14 @@ local function load_state()
     if not ok then
       Data.write_state_data(vim.NIL)
 
-      vim.cmd('Themify')
+      vim.api.nvim_create_autocmd('UIEnter', {
+        callback = function()
+          vim.cmd('Themify')
+        end,
+
+        once = true
+      })
+
     end
   end
 end

@@ -34,7 +34,7 @@ function M.read_state_data()
   --- Just for backward compatibility, might remove this later.
   --- Added 2024/9/14.
 
-  if data ~= vim.NIl and data.colorscheme_repository ~= nil then
+  if data ~= vim.NIL and data.colorscheme_repository ~= nil then
     M.write_state_data({ colorscheme_id = data.colorscheme_repository, theme = data.theme })
 
     return { colorscheme_id = data.colorscheme_repository, theme = data.theme }
