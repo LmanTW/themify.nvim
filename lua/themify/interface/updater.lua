@@ -15,7 +15,7 @@ function Updater:new(callback)
   self.timer = vim.uv.new_timer()
   self.update_cooldown = 0
 
-  self.timer:start(10, 10, vim.schedule_wrap(function()
+  self.timer:start(25, 25, vim.schedule_wrap(function()
     if (self.update_cooldown > 0) then
       self.update_cooldown = self.update_cooldown - 1
 
@@ -43,7 +43,7 @@ end
 --- @return nil
 function Updater:update()
   if self.timer ~= nil then
-    self.update_cooldown = 10
+    self.update_cooldown = 5
   end
 end
 

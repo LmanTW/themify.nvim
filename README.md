@@ -1,4 +1,5 @@
 # Themify
+
 ![A screenshot of Themify](./documents/assets/screenshot.jpg)
 
 A colorscheme manager and switcher designed for [Neovim](https://neovim.io) written in [Lua](https://www.lua.org). Inspired by [Themery.nvim](https://github.com/zaldih/themery.nvim) and [Lazy.nvim](https://github.com/folke/lazy.nvim).
@@ -8,9 +9,11 @@ A colorscheme manager and switcher designed for [Neovim](https://neovim.io) writ
 - ⚡️ Optimized startup time with lazy-loaded colorschemes.
 
 ## 📦 Installation
+
 Use the package manager of your choice to install Theminify:
 
 - [Lazy.nvim](https://github.com/folke/lazy.nvim)
+
 ```lua
 {
   'lmantw/themify.nvim',
@@ -23,6 +26,7 @@ Use the package manager of your choice to install Theminify:
 ```
 
 - [Packer](https://github.com/wbthomason/packer.nvim)
+
 ```lua
 use {
   'lmantw/themify.nvim',
@@ -32,6 +36,7 @@ use {
 ```
 
 ## 🛠 Configuration
+
 The configuration for Themify is really easy and stright forward, just call the `setup` function (or use the `config` option in your package manager) and add the colorschemes you want to install / manage:
 
 ```lua
@@ -41,7 +46,7 @@ require("themery").setup({
   'folke/tokyonight.nvim',
   'Yazeed1s/minimal.nvim',
   {
-    'sho-87/kanagawa-paper.nvim',
+'sho-87/kanagawa-paper.nvim',
 
     branch = 'master'
   },
@@ -84,5 +89,14 @@ require("themery").setup({
 </details>
 
 ## 📎 Other
+
 - [Highlight Groups](./documents/highlight.md)
 - [API Documentation](./documents/api.md)
+
+<a href="https://star-history.com/#LmanTW/themify.nvim&Date">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=LmanTW/themify.nvim&type=Date&theme=dark" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=LmanTW/themify.nvim&type=Date" />
+   <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=LmanTW/themify.nvim&type=Date" />
+ </picture>
+</a>
