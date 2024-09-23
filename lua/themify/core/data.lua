@@ -48,7 +48,6 @@ end
 --- @return nil
 function M.write_state_data(data)
   local json = vim.json.encode(data)
-
   Utilities.error(json == nil, {'Themify: Failed to encode the state data'})
 
   Utilities.write_file(M.state_data_path, json)

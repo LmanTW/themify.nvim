@@ -8,51 +8,61 @@ if (!fs.existsSync(path.join(__dirname, 'cache'))) fs.mkdirSync(path.join(__dirn
 if (!fs.existsSync(path.join(__dirname, 'cache', 'colorschemes'))) fs.mkdirSync(path.join(__dirname, 'cache', 'colorschemes'))
 
 for (const folderName of fs.readdirSync(path.join(__dirname, 'cache', 'colorschemes'))) {
-  if (colorschemes.find((colorscheme) => colorscheme.name === folderName) === undefined) fs.rmSync(path.join(__dirname, 'cache', 'colorschemes', folderName), { recursive: true })
+  if (colorschemes.find((colorscheme) => colorscheme.repository.split('/')[1] === folderName) === undefined) fs.rmSync(path.join(__dirname, 'cache', 'colorschemes', folderName), { recursive: true })
 }
 
 // Start The Database Updating Process
 async function start(): Promise<void> {
-  for (const colorscheme of colorschemes) {
-    if (!fs.existsSync(path.join(__dirname, 'cache', 'colorschemes', colorscheme.name))) {
-      console.log(`Cloning: "${colorscheme.author}/${colorscheme.name}"`)
+  const themes: { name: string, repository: string, brightness: 'dark'|'light', temperature: 'cold'|'warm' }[] = []
 
-      const result = await execute(path.join(__dirname, 'cache', 'colorschemes'), 'git', ['clone', `https://github.com/${colorscheme.author}/${colorscheme.name}.git`])
+  for (const colorscheme of colorschemes) {
+    for (const theme of colorscheme.themes) {
+      themes.push({
+        name: theme.name,
+        repository: colorscheme.repository,
+
+        brightness: theme.brightness,
+        temperature: theme.temperature
+      })
+    }
+
+    if (!fs.existsSync(path.join(__dirname, 'cache', 'colorschemes', colorscheme.repository.split('/')[1]))) {
+      console.log(`Cloning: "${colorscheme.repository}"`)
+
+      const result = await execute(path.join(__dirname, 'cache', 'colorschemes'), 'git', ['clone', `https://github.com/${colorscheme.repository}.git`])
 
       if (result.code !== 0) {
-        console.log(`Error: "${result.stderr.replaceAll('\n', '\\n')}"`)
+        console.log(`Error: "${result.stderr.split('\n')[0]}"`)
     
         process.exit(1)
       }
-    } 
+    }
   }
 
   const lines = `
 
-local colorschemes = {${colorschemes.map((colorscheme) => `{ path = '${path.join(__dirname, 'cache', 'colorschemes', colorscheme.name)}', themes = {${colorscheme.themes.map((theme) => `'${theme.name}'`)}} }`).join(', ')}}
-local colorscheme
+local themes = {${themes.map((theme) => `{ name = '${theme.name}', colorscheme_path = '${path.join(__dirname, 'cache', 'colorschemes', theme.repository.split('/')[1])}' }`).join(', ')}}
+local theme
 
-local data = {}
+local previews_data = {}
 
-for i = 1, #colorschemes do
-  colorscheme = colorschemes[i]
+for i = 1, #themes do
+  theme = themes[i]
 
-  vim.o.runtimepath = table.concat({vim.o.runtimepath, ',', colorscheme.path})
-
-  data[i] = {}
-
-  for i2 = 1, #colorscheme.themes do
-    vim.cmd.colorscheme(colorscheme.themes[i2])
-
-    data[i][i2] = {
-      ["@string.regexp"] = vim.api.nvim_get_hl(0, { name = '@string.regexp', link = true })
-    }
+  if vim.o.runtimepath:find(theme.colorscheme_path) == nil then
+    vim.o.runtimepath = table.concat({vim.o.runtimepath, ',', theme.colorscheme_path})
   end
+
+  vim.cmd.colorscheme(theme.name)
+
+  previews_data[i] = {
+    ["@string.regexp"] = vim.api.nvim_get_hl(0, { name = '@string.regexp', link = true }) 
+  }
 end
 
-local file = vim.loop.fs_open('${path.join(__dirname, 'cache', 'highlight_data.json')}', 'w', 438)
+local file = vim.loop.fs_open('${path.join(__dirname, 'cache', 'previews_data.json')}', 'w', 438)
 
-vim.loop.fs_write(file, vim.json.encode(data))
+vim.loop.fs_write(file, vim.json.encode(previews_data))
 
 vim.cmd(':qa!')
 
@@ -72,21 +82,19 @@ if (lines[i].length === 0) lines.splice(i, 1)
   neovim.stderr.pipe(process.stderr)
 
   neovim.once('exit', () => {
-    const highlight_data: { [key: string]: { [key: string]: number }}[][] = JSON.parse(fs.readFileSync(path.join(__dirname, 'cache', 'highlight_data.json')))
-    const data: { name: string, author: string, themes: { name: string, brightness: 'dark' | 'light', temperature: 'cold' | 'warm', highlights: { [key: string]: { [key: string]: number }}}[] }[] = []
+    const previews_data: { [key: string]: { [key: string]: number }}[] = JSON.parse(fs.readFileSync(path.join(__dirname, 'cache', 'previews_data.json'), 'utf8'))
+    const database: { name: string, repository: string, brightness: 'dark'|'light', temperature: 'cold'|'warm', preview: { [key: string]: { [key: string]: number }} }[] = []
 
-    for (let i = 0; i < colorschemes.length; i++) {
-      const colorscheme = colorschemes[i]
+    for (let i = 0; i < themes.length; i++) {
+      const theme = themes[i]
 
-      data.push({ name: colorscheme.name, author: colorscheme.author, themes: [] })
-
-      for (let i2 = 0; i2 < colorscheme.themes.length; i2++) data[data.length - 1].themes.push({ name: colorscheme.themes[i2].name, brightness: colorscheme.themes[i2].brightness, temperature: colorscheme.themes[i2].temperature, highlights: highlight_data[i][i2] })        
+      database.push({ name: theme.name, repository: theme.repository, brightness: theme.brightness, temperature: theme.temperature, preview: previews_data[i] })
     }
 
-    fs.writeFileSync(path.resolve(__dirname, '../colorschemes.json'), JSON.stringify(data))
+    fs.writeFileSync(path.resolve(__dirname, '../colorschemes.json'), JSON.stringify(database))
 
     fs.rmSync(path.join(__dirname, 'cache', 'config.lua'))
-    fs.rmSync(path.join(__dirname, 'cache', 'highlight_data.json'))
+    fs.rmSync(path.join(__dirname, 'cache', 'previews_data.json'))
   })
 }
 

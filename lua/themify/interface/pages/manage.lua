@@ -118,6 +118,7 @@ Pages.create_page({
     if vim.list_contains(line.tags, 'check') then Manager.check_colorscheme(line.extra)
     elseif vim.list_contains(line.tags, 'install') then Manager.install_colorscheme(line.extra)
     elseif vim.list_contains(line.tags, 'update') then Manager.update_colorscheme(line.extra) end
+
     return {}
   end
 })

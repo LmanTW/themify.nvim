@@ -36,10 +36,6 @@ function M.load_pages()
     require('themify.interface.pages.manage')
     --- require('themify.interface.pages.explore')
 
-    for i = 1, #M.pages_id do
-      M.pages[M.pages_id[i]].update()
-    end
-
     loaded = true
   end
 end

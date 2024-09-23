@@ -53,20 +53,20 @@ end)
 
 --- Get The Transformation Of The Window
 --- @return { x: number, y: number, width: number, height: number } 
-local function get_window_transformation()
-  local total_width = vim.api.nvim_get_option_value('columns', { scope = 'global' })
-  local total_height = vim.api.nvim_get_option_value('lines', { scope = 'global' })
+function Window.get_window_transformation()
+  local screen_width = vim.api.nvim_get_option_value('columns', { scope = 'global' })
+  local screen_height = vim.api.nvim_get_option_value('lines', { scope = 'global' })
 
-  local window_width = math.ceil(total_width * 0.5)
-  local window_height = math.ceil(total_height * 0.5)
+  local width = math.ceil(screen_width * 0.5)
+  local height = math.ceil(screen_height * 0.5)
 
   return {
     -- Yes, I like to use x and y.
 
-    x = math.ceil((total_width - window_width) / 2),
-    y = math.ceil((total_height - window_height) / 2),
-    width = window_width,
-    height = window_height
+    x = math.ceil((screen_width - width) / 2),
+    y = math.ceil((screen_height - height) / 2),
+    width = width,
+    height = height
   }
 end
 
@@ -74,7 +74,7 @@ end
 function Window:new()
   self = setmetatable({}, Window)
 
-  local transformation = get_window_transformation()
+  local transformation = Window.get_window_transformation()
 
   self.buffer = vim.api.nvim_create_buf(false, true)
   self.window = vim.api.nvim_open_win(self.buffer, true, {

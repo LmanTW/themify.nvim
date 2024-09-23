@@ -60,7 +60,7 @@ Pages.create_page({
 
     return 2
   end,
-  leave = function(line)
+  leave = function()
     if state ~= vim.NIL then
       if state.colorscheme_id ~= current.colorscheme_id or state.theme ~= current.theme then
         Manager.load_theme(state.colorscheme_id, state.theme)
