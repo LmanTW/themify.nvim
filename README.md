@@ -90,8 +90,10 @@ require("themery").setup({
 
 ## 📚 Colorscheme Database
 
+Themify has a database of colorschemes that is used by the `Explore` page for searching and browsing colorschemes.
+
 > [!NOTE]
-> You can add a colorscheme to the database by [opening an issue]().
+> You can add a colorscheme to the database by [opening an issue](https://github.com/LmanTW/themify.nvim/issues/new?assignees=&labels=Type%3A+Colorscheme+Request&projects=&template=colorscheme.yml&title=Colorscheme+request%3A+%3CExample%3A+folke%2Ftokyonight.nvim%3E).
 
 ## 📎 Other
 
