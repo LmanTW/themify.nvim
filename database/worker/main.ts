@@ -46,6 +46,12 @@ local theme
 
 local previews_data = {}
 
+function get_highlight(name)
+  local highlight = vim.api.nvim_get_hl(0, { name = name, link = true })
+
+  return vim.tbl_count(highlight) > 0 and highlight or nil
+end
+
 for i = 1, #themes do
   theme = themes[i]
 
@@ -53,10 +59,29 @@ for i = 1, #themes do
     vim.o.runtimepath = table.concat({vim.o.runtimepath, ',', theme.colorscheme_path})
   end
 
+  vim.cmd.highlight('clear')
   vim.cmd.colorscheme(theme.name)
 
+  print(get_highlight('@keyword.function'))
+
   previews_data[i] = {
-    ["@string.regexp"] = vim.api.nvim_get_hl(0, { name = '@string.regexp', link = true }) 
+    Normal = get_highlight('Normal'),
+
+    Boolean = get_highlight('Boolean'),
+    Number = get_highlight('Number'),
+    String = get_highlight('String'),
+    Function = get_highlight('Function'),
+
+    Character = get_highlight('Character'),
+    Operator = get_highlight('Operator'),
+    Delimiter = get_highlight('@punctuation.delimiter'),
+    Bracket = get_highlight('@punctuation.bracket'),
+
+    Keyword = get_highlight('Keyword'),
+    ['@keyword.function'] = get_highlight('@keyword.function'),
+    Statement = get_highlight('Statement'),
+    Variable = get_highlight('@variable'),
+    VariableBuiltin = get_highlight('@variable.builtin')
   }
 end
 
@@ -83,7 +108,7 @@ if (lines[i].length === 0) lines.splice(i, 1)
 
   neovim.once('exit', () => {
     const previews_data: { [key: string]: { [key: string]: number }}[] = JSON.parse(fs.readFileSync(path.join(__dirname, 'cache', 'previews_data.json'), 'utf8'))
-    const database: { name: string, repository: string, brightness: 'dark'|'light', temperature: 'cold'|'warm', preview: { [key: string]: { [key: string]: number }} }[] = []
+    const database: { name: string, repository: string, brightness: 'dark'|'light', temperature: 'cold'|'warm', preview: { [key: string]: { [key: string]: any }} }[] = []
 
     for (let i = 0; i < themes.length; i++) {
       const theme = themes[i]

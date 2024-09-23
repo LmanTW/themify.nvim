@@ -85,7 +85,9 @@ function Window:new()
     height = transformation.height,
 
     style = 'minimal',
-    border = 'rounded'
+    border = 'rounded',
+
+    zindex = 998
   })
 
   self.page = 'home'
@@ -102,7 +104,7 @@ function Window:new()
   vim.api.nvim_set_option_value('cursorline', true, { win = self.window })
   vim.api.nvim_set_current_win(self.window)
 
-  windows[self.window] = self
+  windows[self.window] = self 
 
   self.control:enter_page(nil, self.page)
 
@@ -204,7 +206,7 @@ end
 function Window:update()
   vim.api.nvim_set_option_value('modifiable', true, { buf = self.buffer })
 
-  -- Clear the buffer.
+  --- Clear the buffer.
   vim.api.nvim_buf_set_lines(self.buffer, 0, -1, false, {})
 
   local content = Pages.get_page_content(self.page)
@@ -216,7 +218,7 @@ function Window:update()
     end
   end
 
-  -- Render the page tab.
+  --- Render the page tab.
 
   local left = table.concat({'  < ', Pages.pages[Pages.get_neighbor_page(self.page, -1)].name})
   local current = table.concat({'- ', Pages.pages[self.page].name, ' -'})
@@ -230,7 +232,7 @@ function Window:update()
     Text:new(right, Colors.description)
   }):render(self.buffer, 1)
 
-  -- Render the actions and info.
+  --- Render the actions and info.
 
   local amount = Manager.colorschemes_amount
 
@@ -251,7 +253,7 @@ function Window:update()
 
   vim.api.nvim_set_option_value('modifiable', false, { buf = self.buffer })
 
-  -- Move the cursor.
+  --- Move the cursor.
   vim.api.nvim_win_set_cursor(self.window, {4 + (control.cursor_y - control.scroll_y), 0})
 end
 

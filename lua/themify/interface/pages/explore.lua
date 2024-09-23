@@ -1,3 +1,4 @@
+local Snippet = require('themify.interface.components.snippet')
 local Text = require('themify.interface.components.text')
 local Window = require('themify.interface.window')
 local Pages = require('themify.interface.pages')
@@ -7,8 +8,10 @@ local Utilities = require('themify.utilities')
 local brightness = 'all'
 --- @type 'all'|'cold'|'warm'
 local temperature = 'all'
+--- @type 'lua'
+local language = 'lua'
 
---- @type { name: string, repository: string, brightness: 'dark'|'light', temperature: 'cold'|'warm', preview: table<string, table<string, number>> }[]
+--- @type { name: string, repository: string, brightness: 'dark'|'light', temperature: 'cold'|'warm', preview: table<string, table<string, any>> }[]
 local database
 --- @type number[]
 local result = {}
@@ -17,8 +20,6 @@ local blank = { content = Text:new(''), tags = {} }
 
 local preview_buffer = vim.api.nvim_create_buf(false, true)
 local preview_window
-
-vim.api.nvim_set_option_value('modifiable', false, { buf = preview_buffer })
 
 --- Update The Search Result 
 --- @return nil
@@ -38,6 +39,32 @@ local function update_result()
   end
 end
 
+--- Update The Preview Snippet
+--- @return nil
+local function update_preview()
+  --- Clear the preview buffer.
+  vim.api.nvim_buf_set_lines(preview_buffer, 0, -1, false, {})
+
+  local ok = pcall(function()
+    vim.treesitter.language.inspect(language)
+  end)
+
+  if ok then
+    Snippet.render(preview_buffer, language)
+
+    vim.treesitter.stop(preview_buffer)
+    vim.treesitter.start(preview_buffer, language)
+  else
+    Text:new(table.concat({'  Treesitter parser not found: ', language})):render(preview_buffer, 1)
+
+    vim.treesitter.stop(preview_buffer)
+  end
+
+  --- ts.highlighter.attach(buffer_id, lang)
+end
+
+update_preview()
+
 Pages.create_page({
   id = 'explore',
   name = 'Explore',
@@ -46,6 +73,7 @@ Pages.create_page({
     local content = {
       { content = Text:new(table.concat({'  Brightness: ', brightness})), tags = {'selectable', 'option'}, extra = 'brightness' },
       { content = Text:new(table.concat({'  Temperature: ', temperature})), tags = {'selectable', 'option'}, extra = 'temperature' },
+      { content = Text:new(table.concat({'  Language: ', language})), tags = {'selectable', 'option'}, extra = 'language' },
       blank
     }
 
@@ -71,6 +99,8 @@ Pages.create_page({
       update_result()
     end
 
+    Snippet.check_supported()
+
     return 1
   end,
   leave = function()
@@ -86,7 +116,7 @@ Pages.create_page({
       if preview_window == nil then
         local transformation = Window.get_window_transformation()
 
-        local width = 30
+        local width = math.min(30, transformation.width / 2.5)
 
         preview_window = vim.api.nvim_open_win(preview_buffer, false, {
           relative = 'editor',
@@ -102,6 +132,17 @@ Pages.create_page({
           zindex = 999
         })
       end
+
+      local theme = database[line.extra]
+      local highlights = {}
+
+      for name, value in pairs(theme.preview) do
+        vim.api.nvim_set_hl(0, table.concat({'ThemifyPreview', name}), value)
+
+        highlights[#highlights + 1] = table.concat({name, table.concat({'ThemifyPreview', name})}, ':')
+      end
+
+      vim.api.nvim_buf_set_option(preview_buffer, 'winhl', table.concat(highlights, ','))
     else
       if preview_window ~= nil then
         vim.api.nvim_win_close(preview_window, false)
@@ -116,13 +157,29 @@ Pages.create_page({
         if brightness == 'all' then brightness = 'dark'
         elseif brightness == 'dark' then brightness = 'light'
         else brightness = 'all' end
-      else
+
+        update_result()
+      elseif line.extra == 'temperature' then
         if temperature == 'all' then temperature = 'cold'
         elseif temperature == 'cold' then temperature = 'warm'
         else temperature = 'all' end
-      end
 
-      update_result()
+        update_result()
+      else
+        local index = Utilities.index(Snippet.supported, language) + 1
+
+        if index > #Snippet.supported then
+          index = 1
+        end
+
+        language = Snippet.supported[index]
+
+        update_preview()
+      end
+    elseif vim.list_contains(line.tags, 'theme') then
+      local theme = database[line.extra]
+
+      vim.cmd(table.concat({'exec \'!open https://github.com/', theme.repository, '\''}))
     end
 
     return {'update'}
