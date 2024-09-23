@@ -174,7 +174,7 @@ end
 function Window:install_colorschemes()
   Manager.install_colorschemes()
 
-  self.page = self.control:enter_page(self.page, 'manager')
+  self.page = self.control:enter_page(self.page, 'manage')
 
   self:update()
 end
@@ -184,7 +184,7 @@ end
 function Window:update_colorschemes()
   Manager.update_colorschemes()
 
-  self.page = self.control:enter_page(self.page, 'manager')
+  self.page = self.control:enter_page(self.page, 'manage')
 
   self:update()
 end
@@ -194,7 +194,7 @@ end
 function Window:check_colorschemes()
   Manager.check_colorschemes()
 
-  self.page = self.control:enter_page(self.page, 'manager')
+  self.page = self.control:enter_page(self.page, 'manage')
 
   self:update()
 end

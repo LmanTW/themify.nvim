@@ -25,7 +25,7 @@ Use the package manager of your choice to install Theminify:
 }
 ```
 
-- [Packer](https://github.com/wbthomason/packer.nvim)
+- [Packer.nvim](https://github.com/wbthomason/packer.nvim)
 
 ```lua
 use {

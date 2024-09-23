@@ -19,8 +19,8 @@ local function get_progress_icon(progress)
 end
 
 Pages.create_page({
-  id = 'manager',
-  name = 'Manager',
+  id = 'manage',
+  name = 'Manage',
 
   update = function()
     local list = List:new()

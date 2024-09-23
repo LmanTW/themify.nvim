@@ -33,7 +33,8 @@ local loaded = false
 function M.load_pages()
   if not loaded then
     require('themify.interface.pages.home')
-    require('themify.interface.pages.manager')
+    require('themify.interface.pages.manage')
+    --- require('themify.interface.pages.explore')
 
     for i = 1, #M.pages_id do
       M.pages[M.pages_id[i]].update()
