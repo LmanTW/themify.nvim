@@ -88,6 +88,11 @@ require("themery").setup({
   ```
 </details>
 
+## 📚 Colorscheme Database
+
+> [!NOTE]
+> You can add a colorscheme to the database by [opening an issue]().
+
 ## 📎 Other
 
 - [Highlight Groups](./documents/highlight.md)
