@@ -62,8 +62,6 @@ for i = 1, #themes do
   vim.cmd.highlight('clear')
   vim.cmd.colorscheme(theme.name)
 
-  print(get_highlight('@keyword.function'))
-
   previews_data[i] = {
     Normal = get_highlight('Normal'),
 
