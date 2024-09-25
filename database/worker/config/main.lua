@@ -106,4 +106,7 @@ end
 
 Utilities.write_file(vim.fs.normalize(vim.fs.joinpath(debug.getinfo(1, 'S').source:sub(2), '../../../themes.json')), vim.json.encode(themes))
 
--- vim.cmd('qa!')
+vim.cmd('qa!')
+
+
+--- @alias Snippet [string, nil|string][][]
