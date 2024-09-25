@@ -1,18 +1,18 @@
-name: Performance Report
-description: Report a performance issue.
+name: 'Performance Report'
+description: 'Report a performance issue.'
 
 labels: ['Type: Performance']
 
 body:
-  - type: textarea
+  - type: 'textarea'
     attributes:
-      label: Performance Issue Description
-      description: Describe the performance issue.
+      label: 'Performance Issue Description'
+      description: 'Describe the performance issue.'
     validations:
       required: true
-  - type: dropdown
+  - type: 'dropdown'
     attributes:
-      label: Operating System
+      label: 'Operating System'
       options: ['Windows', 'MacOS', 'Linux', 'Other']
     validations:
       required: true

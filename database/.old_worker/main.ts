@@ -74,12 +74,16 @@ for i = 1, #themes do
     Operator = get_highlight('Operator'),
     Delimiter = get_highlight('@punctuation.delimiter'),
     Bracket = get_highlight('@punctuation.bracket'),
+    Special = get_highlight('Special'),
 
     Keyword = get_highlight('Keyword'),
+    ['@keyword'] = get_highlight('@keyword'),
     ['@keyword.function'] = get_highlight('@keyword.function'),
     Statement = get_highlight('Statement'),
     Variable = get_highlight('@variable'),
-    VariableBuiltin = get_highlight('@variable.builtin')
+    ['@variable'] = get_highlight('@variable'),
+    VariableBuiltin = get_highlight('@variable.builtin'),
+    ['@variable.builtin'] = get_highlight('@variable.builtin')
   }
 end
 

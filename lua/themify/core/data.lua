@@ -11,7 +11,10 @@ local M = {
   --- @type string
   colorschemes_path = vim.fs.joinpath(data_path, 'themify', 'colorschemes'),
   --- @type string
-  state_data_path = vim.fs.joinpath(data_path, 'themify', 'state.json')
+  state_data_path = vim.fs.joinpath(data_path, 'themify', 'state.json'),
+
+  --- @type string
+  snippets_path = vim.fs.normalize(table.concat({debug.getinfo(1, 'S').source:sub(2), '../../../../../database/snippets'}))
 }
 
 --- Check Data Files

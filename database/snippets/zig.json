@@ -1,0 +1,9 @@
+[
+  [["const", "Keyword"], [" "], ["std", "Type"], [" "], ["=", "Operator"], [" "], ["@import", "Statement"], ["("], ["\"std\"", "String"], [")"], [";"]],
+  [],
+  [["pub", "Keyword"], [" "], ["fn", "keyword"], [" "], ["main", "Function"], [" "], ["!", "Operator"], ["void", "Type"], [" {"]],
+  [["  "], ["const", "Keyword"], [" "], ["file", "Character"], [" "], ["=", "Operator"], [" "], ["try", "Keyword"], [" "], ["std", "Type"], ["."], ["fs", "Type"], ["."], ["cwd", "Function"], ["()."], ["openFile", "Function"], ["("], ["\"message.txt\"", "String"], [", .{});"]],
+  [["  "], ["defer", "Keyword"], [" file."], ["close", "Function"], ["();"]],
+  [],
+  [["  "], ["const", "Keyword"], [" allocator "], ["=", "Operator"], [" "], ["std", "Type"], ["."], ["heap", "Type"], ["."], ["page_allocator;"]]
+]

@@ -8,8 +8,8 @@ local Utilities = require('themify.utilities')
 local brightness = 'all'
 --- @type 'all'|'cold'|'warm'
 local temperature = 'all'
---- @type 'lua'
-local language = 'lua'
+--- @type string
+local language = 'zig'
 
 --- @type { name: string, repository: string, brightness: 'dark'|'light', temperature: 'cold'|'warm', preview: table<string, table<string, any>> }[]
 local database
@@ -42,25 +42,11 @@ end
 --- Update The Preview Snippet
 --- @return nil
 local function update_preview()
-  --- Clear the preview buffer.
   vim.api.nvim_buf_set_lines(preview_buffer, 0, -1, false, {})
 
-  local ok = pcall(function()
-    vim.treesitter.language.inspect(language)
-  end)
+  Text:new('Still in development...'):render(preview_buffer, 0)
 
-  if ok then
-    Snippet.render(preview_buffer, language)
-
-    vim.treesitter.stop(preview_buffer)
-    vim.treesitter.start(preview_buffer, language)
-  else
-    Text:new(table.concat({'  Treesitter parser not found: ', language})):render(preview_buffer, 1)
-
-    vim.treesitter.stop(preview_buffer)
-  end
-
-  --- ts.highlighter.attach(buffer_id, lang)
+  -- Snippet.render(preview_buffer, language)
 end
 
 update_preview()
@@ -91,15 +77,13 @@ Pages.create_page({
 
   enter = function()
     if database == nil then
-      local data = Utilities.read_file(vim.fs.normalize(table.concat({debug.getinfo(1, 'S').source:sub(2), '../../../../../../database/colorschemes.json'})))
+      local data = Utilities.read_file(vim.fs.normalize(table.concat({debug.getinfo(1, 'S').source:sub(2), '../../../../../../database/themes.json'})))
 
       database = vim.json.decode(data)
       Utilities.error(database == nil, {'Themify: Failed to encode the colorscheme database'})
 
       update_result()
     end
-
-    Snippet.check_supported()
 
     return 1
   end,
@@ -116,7 +100,7 @@ Pages.create_page({
       if preview_window == nil then
         local transformation = Window.get_window_transformation()
 
-        local width = math.min(30, transformation.width / 2.5)
+        local width = math.min(40, transformation.width / 2.5)
 
         preview_window = vim.api.nvim_open_win(preview_buffer, false, {
           relative = 'editor',
@@ -136,7 +120,7 @@ Pages.create_page({
       local theme = database[line.extra]
       local highlights = {}
 
-      for name, value in pairs(theme.preview) do
+      for name, value in pairs(theme.highlights) do
         vim.api.nvim_set_hl(0, table.concat({'ThemifyPreview', name}), value)
 
         highlights[#highlights + 1] = table.concat({name, table.concat({'ThemifyPreview', name})}, ':')
@@ -166,13 +150,14 @@ Pages.create_page({
 
         update_result()
       else
-        local index = Utilities.index(Snippet.supported, language) + 1
+        local snippets = vim.tbl_keys(Snippet.snippets)
+        local index = Utilities.index(snippets, language) + 1
 
-        if index > #Snippet.supported then
+        if index > #snippets then
           index = 1
         end
 
-        language = Snippet.supported[index]
+        language = snippets[index]
 
         update_preview()
       end

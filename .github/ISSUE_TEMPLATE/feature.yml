@@ -1,12 +1,12 @@
-name: Feature Request
-description: Suggest a feature.
+name: 'Feature Request'
+description: 'Suggest a feature.'
 
 labels: ['Type: Feature Request']
 
 body:
-  - type: textarea
+  - type: 'textarea'
     attributes:
-      label: Feature Description
-      description: Descript the feature and why you think it should be added.
+      label: 'Feature Description'
+      description: 'Descript the feature and why you think it should be added.'
     validations:
       required: true

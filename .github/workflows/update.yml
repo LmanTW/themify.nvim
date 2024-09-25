@@ -1,0 +1,21 @@
+name: 'Update'
+
+on:
+  workflow_dispatch:
+
+jobs:
+  update:
+    name: 'Update The Database'
+    runs-on: 'ubuntu-latest'
+
+    steps: 
+      - name: 'Checkout'
+        uses: 'actions/checkout@v2'
+      - name: 'Install Neovim'
+        run: 'sudo apt update && sudo apt install neovim -y'
+      - name: 'Install Zig'
+        run: 'wget -P ~/ https://ziglang.org/download/0.13.0/zig-linux-x86_64-0.13.0.tar.xz && tar -xf ~/zig-linux-x86_64-0.13.0.tar.xz -C ~/'
+      - name: 'Setup Zig'
+        run: 'mv ~/zig-linux-x86_64-0.13.0/zig /usr/local/bin/zig && mv ~/zig-linux-x86_64-0.13.0/lib /usr/local/lib/zig'
+      - name: 'Run The Worker'
+        run: 'cd ./database/worker/ && zig run main.zig'

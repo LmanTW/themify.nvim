@@ -59,9 +59,7 @@ end
 --- @param path string
 --- @return boolean 
 function M.path_exist(path)
-  local stats = vim.loop.fs_stat(path)
-
-  return stats ~= nil
+  return vim.loop.fs_stat(path) ~= nil
 end
 
 --- Read A File
@@ -72,10 +70,10 @@ function M.read_file(path)
   M.error(stats == nil, {'Themify: Cannot stat the file: "', path, '"'})
 
   local file = vim.loop.fs_open(path, 'r', 438)
-  assert(file ~= nil, table.concat({'Themify: Cannot open the file: "', path, '"'}))
+  M.error(file == nil, {'Themify: Cannot open the file: "', path, '"'})
 
   local content = vim.loop.fs_read(file, stats.size, 0)
-  assert(file ~= nil, table.concat({'Themify: Cannot read the file: "', path, '"'}))
+  M.error(content == nil, {'Themify: Cannot read the file: "', path, '"'})
 
   vim.loop.fs_close(file)
 
@@ -95,7 +93,6 @@ function M.write_file(path, data)
 
   vim.loop.fs_close(file)
 end
-
 
 --- Scan A Directory
 --- @param path string
