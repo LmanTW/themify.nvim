@@ -46,7 +46,7 @@ require("themery").setup({
   'folke/tokyonight.nvim',
   'Yazeed1s/minimal.nvim',
   {
-'sho-87/kanagawa-paper.nvim',
+    'sho-87/kanagawa-paper.nvim',
 
     branch = 'master'
   },
