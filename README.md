@@ -88,15 +88,9 @@ require("themery").setup({
   ```
 </details>
 
-## 📚 Colorscheme Database
-
-Themify has a database of colorschemes that is used by the `Explore` page for searching and browsing colorschemes. You can filter through them by the "brightness" and "temperature" options.
-
-> [!NOTE]
-> You can add a colorscheme to the database by [opening an issue](https://github.com/LmanTW/themify.nvim/issues/new?assignees=&labels=Type%3A+Colorscheme+Request&projects=&template=colorscheme.yml&title=Colorscheme+request%3A+%3CExample%3A+folke%2Ftokyonight.nvim%3E).
-
 ## 📎 Other
 
+- [Colorscheme Database](./documents/database.md)
 - [Highlight Groups](./documents/highlight.md)
 - [API Documentation](./documents/api.md)
 

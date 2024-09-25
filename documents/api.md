@@ -1,4 +1,4 @@
-# API Documentation
+# 🛠 API Documentation
 
 Themify exposes an API that allows developers to interact with the Themify core.
 
