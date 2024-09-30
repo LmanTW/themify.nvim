@@ -80,11 +80,13 @@ end
 function Snippet.render(buffer, language)
   vim.api.nvim_buf_set_lines(buffer, 0, -1, false, {})
 
+  local content = Snippet.snippets[language]
+
   local line
   local parts
 
-  for i = 1, #Snippet.snippets[language] do
-    line = Snippet.snippets[language][i]
+  for i = 1, #content do
+    line = content[i]
     parts = {}
 
     for i2 = 1, #line do

@@ -9,7 +9,7 @@ local brightness = 'all'
 --- @type 'all'|'cold'|'warm'
 local temperature = 'all'
 --- @type string
-local language = 'zig'
+local language = 'lua'
 
 --- @type { name: string, repository: string, brightness: 'dark'|'light', temperature: 'cold'|'warm', preview: table<string, table<string, any>> }[]
 local database
@@ -42,11 +42,7 @@ end
 --- Update The Preview Snippet
 --- @return nil
 local function update_preview()
-  vim.api.nvim_buf_set_lines(preview_buffer, 0, -1, false, {})
-
-  Text:new('Still in development...'):render(preview_buffer, 0)
-
-  -- Snippet.render(preview_buffer, language)
+  Snippet.render(preview_buffer, language)
 end
 
 update_preview()

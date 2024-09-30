@@ -48,7 +48,7 @@ require("themery").setup({
   {
     'sho-87/kanagawa-paper.nvim',
 
-    branch = 'master'
+     branch = 'master'
   },
 
   -- Built-in colorschemes are also supported.
@@ -93,6 +93,7 @@ require("themery").setup({
 - [Colorscheme Database](./documents/database.md)
 - [Highlight Groups](./documents/highlight.md)
 - [API Documentation](./documents/api.md)
+- [Funny Dev Post](https://dev.to/lman_tw/so-i-created-yet-another-neovim-plugin-29ho)
 
 <a href="https://star-history.com/#LmanTW/themify.nvim&Date">
  <picture>

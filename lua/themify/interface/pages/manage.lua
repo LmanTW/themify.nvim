@@ -76,7 +76,7 @@ Pages.create_page({
           Text:new(Manager.colorschemes_id[i])
         }), tags = {'selectable', 'check'}, extra = Manager.colorschemes_id[i] })
         list:add_item('failed', { content = Text.combine({
-          Text:new('    '),
+          Text:new('     '),
           Text:new(table.concat({' ', colorscheme_data.info, ' '}), Colors.error)
         }), tags = {} })
       elseif colorscheme_data.status == 'installing' or colorscheme_data.status == 'updating' then

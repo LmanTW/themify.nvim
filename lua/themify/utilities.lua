@@ -120,6 +120,8 @@ function M.delete_directory(path)
   local files_name = M.scan_directory(path)
   local file_path
 
+  --- Can use "vim.fs.rm" in the future.
+
   for i = 1, #files_name do
 
     file_path = vim.fs.joinpath(path, files_name[i])

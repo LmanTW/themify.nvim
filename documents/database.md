@@ -1,5 +1,7 @@
 # 📚 Colorscheme Database (WIP)
 
+Themify has a colorscheme database that can be searched using the `brightness` and `temperature` options.
+
 > [!TIP]
 > You can add a colorscheme to the database by [opening an issue](https://github.com/LmanTW/themify.nvim/issues/new/choose).
 
