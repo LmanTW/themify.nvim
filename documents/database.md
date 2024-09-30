@@ -1,6 +1,4 @@
-# 📚 Colorscheme Database (WIP)
-
-Themify has a colorscheme database that can be searched using the `brightness` and `temperature` options.
+# 📚 Colorscheme Database
 
 > [!TIP]
 > You can add a colorscheme to the database by [opening an issue](https://github.com/LmanTW/themify.nvim/issues/new/choose).
@@ -17,9 +15,12 @@ You can find the main database file at `database/themes.json`, which contains a 
 --- @field temperature 'cold'|'wram'
 --- @field highlights table<string, any>
 
---- @alias Snippet [string, nil|string][][]
---- Lines -> Fragments -> Fragment = [content, highlight]
+--- @alias Snippet [string, nil|string, nil|string][][]
+--- Lines -> Fragments -> Fragment = [content, highlight, real_highlight]
 ```
 
 > [!NOTE]
 > The `highlights` table includes the highlight groups used for previewing, check out `database/snippets` for all the preview snippets.
+
+> [!NOTE]
+> `real_highlight` is used when the text is highlighted by the LSP, not Treesitter.
