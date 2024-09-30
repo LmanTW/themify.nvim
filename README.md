@@ -100,7 +100,6 @@ Themify has a colorscheme database that can be access through the `Explore` page
 - [Colorscheme Database](./documents/database.md)
 - [Highlight Groups](./documents/highlight.md)
 - [API Documentation](./documents/api.md)
-- [Funny Dev Post](https://dev.to/lman_tw/so-i-created-yet-another-neovim-plugin-29ho)
 
 <a href="https://star-history.com/#LmanTW/themify.nvim&Date">
  <picture>
