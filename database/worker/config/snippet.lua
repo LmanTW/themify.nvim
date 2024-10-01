@@ -60,10 +60,10 @@ function Snippet:get_highlights()
           local captures = vim.treesitter.get_captures_at_pos(self.buffer, i - 1, x)
 
           if #captures > 0 then
-            highlights[part[2]] = vim.api.nvim_get_hl_by_name('@' .. captures[1].capture, true)
+            highlights[part[2]] = vim.api.nvim_get_hl(0, { name = table.concat({'@', captures[1].capture}) })
           end
         else
-          highlights[part[2]] = vim.api.nvim_get_hl(0, { name = line[i2][3], link = true })
+           highlights[part[2]] = vim.api.nvim_get_hl(0, { name = line[i2][3] })
         end
       end
 
