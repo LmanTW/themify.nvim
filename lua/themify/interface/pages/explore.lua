@@ -96,7 +96,7 @@ Pages.create_page({
       if preview_window == nil then
         local transformation = Window.get_window_transformation()
 
-        local width = math.min(40, transformation.width / 2.5)
+        local width = math.min(40, math.floor(transformation.width / 2.5))
 
         preview_window = vim.api.nvim_open_win(preview_buffer, false, {
           relative = 'editor',

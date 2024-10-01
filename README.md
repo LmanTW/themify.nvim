@@ -90,6 +90,8 @@ require("themery").setup({
 
 ## 📚 Colorscheme Database
 
+![A video of the explore page](./documents/assets/explore.gif)
+
 Themify has a colorscheme database that can be access through the Explore page, you can search through the themes by using the `brightness` and `temperature` options.
 
 > [!TIP]
