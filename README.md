@@ -90,8 +90,6 @@ require("themery").setup({
 
 ## 📚 Colorscheme Database
 
-![A video of the explore page](./documents/assets/explore.gif)
-
 Themify has a colorscheme database that can be access through the Explore page, you can search through the themes by using the `brightness` and `temperature` options.
 
 > [!TIP]
@@ -105,8 +103,8 @@ Themify has a colorscheme database that can be access through the Explore page, 
 
 <a href="https://star-history.com/#LmanTW/themify.nvim&Date">
  <picture>
-   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=LmanTW/themify.nvim&type=Date&theme=dark" />
-   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=LmanTW/themify.nvim&type=Date" />
-   <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=LmanTW/themify.nvim&type=Date" />
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=LmanTW/themify.nvim&type=Date&theme=dark"/>
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=LmanTW/themify.nvim&type=Date"/>
+   <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=LmanTW/themify.nvim&type=Date"/>
  </picture>
 </a>

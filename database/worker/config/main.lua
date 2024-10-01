@@ -70,7 +70,7 @@ for i = 1, #colorschemes do
       highlights = vim.tbl_deep_extend('keep', highlights, snippets[i3]:get_highlights())
     end
 
-    themes[#themes + 1] = { name = theme.name, repository = theme.repository, brightness = theme.brightness, temperature = theme.temperature, highlights = highlights }
+    themes[#themes + 1] = { name = theme.name, repository = colorscheme.repository, brightness = theme.brightness, temperature = theme.temperature, highlights = highlights }
   end
 end
 
