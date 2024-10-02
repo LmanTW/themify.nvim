@@ -10,7 +10,8 @@ async function start(): Promise<void> {
   const colorschemes = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../colorschemes.json'), 'utf8')) as Colorscheme[]
   const parsers: Parser[] = [
     { language: 'typescript', repository: 'tree-sitter/tree-sitter-typescript', source: 'typescript' },
-    { language: 'python', repository: 'tree-sitter/tree-sitter-python', source: '' }
+    { language: 'python', repository: 'tree-sitter/tree-sitter-python', source: '' },
+    { language: 'zig', repository: 'maxxnino/tree-sitter-zig', source: '' }
   ]
 
   Log.running('Checking the colorschemes')
