@@ -1,7 +1,9 @@
 local Snippet = require('themify.interface.components.snippet')
 local Text = require('themify.interface.components.text')
 local Window = require('themify.interface.window')
+local Colors = require('themify.interface.colors')
 local Pages = require('themify.interface.pages')
+local Manager = require('themify.core.manager')
 local Utilities = require('themify.utilities')
 
 --- @type 'all'|'dark'|'light'
@@ -11,12 +13,13 @@ local temperature = 'all'
 --- @type string
 local language = 'lua'
 
---- @type { name: string, repository: string, brightness: 'dark'|'light', temperature: 'cold'|'warm', preview: table<string, table<string, any>> }[]
+--- @type { name: string, repository: string, brightness: 'dark'|'light', temperature: 'cold'|'warm', highlights: table<string, table<string, any>> }[]
 local database
 --- @type number[]
 local result = {}
 
-local blank = { content = Text:new(''), tags = {} }
+local line_blank = { content = Text:new(''), tags = {} }
+local text_installed = Text.combine({Text:new(' '), Text:new('(Installed)', Colors.description)})
 
 local preview_buffer = vim.api.nvim_create_buf(false, true)
 local preview_window
@@ -56,16 +59,22 @@ Pages.create_page({
       { content = Text:new(table.concat({'  Brightness: ', brightness})), tags = {'selectable', 'option'}, extra = 'brightness' },
       { content = Text:new(table.concat({'  Temperature: ', temperature})), tags = {'selectable', 'option'}, extra = 'temperature' },
       { content = Text:new(table.concat({'  Language: ', language})), tags = {'selectable', 'option'}, extra = 'language' },
-      blank
+      line_blank
     }
 
     local theme
+    local parts
 
     for i = 1, #result do
       --- Result is just an array of index that points to the database.
       theme = database[result[i]]
+      parts = {Text:new(table.concat({'  ', theme.name}))}
 
-      content[#content + 1] = { content = Text:new(table.concat({'  ', theme.name})), tags = {'selectable', 'theme'}, extra = result[i] }
+      if Manager.colorschemes_data[theme.repository] ~= nil and vim.list_contains(Manager.colorschemes_data[theme.repository].themes, theme.name) then
+        parts[#parts + 1] = text_installed
+      end
+
+      content[#content + 1] = { content = Text.combine(parts), tags = {'selectable', 'theme'}, extra = result[i] }
     end
 
     return content

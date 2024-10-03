@@ -8,7 +8,7 @@ local Utilities = require('themify.utilities')
 local List = {}
 List.__index = List
 
-local blank = { content = Text:new(''), tags = {} }
+local line_blank = { content = Text:new(''), tags = {} }
 
 --- Create A New List
 function List:new()
@@ -54,7 +54,7 @@ function List:get_content()
     vim.list_extend(content, section.content)
 
     if i < #self.sections_id then
-      content[#content + 1] = blank
+      content[#content + 1] = line_blank
     end
   end
 
