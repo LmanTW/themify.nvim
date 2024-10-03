@@ -45,6 +45,11 @@
     "stars": 815
   },
   {
+    "repository": "fenetikm/falcon",
+    "themes": [{ "name": "falcon", "brightness": "dark", "temperature": "cold" }],
+    "stars": 724
+  },
+  {
     "repository": "craftzdog/solarized-osaka.nvim",
     "themes": [{ "name": "solarized-osaka", "brightness": "dark", "temperature": "warm" }],
     "stars": 671
@@ -75,6 +80,11 @@
     "stars": 243
   },
   {
+    "repository": "Everblush/nvim",
+    "themes": [{ "name": "everblush", "brightness": "dark", "temperature": "cold" }],
+    "stars": 241
+  },
+  {
     "repository": "Yazeed1s/oh-lucy.nvim",
     "themes": [{ "name": "oh-lucy-evening", "brightness": "dark", "temperature": "warm" }, { "name": "oh-lucy", "brightness": "dark", "temperature": "cold" }],
     "stars": 219
@@ -90,6 +100,11 @@
     "stars": 210
   },
   {
+    "repository": "NTBBloodbath/doom-one.nvim",
+    "themes": [{ "name": "doom-one", "brightness": "light", "temperature": "cold" }],
+    "stars": 209
+  },
+  {
     "repository": "miikanissi/modus-themes.nvim",
     "themes": [{ "name": "modus_operandi", "brightness": "light", "temperature": "cold" }, { "name": "modus_vivendi", "brightness": "dark", "temperature": "cold" }],
     "stars": 187
@@ -98,11 +113,6 @@
     "repository": "shaunsingh/moonlight.nvim",
     "themes": [{ "name": "moonlight", "brightness": "dark", "temperature": "cold" }],
     "stars": 186
-  },
-  {
-    "repository": "dgox16/oldworld.nvim",
-    "themes": [{ "name": "oldworld", "brightness": "dark", "temperature": "warm" }],
-    "stars": 138
   },
   {
     "repository": "Yazeed1s/minimal.nvim",
@@ -115,6 +125,21 @@
     "stars": 164
   },
   {
+    "repository": "dgox16/oldworld.nvim",
+    "themes": [{ "name": "oldworld", "brightness": "dark", "temperature": "warm" }],
+    "stars": 138
+  },
+  {
+    "repository": "ofirgall/ofirkai.nvim",
+    "themes": [{ "name": "ofirkai", "brightness": "dark", "temperature": "warm" }, { "name": "ofirkai-darkblue", "brightness": "dark", "temperature": "cold" }],
+    "stars": 123
+  },
+  {
+    "repository": "blazkowolf/gruber-darker.nvim",
+    "themes": [{ "name": "gruber-darker", "brightness": "dark", "temperature": "warm" }],
+    "stars": 109
+  },
+  {
     "repository": "HoNamDuong/hybrid.nvim",
     "themes": [{ "name": "hybrid", "brightness": "dark", "temperature": "warm" }],
     "stars": 90
@@ -123,6 +148,11 @@
     "repository": "sho-87/kanagawa-paper.nvim",
     "themes": [{ "name": "kanagawa-paper", "brightness": "dark", "temperature": "cold" }],
     "stars": 85
+  },
+  {
+    "repository": "fcancelinha/nordern.nvim",
+    "themes": [{ "name": "nordern", "brightness": "dark", "temperature": "cold" }],
+    "stars": 75
   },
   {
     "repository": "lewpoly/sherbet.nvim",
@@ -138,5 +168,10 @@
     "repository": "samharju/synthweave.nvim",
     "themes": [{ "name": "synthweave", "brightness": "dark", "temperature": "cold" }, { "name": "synthweave-transparent", "brightness": "dark", "temperature": "cold" }],
     "stars": 43
+  },
+  {
+    "repository": "killitar/obscure.nvim",
+    "themes": [{ "name": "obscure", "brightness": "dark", "temperature": "warm" }],
+    "stars": 33
   }
 ]
