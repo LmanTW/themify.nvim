@@ -35,12 +35,32 @@ use {
 }
 ```
 
+<details>
+  <summary>Manual Installation</summary>
+
+  ```lua
+  local themify_path = vim.fs.joinpath(vim.fn.stdpath('data'), 'themify')
+  
+  if not vim.loop.fs_stat(themify_path) then
+    vim.fn.system({
+      'git', 'clone',
+      'https://github.com/LmanTW/themify.nvim.git',
+      themify_path,
+    })
+  end
+  
+  vim.opt.rtp:prepend(themify_path)
+
+  require('themify').setup()
+  ```
+</details>
+
 ## 🛠 Configuration
 
 The configuration for Themify is really easy and stright forward, just call the `setup` function (or use the `config` option in your package manager) and add the colorschemes you want to install / manage:
 
 ```lua
-require("themery").setup({
+require('themery').setup({
   -- Your list of colorschemes.
 
   'folke/tokyonight.nvim',
