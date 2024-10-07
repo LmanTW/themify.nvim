@@ -59,7 +59,18 @@ for i = 1, #colorschemes do
     theme = colorscheme.themes[i2]
 
     vim.cmd.highlight('clear')
-    vim.cmd.colorscheme(theme.name)
+
+    if theme.background == nil then
+      vim.o.background = 'dark'
+    else
+      vim.o.background = theme.background
+    end
+
+    if theme.setup == nil then
+      vim.cmd.colorscheme(theme.name)
+    else
+      loadstring(theme.setup)()
+    end
 
     highlights = {
       Normal = vim.api.nvim_get_hl(0, { name = 'Normal', link = true }),
@@ -70,7 +81,7 @@ for i = 1, #colorschemes do
       highlights = vim.tbl_deep_extend('keep', highlights, snippets[i3]:get_highlights())
     end
 
-    themes[#themes + 1] = { name = theme.name, repository = colorscheme.repository, brightness = theme.brightness, temperature = theme.temperature, highlights = highlights }
+    themes[#themes + 1] = { name = table.concat({theme.name, theme.background == nil and '' or table.concat({' ', '(', theme.background, ')'})}), repository = colorscheme.repository, brightness = theme.brightness, temperature = theme.temperature, highlights = highlights }
   end
 end
 

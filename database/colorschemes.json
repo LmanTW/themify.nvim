@@ -31,8 +31,13 @@
   },
   {
     "repository": "sainnhe/everforest",
-    "themes": [{ "name": "everforest", "brightness": "light", "temperature": "warm" }],
+    "themes": [{ "name": "everforest", "brightness": "light", "temperature": "cold" }],
     "stars": 2847
+  },
+  {
+    "repository": "nyoom-engineering/oxocarbon.nvim",
+    "themes": [{ "name": "oxocarbon", "background": "dark", "brightness": "dark", "temperature": "cold" }, { "name": "oxocarbon", "background": "light", "brightness": "light", "temperature": "cold" }],
+    "stars": 1109
   },
   {
     "repository": "bluz71/vim-moonfly-colors",
@@ -45,9 +50,24 @@
     "stars": 815
   },
   {
+    "repository": "olimorris/onedarkpro.nvim",
+    "themes": [{ "name": "onedark", "brightness": "dark", "temperature": "cold" }, { "name": "onelight", "brightness": "light", "temperature": "cold" }, { "name": "onedark_vivid", "brightness": "dark", "temperature": "cold" }, { "name": "onedark_dark", "brightness": "dark", "temperature": "cold" }],
+    "stars": 786
+  },
+  {
     "repository": "fenetikm/falcon",
     "themes": [{ "name": "falcon", "brightness": "dark", "temperature": "cold" }],
     "stars": 724
+  },
+  {
+    "repository": "AlexvZyl/nordic.nvim",
+    "themes": [{ "name": "nordic", "brightness": "dark", "temperature": "cold" }],
+    "stars": 710
+  },
+  {
+    "repository": "Mofiqul/vscode.nvim",
+    "themes": [{ "name": "vscode", "background": "dark", "brightness": "dark", "temperature": "warm" }, { "name": "vscode", "background": "light", "brightness": "light", "temperature": "cold" }],
+    "stars": 700
   },
   {
     "repository": "craftzdog/solarized-osaka.nvim",
@@ -63,6 +83,11 @@
     "repository": "tiagovla/tokyodark.nvim",
     "themes": [{ "name": "tokyodark", "brightness": "dark", "temperature": "cold" }],
     "stars": 477
+  },
+  {
+    "repository": "luisiacc/gruvbox-baby",
+    "themes": [{ "name": "gruvbox-baby", "brightness": "dark", "temperature": "warm" }],
+    "stars": 394
   },
   {
     "repository": "olivercederborg/poimandres.nvim",
@@ -135,6 +160,11 @@
     "stars": 138
   },
   {
+    "repository": "vague2k/vague.nvim",
+    "themes": [{ "name": "vague", "setup": "require(\"vague\").setup()", "brightness": "dark", "temperature": "warm" }],
+    "stars": 127
+  },
+  {
     "repository": "ofirgall/ofirkai.nvim",
     "themes": [{ "name": "ofirkai", "brightness": "dark", "temperature": "warm" }, { "name": "ofirkai-darkblue", "brightness": "dark", "temperature": "cold" }],
     "stars": 123
@@ -161,7 +191,7 @@
   },
   {
     "repository": "lewpoly/sherbet.nvim",
-    "themes": [{ "name": "sherbet", "brightness": "dark", "temperature": "warm" }],
+    "themes": [{ "name": "sherbet", "brightness": "dark", "temperature": "cold" }],
     "stars": 72
   },
   {
