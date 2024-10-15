@@ -105,6 +105,11 @@
     "stars": 277 
   },
   {
+    "repository": "aktersnurra/no-clown-fiesta.nvim",
+    "themes": [{ "name": "no-clown-fiesta", "brightness": "dark", "temperature": "warm" }],
+    "stars": 268
+  },
+  {
     "repository": "oxfist/night-owl.nvim",
     "themes": [{ "name": "night-owl", "brightness": "dark", "temperature": "cold" }],
     "stars": 243

@@ -168,6 +168,10 @@ function Window:switch_page(direction)
     Pages.get_page(self.page).hover(content[control.cursor_y])
   end
 
+  control.scroll_y = 1
+
+  self.control:check_scroll(self.page)
+
   self:update()
 end
 
