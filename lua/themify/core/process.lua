@@ -54,10 +54,10 @@ end
 function Process:new(cwd, command, args, callback)
   self = setmetatable({}, Process)
 
-  self.stdout = vim.loop.new_pipe(false)
-  self.stderr = vim.loop.new_pipe(false)
+  self.stdout = vim.uv.new_pipe(false)
+  self.stderr = vim.uv.new_pipe(false)
 
-  self.handle = vim.loop.spawn(command, {
+  self.handle = vim.uv.spawn(command, {
     cwd = cwd,
     args = args,
 
