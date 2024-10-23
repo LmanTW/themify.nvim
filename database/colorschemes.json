@@ -160,6 +160,11 @@
     "stars": 187
   },
   {
+    "repository": "diegoulloao/neofusion.nvim",
+    "themes": [{ "name": "neofusion", "brightness": "dark", "temperature": "cold" }],
+    "stars": 185
+  },
+  {
     "repository": "rafamadriz/neon",
     "themes": [{ "name": "neon", "brightness": "dark", "temperature": "cold" }],
     "stars": 183
@@ -177,7 +182,7 @@
   {
     "repository": "cpea2506/one_monokai.nvim",
     "themes": [{ "name": "one_monokai", "brightness": "dark", "temperature": "cold" }],
-    "stars": "169"
+    "stars": 169
   },
   {
     "repository": "zootedb0t/citruszest.nvim",
@@ -217,6 +222,11 @@
   {
     "repository": "blazkowolf/gruber-darker.nvim",
     "themes": [{ "name": "gruber-darker", "brightness": "dark", "temperature": "warm" }],
+    "stars": 114
+  },
+  {
+    "repository": "lunarvim/horizon.nvim",
+    "themes": [{ "name": "horizon", "brightness": "dark", "temperature": "cold" }],
     "stars": 114
   },
   {
@@ -288,6 +298,11 @@
     "repository": "ptdewey/darkearth-nvim",
     "themes": [{ "name": "darkearth", "brightness": "dark", "temperature": "warm" }],
     "stars": 40
+  },
+  {
+    "repository": "PHSix/nvim-hybrid",
+    "themes": [{ "name": "nvim-hybrid", "brightness": "dark", "temperature": "cold" }],
+    "stars": 26
   },
   {
     "repository": "alexmozaidze/palenight.nvim",
