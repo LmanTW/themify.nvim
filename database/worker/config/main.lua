@@ -89,4 +89,6 @@ Utilities.write_file(vim.fs.normalize(vim.fs.joinpath(debug.getinfo(1, 'S').sour
 
 print('complete', table.concat({'Successfully got all the preview highlight groups\n'}))
 
+print('info', table.concat({'Themes in the database: ', tostring(#themes), '\n'}))
+
 vim.cmd('qa')

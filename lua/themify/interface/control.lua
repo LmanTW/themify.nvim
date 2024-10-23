@@ -12,8 +12,10 @@ Control.__index = Control
 local mapping = {
   k = 'move_cursor("up")',
   ['<Up>'] = 'move_cursor("up")',
+  ['<S-Up>'] = 'move_cursor("top")',
   j = 'move_cursor("down")',
   ['<Down>'] = 'move_cursor("down")',
+  ['<S-Down>'] = 'move_cursor("bottom")',
   ['<CR>'] = 'select()',
 
   ['<Left>'] = 'switch_page("left")',
@@ -86,6 +88,30 @@ function Control:move_cursor(page, direction)
     for i = control.cursor_y + 1, #content do
       if content[i] ~= nil and vim.list_contains(content[i].tags, 'selectable') then
         control.cursor_y = i
+
+        if control.cursor_y - control.scroll_y > self.height - 7 then
+          control.scroll_y = control.cursor_y - (self.height - 7)
+        end
+
+        return true
+      end
+    end
+  elseif direction == 'top' then
+    for i = 1, #content do
+      if content[i] ~= nil and vim.list_contains(content[i].tags, 'selectable') then
+        control.cursor_y = i
+
+        if control.cursor_y - control.scroll_y < 1 then
+          control.scroll_y = control.cursor_y
+        end
+
+        return true
+      end
+    end
+  elseif direction == 'bottom' then
+    for i = 0, #content do
+      if content[#content - i] ~= nil and vim.list_contains(content[#content - i].tags, 'selectable') then
+        control.cursor_y = #content - i
 
         if control.cursor_y - control.scroll_y > self.height - 7 then
           control.scroll_y = control.cursor_y - (self.height - 7)

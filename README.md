@@ -5,7 +5,7 @@
 A colorscheme manager and switcher designed for [Neovim](https://neovim.io) written in [Lua](https://www.lua.org). Inspired by [Themery.nvim](https://github.com/zaldih/themery.nvim) and [Lazy.nvim](https://github.com/folke/lazy.nvim).
 
 - 🎨 Easily install and manage your colorschemes.
-- 🔍 Explore and preview colorschemes directly in Neovim.
+- 🔍 Explore and preview 100+ colorschemes directly in Neovim.
 - ⚡️ Optimized startup time with lazy-loaded colorschemes.
 
 ## 📦 Installation
