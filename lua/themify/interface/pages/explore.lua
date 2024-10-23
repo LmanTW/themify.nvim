@@ -131,7 +131,7 @@ Pages.create_page({
         highlights[#highlights + 1] = table.concat({name, table.concat({'ThemifyPreview', name})}, ':')
       end
 
-      vim.api.nvim_buf_set_option(preview_buffer, 'winhl', table.concat(highlights, ','))
+      vim.api.nvim_set_option_value('winhl', table.concat(highlights, ','), { buf = preview_buffer })
     else
       if preview_window ~= nil then
         vim.api.nvim_win_close(preview_window, false)

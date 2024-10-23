@@ -31,31 +31,31 @@ Pages.create_page({
       list:create_section('not_installed', { content = Text.combine({
         Text:new('  Not Installed '),
         Text:new(table.concat({'(', amount.not_installed, ')'}), Colors.description)
-      }), tags = {'selectable'} })
+      }), tags = {} })
     end
     if amount.failed ~= nil then
       list:create_section('failed', { content = Text.combine({
         Text:new('  Failed '),
         Text:new(table.concat({'(', amount.failed, ')'}), Colors.description)
-      }), tags = {'selectable'} })
+      }), tags = {} })
     end
     if amount.installing ~= nil then
       list:create_section('installing', { content = Text.combine({
         Text:new('  Installing '),
         Text:new(table.concat({'(', amount.installing, ')'}), Colors.description)
-      }), tags = {'selectable'} })
+      }), tags = {} })
     end
     if amount.updating ~= nil then
       list:create_section('updating', { content = Text.combine({
         Text:new('  Updating '),
         Text:new(table.concat({'(', amount.updating, ')'}), Colors.description)
-      }), tags = {'selectable'} })
+      }), tags = {} })
     end
     if amount.installed ~= nil then
       list:create_section('installed', { content = Text.combine({
         Text:new('  Installed '),
         Text:new(table.concat({'(', amount.installed, ')'}), Colors.description)
-      }), tags = {'selectable'} })
+      }), tags = {} })
     end
 
     local colorscheme_data

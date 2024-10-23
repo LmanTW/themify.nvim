@@ -1,22 +1,5 @@
 local M = {}
 
---- Stringify A Data
---- @param data any
---- @return string
-function M.stringify(data)
-  if type(data) == 'table' then
-    local text = '{ '
-
-    for key, value in pairs(data) do
-      text = table.concat({text, '[', M.stringify(key), ']=',  M.stringify(value),  ', '})
-    end
-
-    return text:sub(0, text:len() - 1) .. ' }'
-  else
-    return type(data) == 'string' and table.concat({'"', data, '"'}) or tostring(data)
-  end
-end
-
 --- Check If A List Contains A Set Of Values (T = Type)
 --- @generic T
 --- @param list T[]

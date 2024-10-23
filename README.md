@@ -10,6 +10,10 @@ A colorscheme manager and switcher designed for [Neovim](https://neovim.io) writ
 
 ## 📦 Installation
 
+> [!WARNING]
+> * Neovim >= 0.10
+> * Git
+
 Use the package manager of your choice to install Theminify:
 
 - [Lazy.nvim](https://github.com/folke/lazy.nvim)

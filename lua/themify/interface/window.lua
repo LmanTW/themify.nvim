@@ -104,7 +104,7 @@ function Window:new()
   vim.api.nvim_set_option_value('cursorline', true, { win = self.window })
   vim.api.nvim_set_current_win(self.window)
 
-  windows[self.window] = self 
+  windows[self.window] = self
 
   self.control:enter_page(nil, self.page)
 
