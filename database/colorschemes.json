@@ -95,19 +95,24 @@
     "stars": 389
   },
   {
+    "repository": "ray-x/aurora",
+    "themes": [{ "name": "aurora", "brightness": "dark", "temperature": "cold" }],
+    "stars": 346
+  },
+  {
     "repository": "glepnir/zephyr-nvim",
     "themes": [{ "name": "zephyr", "brightness": "dark", "temperature": "cold" }],
     "stars": 344
   },
   {
+    "repository": "aktersnurra/no-clown-fiesta.nvim",
+    "themes": [{ "name": "no-clown-fiesta", "brightness": "dark", "temperature": "cold" }],
+    "stars": 333
+  },
+  {
     "repository": "mellow-theme/mellow.nvim",
     "themes": [{ "name": "mellow", "brightness": "dark", "temperature": "warm" }],
     "stars": 284
-  },
-  {
-    "repository": "aktersnurra/no-clown-fiesta.nvim",
-    "themes": [{ "name": "no-clown-fiesta", "brightness": "dark", "temperature": "warm" }],
-    "stars": 273
   },
   {
     "repository": "oxfist/night-owl.nvim",
@@ -230,6 +235,16 @@
     "stars": 114
   },
   {
+    "repository": "yorumicolors/yorumi.nvim",
+    "themes": [{ "name": "yorumi", "brightness": "dark", "temperature": "cold" }],
+    "stars": 112
+  },
+  {
+    "repository": "Verf/deepwhite.nvim",
+    "themes": [{ "name": "deepwhite", "brightness": "light", "temperature": "cold" }],
+    "stars": 109
+  },
+  {
     "repository": "aliqyan-21/darkvoid.nvim",
     "themes": [{ "name": "darkvoid", "setup": "require(\"darkvoid\").setup()", "brightness": "dark", "temperature": "cold" }],
     "stars": 108
@@ -280,6 +295,16 @@
     "stars": 56
   },
   {
+    "repository": "bettervim/yugen.nvim",
+    "themes": [{ "name": "yugen", "brightness": "dark", "temperature": "cold" }],
+    "stars": 51
+  },
+  {
+    "repository": "ilof2/posterpole.nvim",
+    "themes": [{ "name": "posterpole", "brightness": "dark", "temperature": "cold" }],
+    "stars": 49
+  },
+  {
     "repository": "sekke276/dark_flat.nvim",
     "themes": [{ "name": "dark_flat", "brightness": "dark", "temperature": "cold" }],
     "stars": 45
@@ -300,9 +325,19 @@
     "stars": 40
   },
   {
+    "repository": "water-sucks/darkrose.nvim",
+    "themes": [{ "name": "darkrose", "brightness": "dark", "temperature": "cold" }],
+    "stars": 33
+  },
+  {
     "repository": "PHSix/nvim-hybrid",
     "themes": [{ "name": "nvim-hybrid", "brightness": "dark", "temperature": "cold" }],
     "stars": 26
+  },
+  {
+    "repository": "e-q/okcolors.nvim",
+    "themes": [{ "name": "okcolors-smooth", "background": "dark", "brightness": "dark", "temperature": "cold" }, { "name": "okcolors-smooth", "background": "light", "brightness": "light", "temperature": "cold" }, { "name": "okcolors-sharp", "background": "dark", "brightness": "dark", "temperature": "cold" }, { "name": "okcolors-sharp", "background": "light", "brightness": "light", "temperature": "cold" }],
+    "stars": 24
   },
   {
     "repository": "alexmozaidze/palenight.nvim",
@@ -317,6 +352,11 @@
   {
     "repository": "kevinm6/kurayami.nvim",
     "themes": [{ "name": "kurayami", "brightness": "dark", "temperature": "cold" }],
+    "stars": 6
+  },
+  {
+    "repository": "sample-usr/rakis.nvim",
+    "themes": [{ "name": "rakis", "background": "dark", "brightness": "dark", "temperature": "warm" }, { "name": "rakis", "background": "light", "brightness": "light", "temperature": "warm" }],
     "stars": 6
   }
 ]
