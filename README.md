@@ -82,7 +82,7 @@ require('themery').setup({
 ```
 
 > [!IMPORTANT]
-> The colorschemes will not be installed automatically, please use the command `:Themify` to open the interface, then press `I` to install all the colorschemes.
+> The colorschemes will not be installed automatically, please use the command `:Themify` to open the menu then press `I` to install all the colorschemes.
 
 <details>
   <summary>Advance Configuration</summary>

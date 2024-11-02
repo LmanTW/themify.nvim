@@ -80,7 +80,7 @@ end
 --- @return nil
 function M.load_theme(colorscheme_id, theme)
   if colorscheme_id == nil then
-    -- If the colorscheme type is "local", it won't pass the colorscheme_id when loading the theme.
+    -- <colorscheme_id> is not provided when loading a "local" colorscheme.
 
     colorscheme_id = theme
   end
@@ -148,8 +148,8 @@ function M.clean_colorschemes()
       if colorscheme_id == nil
         -- The colorschemes is not being used.
         or not Utilities.path_exist(table.concat({M.colorschemes_data[colorscheme_id].path, '.git', 'HEAD'}, '/'))
-        or normalize_branch(M.colorschemes_data[colorscheme_id].branch) ~= normalize_branch(Data.read_colorscheme_repository_head(repository_folders[i]).branch)
         -- The repository is on a different branch.
+        or normalize_branch(M.colorschemes_data[colorscheme_id].branch) ~= normalize_branch(Data.read_colorscheme_repository_head(repository_folders[i]).branch)
       then
         -- Remove the colorscheme in async because it might take a long time.
         Utilities.execute_async(function()
@@ -331,7 +331,7 @@ function M.update_colorscheme(colorscheme_id)
             colorscheme_data.status = code == 0 and 'installed' or 'failed'
             colorscheme_data.progress = 0
 
-            if code == 0 then 
+            if code == 0 then
               colorscheme_data.info = table.concat({'Updated ', local_commit:sub(0, 7), ' -> ', remote_commit:sub(0, 7)})
             else
               colorscheme_data.info = vim.split(stderr, '\n')[1]
@@ -373,7 +373,7 @@ function M.check_colorscheme_commit(colorscheme_id, callback)
   end)
 end
 
---- Count Colorscheme Amount
+--- Count Amount Of The Colorscheme
 --- @return nil
 function M.count_colorscheme_amount()
   M.colorschemes_amount = {}

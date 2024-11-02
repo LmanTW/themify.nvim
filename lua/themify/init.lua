@@ -3,6 +3,7 @@
 local Manager = require('themify.core.manager')
 local Utilities = require('themify.utilities')
 local Event = require('themify.core.event')
+local Command = require('themify.command')
 local Data = require('themify.core.data')
 
 local M = {
@@ -103,13 +104,18 @@ function M.setup(config)
     Manager.check_colorschemes()
   end))
 
-  if config.async == true then
+  if config.async then
     Utilities.execute_async(vim.schedule_wrap(load_state))
   else
     load_state()
   end
 end
 
-vim.cmd('command! Themify lua require("themify.commands").open()')
+vim.api.nvim_create_user_command("Themify", Command.handle, {
+  nargs = '?',
+  complete = Command.complete
+})
+
+--- vim.cmd('command! Themify lua require("themify.commands").open()')
 
 return M
