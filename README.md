@@ -11,8 +11,7 @@ A colorscheme manager and switcher designed for [Neovim](https://neovim.io) writ
 ## 📦 Installation
 
 > [!WARNING]
-> * Neovim >= 0.10
-> * Git
+> Requirements: `Neovim >= 0.10`, `Git`
 
 Use the package manager of your choice to install Theminify:
 

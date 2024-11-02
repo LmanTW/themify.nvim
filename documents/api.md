@@ -5,7 +5,7 @@ Themify exposes an API that allows developers to interact with the Themify core.
 - [Themify](#themify)
   - [colorschemes_data](#colorschemes_data)
   - [colorschemes_repository](#colorschemes_repository)
-- [add_colorscheme()](#add_colorscheme)
+  - [add_colorscheme()](#add_colorscheme)
   - [load_theme()](#load_theme)
   - [clean_colorschemes()](#clean_colorschemes)
   - [check_colorschemes()](#check_colorschemes)
@@ -129,7 +129,7 @@ Themify.listen(<event>, <callback>)
 
 ### Events
 
-- `update` | When something is updated that requires an interface update.
+- `update` | When something is updated that requires a window update.
 - `state_update` | When the state of any of the colorscheme is updated.
 
 # Types
