@@ -38,11 +38,12 @@ end
 
 --- Create A Clone Task
 --- @param cwd string
---- @param repository string
+--- @param source string
 --- @param branch string
+--- @param path string
 --- @param callback function
-function M.clone(cwd, repository, branch, callback)
-  return Pipeline.create_task(cwd, 'git', {'clone', table.concat({'https://github.com/', repository}), '-b', branch, '--progress'}, function(_, stderr)
+function M.clone(cwd, source, branch, path, callback)
+  return Pipeline.create_task(cwd, 'git', {'clone', source, path, '-b', branch, '--progress'}, function(_, stderr)
     if stderr ~= nil then
       if (stderr:sub(0, 24) == 'Counting objects') then
         callback((tonumber(stderr:match('[0-9]*[0-9]')) or 0) / 4, 'Counting Objects...')

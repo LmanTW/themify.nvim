@@ -6,18 +6,23 @@
 --- @field blacklist? string[]
 
 --- @class Colorscheme_Data
---- @field type 'github'|'local'
---- @field name string
+--- @field type 'remote'|'local'
 --- @field status 'unknown'|'not_installed'|'installed'|'installing'|'updating'|'failed'
+--- @field repository? Repository
 --- @field progress number
 --- @field info string
---- @field branch string
 --- @field before? function
 --- @field after? function
 --- @field themes string[]
 --- @field whitelist? string[]
 --- @field blacklist? string[]
 --- @field path string
+
+--- @class Repository
+--- @field source string
+--- @field author string
+--- @field name string
+--- @field branch string
 
 local Pipeline = require('themify.core.pipeline')
 local Utilities = require('themify.utilities')
@@ -37,40 +42,65 @@ local M = {
   colorschemes_amount = {}
 }
 
---- Get The Name Of The Colorscheme
+--- Parse The Repository
 --- @param repository string
---- @return { type: 'github'|'local', name: string }
-local function get_colorscheme_name(repository)
-  local chunks = vim.split(repository, '/')
+--- @return { source: string, author: string, name: string }
+local function parse_repository(repository)
+  if repository:sub(1, 8) == 'https://' then
+    local chunks = vim.split(repository:sub(9), '/')
 
-  Utilities.error(#chunks > 2, {'Themify: Invalid colorscheme name: "', repository, '"'})
+    Utilities.error(#chunks > 3 or (chunks[1]:len() == 0 or chunks[2]:len() == 0), {'Themify: Invalid repository name: "', repository, '"'})
 
-  return #chunks == 1 and { type = 'local', name = chunks[1] } or { type = 'github', name = chunks[2] }
+    return { source = repository, author = chunks[2], name = chunks[3] }
+  else
+    local chunks = vim.split(repository, '/')
+
+    Utilities.error(#chunks > 2 or (chunks[1]:len() == 0 or chunks[2]:len() == 0), {'Themify: Invalid repository name: "', repository, '"'})
+
+    return { source = table.concat({'https://github.com', repository}, '/'), author = chunks[1], name = chunks[2] }
+  end
 end
 
 --- Add A Colorscheme To Manage
---- @param colorscheme_id string
+--- @param colorscheme_source string
 --- @param colorscheme_info Colorscheme_Info
 --- @return nil
-function M.add_colorscheme(colorscheme_id, colorscheme_info)
-  Utilities.error(M.colorschemes_data[colorscheme_id] ~= nil, {'Themify: Duplicate colorscheme: "', colorscheme_id, '"'})
+function M.add_colorscheme(colorscheme_source, colorscheme_info)
+  local colorscheme_id = colorscheme_source
+  local colorscheme_type = colorscheme_source:find('/') and 'remote' or 'local'
+  local colorscheme_repository
+  local colorscheme_path = colorscheme_id
 
-  local colorscheme_name = get_colorscheme_name(colorscheme_id)
+  if (colorscheme_type == 'remote') then
+    local repository = parse_repository(colorscheme_id)
+
+    colorscheme_id = table.concat({repository.author, repository.name}, '/')
+    colorscheme_repository = {
+      source = repository.source,
+      author = repository.author,
+      name = repository.name,
+      branch = colorscheme_info.branch
+    }
+
+    colorscheme_path = table.concat({repository.author, repository.name}, '-')
+  end
+
+  Utilities.error(colorscheme_id:len() == 0, {'Themify: Invalid colorscheme source: "', colorscheme_source, '"'})
+  Utilities.error(M.colorschemes_data[colorscheme_id] ~= nil, {'Themify: Duplicate colorscheme: "', colorscheme_id, '"'})
 
   M.colorschemes_id[#M.colorschemes_id + 1] = colorscheme_id
   M.colorschemes_data[colorscheme_id] = {
-    type = colorscheme_name.type,
-    name = colorscheme_name.name,
-    status = colorscheme_name.type == 'github' and 'unknown' or 'installed',
+    type = colorscheme_type,
+    status = colorscheme_type == 'remote' and 'unknown' or 'installed',
+    repository = colorscheme_repository,
     progress = 0,
     info = '',
-    branch = colorscheme_info.branch,
     before = colorscheme_info.before,
     after = colorscheme_info.after,
     themes = {},
     whitelist = colorscheme_info.whitelist,
     blacklist = colorscheme_info.blacklist,
-    path = vim.fs.joinpath(Data.colorschemes_path, colorscheme_name.name)
+    path = vim.fs.joinpath(Data.colorschemes_path, colorscheme_path)
   }
 end
 
@@ -87,13 +117,11 @@ function M.load_theme(colorscheme_id, theme)
 
   local colorscheme_data = M.colorschemes_data[colorscheme_id]
 
-  if colorscheme_data == nil
-    -- or (colorscheme_data.type == 'github' and not vim.list_contains(colorscheme_data.themes, theme))
-  then
+  if colorscheme_data == nil then
     return false
   end
 
-  if colorscheme_data.type == 'github' then
+  if colorscheme_data.type == 'remote' then
     if not vim.list_contains(M.loaded_colorschemes, colorscheme_id) then
       vim.o.runtimepath = table.concat({vim.o.runtimepath, ',', colorscheme_data.path})
     end
@@ -114,12 +142,12 @@ function M.load_theme(colorscheme_id, theme)
   return ok
 end
 
---- Get The Repository Of The Colorscheme
---- @param colorscheme_name string
+--- Get The Id Of The Colorscheme Using The Folder Name
+--- @param folder_name string
 --- @return string|nil
-local function get_colorscheme_id(colorscheme_name)
+local function get_colorscheme_id(folder_name)
   for colorscheme_id, colorscheme_data in pairs(M.colorschemes_data) do
-    if colorscheme_data.name == colorscheme_name then
+    if colorscheme_data.repository ~= nil and table.concat({colorscheme_data.repository.author, colorscheme_data.repository.name}, '-') == folder_name then
       return colorscheme_id
     end
   end
@@ -149,7 +177,7 @@ function M.clean_colorschemes()
         -- The colorschemes is not being used.
         or not Utilities.path_exist(table.concat({M.colorschemes_data[colorscheme_id].path, '.git', 'HEAD'}, '/'))
         -- The repository is on a different branch.
-        or normalize_branch(M.colorschemes_data[colorscheme_id].branch) ~= normalize_branch(Data.read_colorscheme_repository_head(repository_folders[i]).branch)
+        or normalize_branch(M.colorschemes_data[colorscheme_id].repository.branch) ~= normalize_branch(Data.read_colorscheme_repository_head(repository_folders[i]).branch)
       then
         -- Remove the colorscheme in async because it might take a long time.
         Utilities.execute_async(function()
@@ -178,7 +206,7 @@ function M.check_colorscheme(colorscheme_id)
 
   Utilities.error(colorscheme_data == nil, {'Themify: Colorscheme not found: "', colorscheme_id, '"'})
 
-  if colorscheme_data.type == 'github' and (colorscheme_data.status ~= 'installing' and colorscheme_data.status ~= 'updating') then
+  if colorscheme_data.type == 'remote' and (colorscheme_data.status ~= 'installing' and colorscheme_data.status ~= 'updating') then
     colorscheme_data.status = Utilities.path_exist(colorscheme_data.path) and 'installed' or 'not_installed'
     colorscheme_data.info = ''
 
@@ -242,13 +270,13 @@ function M.install_colorscheme(colorscheme_id)
     Event.emit('state_update')
 
     local pipeline = Pipeline:new({
-      Tasks.clone(Data.colorschemes_path, colorscheme_id, colorscheme_data.branch, function(progress, info)
+      Tasks.clone(Data.colorschemes_path, colorscheme_data.repository.source, colorscheme_data.repository.branch, table.concat({colorscheme_data.repository.author, colorscheme_data.repository.name}, '-'), function(progress, info)
         colorscheme_data.progress = progress
         colorscheme_data.info = info
 
         Event.emit('update')
       end),
-      Tasks.checkout(colorscheme_data.path, colorscheme_data.branch, function()
+      Tasks.checkout(colorscheme_data.path, colorscheme_data.repository.branch, function()
         colorscheme_data.progress = 100
         colorscheme_data.info = 'Checking Out...'
 
@@ -287,7 +315,7 @@ function M.update_colorscheme(colorscheme_id)
 
   local colorscheme_data = M.colorschemes_data[colorscheme_id]
 
-  if colorscheme_data.type == 'github' and colorscheme_data.status == 'installed' then
+  if colorscheme_data.type == 'remote' and colorscheme_data.status == 'installed' then
     colorscheme_data.status = 'updating'
     colorscheme_data.progress = 0
     colorscheme_data.info = 'Fetching...'
@@ -313,13 +341,13 @@ function M.update_colorscheme(colorscheme_id)
           Event.emit('state_update')
         else
           local pipeline = Pipeline:new({
-            Tasks.reset(colorscheme_data.path, colorscheme_data.branch, function()
+            Tasks.reset(colorscheme_data.path, colorscheme_data.repository.branch, function()
               Event.emit('update')
 
               colorscheme_data.progress = 25
               colorscheme_data.info = 'Reseting...'
             end),
-            Tasks.pull(colorscheme_data.path, colorscheme_data.branch, function()
+            Tasks.pull(colorscheme_data.path, colorscheme_data.repository.branch, function()
               Event.emit('update')
 
               colorscheme_data.progress = 50
@@ -355,11 +383,11 @@ function M.check_colorscheme_commit(colorscheme_id, callback)
   local local_commit, remote_commit
 
   local pipeline = Pipeline:new({
-    Tasks.fetch(colorscheme_data.path, colorscheme_data.branch),
+    Tasks.fetch(colorscheme_data.path, colorscheme_data.repository.branch),
     Tasks.get_commit(colorscheme_data.path, 'HEAD', function(commit_hash)
       local_commit = commit_hash
     end),
-    Tasks.get_commit(colorscheme_data.path, table.concat({'origin', colorscheme_data.branch}, '/'), function(commit_hash)
+    Tasks.get_commit(colorscheme_data.path, table.concat({'origin', colorscheme_data.repository.branch}, '/'), function(commit_hash)
       remote_commit = commit_hash
     end)
   })

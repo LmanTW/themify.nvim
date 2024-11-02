@@ -58,23 +58,25 @@ Pages.create_page({
       }), tags = {} })
     end
 
+    local colorscheme_id
     local colorscheme_data
 
     for i = 1, #Manager.colorschemes_id do
-      colorscheme_data = Manager.colorschemes_data[Manager.colorschemes_id[i]]
+      colorscheme_id = Manager.colorschemes_id[i]
+      colorscheme_data = Manager.colorschemes_data[colorscheme_id]
 
       if colorscheme_data.status == 'not_installed' then
         list:add_item(colorscheme_data.status, { content = Text.combine({
           Text:new('    '),
           Text:new('󱑥 ', Colors.icon),
-          Text:new(Manager.colorschemes_id[i])
-        }), tags = {'selectable', 'install'}, extra = Manager.colorschemes_id[i] })
+          Text:new(colorscheme_id)
+        }), tags = {'selectable', 'install'}, extra = colorscheme_id })
       elseif colorscheme_data.status == 'failed' then
         list:add_item('failed', { content = Text.combine({
           Text:new('    '),
           Text:new('󰗖 ', Colors.icon),
-          Text:new(Manager.colorschemes_id[i])
-        }), tags = {'selectable', 'check'}, extra = Manager.colorschemes_id[i] })
+          Text:new(colorscheme_id)
+        }), tags = {'selectable', 'check'}, extra = colorscheme_id })
         list:add_item('failed', { content = Text.combine({
           Text:new('     '),
           Text:new(table.concat({' ', colorscheme_data.info, ' '}), Colors.error)
@@ -83,7 +85,7 @@ Pages.create_page({
         list:add_item(colorscheme_data.status, { content = Text.combine({
           Text:new('    '),
           Text:new(get_progress_icon(colorscheme_data.progress), Colors.icon),
-          Text:new(Manager.colorschemes_id[i]),
+          Text:new(colorscheme_id),
           Text:new(' '),
           Text:new(table.concat({' ', colorscheme_data.info, ' '}), Colors.info)
         }), tags = {} })
@@ -91,7 +93,7 @@ Pages.create_page({
         local parts = {
           Text:new('    '),
           Text:new('󰸡 ', Colors.icon),
-          Text:new(Manager.colorschemes_id[i]),
+          Text:new(colorscheme_id),
         }
 
         if colorscheme_data.info:len() > 0 then

@@ -18,6 +18,7 @@ Themify exposes an API that allows developers to interact with the Themify core.
 - [Types](#types)
   - [Colorscheme_Info](#colorscheme_info)
   - [Colorscheme_Data](#colorscheme_data)
+  - [Repository](#repository)
 
 # Themify
 
@@ -47,10 +48,10 @@ Themify.colorscheme_repository
 
 ```lua
 --- Add a colorscheme to manage.
-Themify.add_colorscheme(<colorscheme_id>, <colorscheme_info>)
+Themify.add_colorscheme(<colorscheme_source>, <colorscheme_info>)
 ```
 
-- `colorscheme_id: string` | The id the colorscheme. `Example: 'folke/tokyonight.nvim' or 'default'`
+- `colorscheme_source: string` | The source the colorscheme. `Example: 'folke/tokyonight.nvim' or 'default'`
 - `colorscheme_info: Colorscheme_Info` | The info of the colorscheme.
 
 ## load_theme()
@@ -151,16 +152,25 @@ Some type annotations for Themify.
 
 ```lua
 --- @class Colorscheme_Data
---- @field type 'github'|'local'
---- @field name string
+--- @field type 'remote'|'local'
 --- @field status 'unknown'|'not_installed'|'installed'|'installing'|'updating'|'failed'
+--- @field repository? Repository
 --- @field progress number
 --- @field info string
---- @field branch string
 --- @field before? function
 --- @field after? function
 --- @field themes string[]
 --- @field whitelist? string[]
 --- @field blacklist? string[]
 --- @field path string
+```
+
+## Repository
+
+```lua
+--- @class Repository
+--- @field source string
+--- @field author string
+--- @field name string
+--- @field branch string
 ```

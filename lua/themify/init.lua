@@ -27,7 +27,7 @@ local M = {
 --- @param type_name string
 --- @return nil
 local function throw_colorscheme_config_error(colorscheme_repository, option_name, type_name)
- error(table.concat({'Themify: The "', option_name, '" option for the colorscheme "', colorscheme_repository, '" must be a <', type_name, '>'}))
+  error(table.concat({'Themify: The "', option_name, '" option for the colorscheme "', colorscheme_repository, '" must be a <', type_name, '>'}))
 end
 
 --- Check The Config Of A Colorscheme

@@ -24,12 +24,12 @@ Pages.create_page({
     end
 
     for i = 1, #Manager.colorschemes_id do
-      local colorscheme_data = Manager.colorschemes_data[Manager.colorschemes_id[i]]
+      local colorscheme_id = Manager.colorschemes_id[i]
+      local colorscheme_data = Manager.colorschemes_data[colorscheme_id]
 
-      if colorscheme_data.type == 'github' then
-
+      if colorscheme_data.type == 'remote' then
         if colorscheme_data.status == 'installed' or colorscheme_data.status == 'updating' then
-          content[#content + 1] = { content = Text:new(table.concat({'   ', Manager.colorschemes_id[i]})), tags = {} }
+          content[#content + 1] = { content = Text:new(table.concat({'   ', colorscheme_id})), tags = {} }
 
           for i2 = 1, #colorscheme_data.themes do
             local selected = state ~= vim.NIL and (Manager.colorschemes_id[i] == state.colorscheme_id and colorscheme_data.themes[i2] == state.theme)
