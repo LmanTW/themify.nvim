@@ -8,7 +8,7 @@ local Data = require('themify.core.data')
 
 local M = {
   colorschemes_data = Manager.colorschemes_data,
-  colorschemes_repository = Manager.colorschemes_repository,
+  colorschemes_id = Manager.colorschemes_id,
   add_colorscheme = Manager.add_colorscheme,
   load_theme = Manager.load_theme,
   clean_colorschemes = Manager.clean_colorschemes,
@@ -55,12 +55,12 @@ local function load_state()
 
       vim.api.nvim_create_autocmd('UIEnter', {
         callback = function()
+          vim.notify(table.concat({'Themify: Colorscheme not found: "', state.colorscheme_id, '"'}), vim.log.levels.WARN)
           vim.cmd('Themify')
         end,
 
         once = true
       })
-
     end
   end
 end
@@ -115,7 +115,5 @@ vim.api.nvim_create_user_command("Themify", Command.handle, {
   nargs = '?',
   complete = Command.complete
 })
-
---- vim.cmd('command! Themify lua require("themify.commands").open()')
 
 return M

@@ -18,14 +18,14 @@ async function start(): Promise<void> {
 
   for (const colorscheme of colorschemes) {
     for (const theme of colorscheme.themes) {
-      if (theme.brightness !== 'dark' && theme.brightness !== 'light') {
+      if (!['dark', 'light'].includes(theme.brightness)) {
         Log.error(`Invalid value "${theme.brightness}" for property "brightness" in "${theme.name}" (${colorscheme.repository})`)
         Log.blank()
 
         process.exit()
       }
 
-      if (theme.temperature !== 'cold' && theme.temperature !== 'warm') {
+      if (!['cold', 'warm'].includes(theme.temperature)) {
         Log.error(`Invalid value "${theme.brightness}" for property "temperature" in "${theme.name}" (${colorscheme.repository})`)
         Log.blank()
 

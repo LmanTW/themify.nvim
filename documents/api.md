@@ -35,11 +35,11 @@ Themify.colorschemes_data
 
 - `table<string, Colorscheme_Data>`
 
-## colorscheme_repository
+## colorscheme_id
 
 ```lua
---- A list of the repositories of the colorschemes in order.
-Themify.colorscheme_repository
+--- A list of the id of the colorschemes in order.
+Themify.colorscheme_id
 ```
 
 - `string[]`
