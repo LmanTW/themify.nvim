@@ -16,7 +16,7 @@
   },
   {
     "repository": "EdenEast/nightfox.nvim",
-    "themes": [{ "name": "nightfox", "brightness": "dark", "temperature": "cold" }, { "name": "dayfox", "brightness": "light", "temperature": "warm" }, { "name": "dawnfox", "brightness": "light", "temperature": "cold" }, { "name": "duskfox", "brightness": "dark", "temperature": "cold" }, { "name": "nordfox", "brightness": "dark", "temperature": "cold" }, { "name": "terafox", "brightness": "dark", "temperature": "cold" }, { "name": "carbonfox", "brightness": "dark", "temperature": "cold" }],
+    "themes": [{ "name": "nightfox", "brightness": "dark", "temperature": "cold" }, { "name": "dayfox", "brightness": "light", "temperature": "cold" }, { "name": "dawnfox", "brightness": "light", "temperature": "cold" }, { "name": "duskfox", "brightness": "dark", "temperature": "cold" }, { "name": "nordfox", "brightness": "dark", "temperature": "cold" }, { "name": "terafox", "brightness": "dark", "temperature": "cold" }, { "name": "carbonfox", "brightness": "dark", "temperature": "cold" }],
     "stars": 3105
   },
   {

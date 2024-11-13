@@ -128,14 +128,14 @@ function M.load_theme(colorscheme_id, theme)
   end
 
   if type(colorscheme_data.before) == 'function' then
-    colorscheme_data.before()
+    pcall(colorscheme_data.before)
   end
 
   local ok = pcall(vim.cmd.colorscheme, theme)
 
   if ok then
     if type(colorscheme_data.after) == 'function' then
-      colorscheme_data.after()
+      pcall(colorscheme_data.after)
     end
   end
 
