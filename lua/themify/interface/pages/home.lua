@@ -38,9 +38,9 @@ Pages.create_page({
           end
         end
       else
-        local selected = state ~= vim.NIL and (state.colorscheme_id == nil and state.theme == colorscheme_data.name)
+        local selected = state ~= vim.NIL and (state.colorscheme_id == nil and state.theme == colorscheme_id)
 
-        content[#content + 1] = { content = Text:new(table.concat({selected and '  > ' or '  - ', colorscheme_data.name})), tags = {'selectable', 'theme'}, extra = { theme = colorscheme_data.name }}
+        content[#content + 1] = { content = Text:new(table.concat({selected and '  > ' or '  - ', colorscheme_id})), tags = {'selectable', 'theme'}, extra = { theme = colorscheme_id }}
       end
     end
 

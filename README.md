@@ -2,10 +2,10 @@
 
 ![A screenshot of Themify](./documents/assets/screenshot.jpg)
 
-A colorscheme manager and switcher designed for [Neovim](https://neovim.io) written in [Lua](https://www.lua.org). Inspired by [Themery.nvim](https://github.com/zaldih/themery.nvim) and [Lazy.nvim](https://github.com/folke/lazy.nvim).
+A lightweight colorscheme manager inspired by [Themery.nvim](https://github.com/zaldih/themery.nvim) and [Lazy.nvim](https://github.com/folke/lazy.nvim).
 
 - 🎨 Easily install and manage your colorschemes.
-- 🔍 Explore and preview 100+ colorschemes directly in Neovim.
+- 🔍 Switch between colorschemes with a live preview.
 - ⚡️ Optimized startup time with lazy-loaded colorschemes.
 
 ## 📦 Installation
@@ -111,18 +111,10 @@ require('themery').setup({
   ```
 </details>
 
-## 📚 Colorscheme Database
-
-Themify has a colorscheme database that can be access through the Explore page, you can search through the themes by using the `brightness` and `temperature` options.
-
-> [!TIP]
-> You can add a colorscheme to the database by [opening an issue](https://github.com/LmanTW/themify.nvim/issues/new/choose).
-
 ## 📎 Other
 
-- [Colorscheme Database](./documents/database.md)
-- [Highlight Groups](./documents/highlight.md)
 - [API Documentation](./documents/api.md)
+- [Highlight Groups](./documents/highlight.md)
 
 <a href="https://star-history.com/#LmanTW/themify.nvim&Date">
  <picture>

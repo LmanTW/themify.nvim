@@ -17,7 +17,7 @@ local M = {
   snippets_path = vim.fs.normalize(table.concat({debug.getinfo(1, 'S').source:sub(2), '../../../../../database/snippets'}))
 }
 
---- Check Data Files
+--- Check the data files.
 --- @return nil
 function M.check_data_files() 
   if not Utilities.path_exist(M.themify_path) then vim.fn.mkdir(M.themify_path, 'p') end
@@ -27,7 +27,7 @@ function M.check_data_files()
   end
 end
 
---- Read The State Data
+--- Read the state data.
 --- @return StateData
 function M.read_state_data()
   M.check_data_files()
@@ -35,7 +35,7 @@ function M.read_state_data()
   local data = vim.json.decode(Utilities.read_file(M.state_data_path))
 
   --- Just for backward compatibility, might remove this later.
-  --- Added 2024/9/14.
+  --- Added at 2024/9/14.
 
   if data ~= vim.NIL and data.colorscheme_repository ~= nil then
     M.write_state_data({ colorscheme_id = data.colorscheme_repository, theme = data.theme })
@@ -46,7 +46,7 @@ function M.read_state_data()
   return data
 end
 
---- Write The State Data
+--- Write the state data.
 --- @param data StateData
 --- @return nil
 function M.write_state_data(data)
@@ -56,7 +56,7 @@ function M.write_state_data(data)
   Utilities.write_file(M.state_data_path, json)
 end
 
---- Read The Head Of The Colorscheme Repository
+--- Read the head of the colorscheme repository.
 --- @param colorscheme_name string
 --- @return { branch: string }
 function M.read_colorscheme_repository_head (colorscheme_name)

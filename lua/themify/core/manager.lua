@@ -42,7 +42,7 @@ local M = {
   colorschemes_amount = {}
 }
 
---- Parse The Repository
+--- Parse the repository.
 --- @param repository string
 --- @return { source: string, author: string, name: string }
 local function parse_repository(repository)
@@ -61,7 +61,7 @@ local function parse_repository(repository)
   end
 end
 
---- Add A Colorscheme To Manage
+--- Add a colorscheme to manage.
 --- @param colorscheme_source string
 --- @param colorscheme_info Colorscheme_Info
 --- @return nil
@@ -104,7 +104,7 @@ function M.add_colorscheme(colorscheme_source, colorscheme_info)
   }
 end
 
---- Load A Theme
+--- Load a theme.
 --- @param colorscheme_id nil|string
 --- @param theme string
 --- @return nil
@@ -142,7 +142,7 @@ function M.load_theme(colorscheme_id, theme)
   return ok
 end
 
---- Get The Id Of The Colorscheme Using The Folder Name
+--- Get the ID of the colorscheme using the repository folder name.
 --- @param folder_name string
 --- @return string|nil
 local function get_colorscheme_id(folder_name)
@@ -153,14 +153,14 @@ local function get_colorscheme_id(folder_name)
   end
 end
 
---- Normalize Branch Name
+--- Normalize a branch name.
 --- @param branch string
 --- @return string
 local function normalize_branch(branch)
   return branch == 'master' and 'main' or branch
 end
 
---- Clean Unused Colorschemes
+--- Clean unused colorschemes.
 --- @return nil
 function M.clean_colorschemes()
   local repository_folders = Utilities.scan_directory(Data.colorschemes_path)
@@ -188,7 +188,7 @@ function M.clean_colorschemes()
   end
 end
 
---- The The Colorschemes
+--- Check the colorschemes.
 function M.check_colorschemes()
   Data.check_data_files()
   M.clean_colorschemes()
@@ -198,7 +198,7 @@ function M.check_colorschemes()
   end
 end
 
---- Check A Colorscheme
+--- Check a colorscheme.
 --- @param colorscheme_id string
 --- @return nil
 function M.check_colorscheme(colorscheme_id)
@@ -213,7 +213,7 @@ function M.check_colorscheme(colorscheme_id)
     Event.emit('state_update')
 
     if colorscheme_data.status == 'installed' then
-      -- Check the themes under the colorscheme.
+      -- Check all the themes under the colorscheme.
 
       colorscheme_data.themes = {}
 
@@ -243,7 +243,7 @@ function M.check_colorscheme(colorscheme_id)
   end
 end
 
---- Install The Colorschemes
+--- Install the colorschemes.
 --- @return nil
 function M.install_colorschemes()
   Data.check_data_files()
@@ -253,7 +253,7 @@ function M.install_colorschemes()
   end
 end
 
---- Install A Colorscheme
+--- Install a colorscheme.
 --- @param colorscheme_id string
 --- @return nil
 function M.install_colorscheme(colorscheme_id)
@@ -299,7 +299,7 @@ function M.install_colorscheme(colorscheme_id)
   end
 end
 
---- Update The Colorscheme
+--- Update the colorschemes.
 --- @return nil
 function M.update_colorschemes()
   for i = 1, #M.colorschemes_id do
@@ -307,7 +307,7 @@ function M.update_colorschemes()
   end
 end
 
---- Update A Colorscheme
+--- Update a colorscheme.
 --- @param colorscheme_id string
 --- @return nil
 function M.update_colorscheme(colorscheme_id)
@@ -374,7 +374,7 @@ function M.update_colorscheme(colorscheme_id)
   end
 end
 
---- Check The Commit Of The Colorscheme
+--- Check the commit of the colorscheme.
 --- @param colorscheme_id string
 --- @param callback function
 --- @return nil 
@@ -401,16 +401,22 @@ function M.check_colorscheme_commit(colorscheme_id, callback)
   end)
 end
 
---- Count Amount Of The Colorscheme
+--- Count the amount of the colorscheme.
 --- @return nil
 function M.count_colorscheme_amount()
   M.colorschemes_amount = {}
-  local status
+
+  local colorscheme_data
+  local colorscheme_status
 
   for i = 1, #M.colorschemes_id do
-    status = M.colorschemes_data[M.colorschemes_id[i]].status
+    colorscheme_data = M.colorschemes_data[M.colorschemes_id[i]]
 
-    M.colorschemes_amount[status] = M.colorschemes_amount[status] == nil and 1 or M.colorschemes_amount[status] + 1
+    if (colorscheme_data.type == 'remote') then
+      colorscheme_status = colorscheme_data.status
+
+      M.colorschemes_amount[colorscheme_status] = M.colorschemes_amount[colorscheme_status] == nil and 1 or M.colorschemes_amount[colorscheme_status] + 1
+    end
   end
 end
 

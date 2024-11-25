@@ -1,9 +1,0 @@
-[
-  [["# The main function", "Comment"]],
-  [["def", "Statement", "Statement"], [" "], ["main", "Function"], ["():"]],
-  [["    file = "], ["open", "Function"], ["("], ["'message.txt'", "String"], [", "], ["'r'", "String"], [")"]],
-  [],
-  [["    "], ["print", "Function"], ["(file."], ["read", "Function", "Function"], ["())"]],
-  [],
-  [["main", "Function", "Function"], ["()"]]
-]

@@ -22,7 +22,7 @@ Window.__index = Window
 --- @type table<integer, Window>
 local windows = {}
 
---- Get A Window
+--- Get a window.
 --- @param id integer
 function Window.get_window(id)
   Utilities.error(windows[id] == nil, {'Themify: Window not found: "', tostring(id), '"'})
@@ -51,7 +51,7 @@ Event.listen('update', function()
   end
 end)
 
---- Get The Transformation Of The Window
+--- Get the transformation of the window.
 --- @return { x: number, y: number, width: number, height: number } 
 function Window.get_window_transformation()
   local screen_width = vim.api.nvim_get_option_value('columns', { scope = 'global' })
@@ -70,7 +70,7 @@ function Window.get_window_transformation()
   }
 end
 
---- Create A New Windowr
+--- Create a new window.
 function Window:new()
   self = setmetatable({}, Window)
 
@@ -118,7 +118,7 @@ function Window:new()
   return self
 end
 
---- Move The Cursor
+--- Move the cursor.
 --- @param direction 'up'|'down'
 --- @return nil
 function Window:move_cursor(direction)
@@ -134,7 +134,7 @@ function Window:move_cursor(direction)
   self:update()
 end
 
---- Select The Current Line
+--- Select the current line.
 --- @return nil
 function Window:select()
   self.control:check_cursor(self.page)
@@ -155,7 +155,7 @@ function Window:select()
   end
 end
 
---- Switch The Page
+--- Switch a page.
 --- @param direction 'left'|'right'
 --- @return nil
 function Window:switch_page(direction)
@@ -175,7 +175,7 @@ function Window:switch_page(direction)
   self:update()
 end
 
---- Install The Colorschemes
+--- Install the colorschemes.
 --- @return nil
 function Window:install_colorschemes()
   Manager.install_colorschemes()
@@ -185,7 +185,7 @@ function Window:install_colorschemes()
   self:update()
 end
 
---- Update The Colorschemes
+--- Update the colorschemes.
 --- @return nil
 function Window:update_colorschemes()
   Manager.update_colorschemes()
@@ -205,12 +205,10 @@ function Window:check_colorschemes()
   self:update()
 end
 
---- Update The Window
+--- Update the window.
 --- @return nil
 function Window:update()
   vim.api.nvim_set_option_value('modifiable', true, { buf = self.buffer })
-
-  --- Clear the buffer.
   vim.api.nvim_buf_set_lines(self.buffer, 0, -1, false, {})
 
   local content = Pages.get_page_content(self.page)
@@ -222,7 +220,7 @@ function Window:update()
     end
   end
 
-  --- Render the page tab.
+  -- Render the page tab.
 
   local left = table.concat({'  < ', Pages.pages[Pages.get_neighbor_page(self.page, -1)].name})
   local current = table.concat({'- ', Pages.pages[self.page].name, ' -'})
@@ -236,7 +234,7 @@ function Window:update()
     Text:new(right, Colors.description)
   }):render(self.buffer, 1)
 
-  --- Render the actions and info.
+  -- Render the actions and info.
 
   local amount = Manager.colorschemes_amount
 
@@ -257,11 +255,11 @@ function Window:update()
 
   vim.api.nvim_set_option_value('modifiable', false, { buf = self.buffer })
 
-  --- Move the cursor.
+  -- Move the cursor.
   vim.api.nvim_win_set_cursor(self.window, {4 + (control.cursor_y - control.scroll_y), 0})
 end
 
---- Close The Window
+-- Close The Window.
 function Window:close()
   vim.api.nvim_win_close(self.window, false)
 end

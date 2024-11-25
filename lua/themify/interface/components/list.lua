@@ -10,7 +10,7 @@ List.__index = List
 
 local line_blank = { content = Text:new(''), tags = {} }
 
---- Create A New List
+--- Create a new list.
 function List:new()
   self.sections = {}
   self.sections_id = {}
@@ -18,7 +18,7 @@ function List:new()
   return self
 end
 
---- Create A Section
+--- Create a section.
 --- @param id string
 --- @param title Line
 --- @return nil
@@ -29,7 +29,7 @@ function List:create_section(id, title)
   self.sections_id[#self.sections_id + 1] = id
 end
 
---- Add An Item
+--- Add an item.
 --- @param section string
 --- @param line Line
 --- @return nil
@@ -41,7 +41,7 @@ function List:add_item(section, line)
   content[#content + 1] = line
 end
 
---- Get The Content Of The List
+--- Get the content of the list.
 --- @return Line[]
 function List:get_content()
   local content = {}

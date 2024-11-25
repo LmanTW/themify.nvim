@@ -1,6 +1,6 @@
 local M = {}
 
---- Handle The Themify Command
+--- Handle the themify command.
 --- @return nil
 function M.handle(args)
   local Window = require('themify.interface.window')
@@ -22,7 +22,7 @@ function M.handle(args)
   end
 end
 
---- Complete The Command Argument
+--- Complete the command argument.
 --- @param lead string
 --- @return string[]
 function M.complete(lead)

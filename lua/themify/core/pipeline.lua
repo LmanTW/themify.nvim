@@ -8,7 +8,7 @@ local Pipeline = {}
 
 Pipeline.__index = Pipeline
 
---- Create A Task
+--- Create a task.
 --- @param command string
 --- @param args string[]
 --- @param callback function?
@@ -17,7 +17,7 @@ function Pipeline.create_task(cwd, command, args, callback)
   return { cwd = cwd, command = command, args = args, callback = callback }
 end
 
---- Create A New Pipeline 
+--- Create a new pipeline.
 --- @param tasks Task[]
 function Pipeline:new(tasks)
   self = setmetatable({}, Pipeline)
@@ -27,12 +27,12 @@ function Pipeline:new(tasks)
   return self
 end
 
---- Start The Pipeline
+--- Start the pipeline.
 --- @param callback function
 function Pipeline:start(callback)
   local current_task = 0
 
-  --- Execute The Next Task
+  -- Execute the next task.
   local function next()
     current_task = current_task + 1
 

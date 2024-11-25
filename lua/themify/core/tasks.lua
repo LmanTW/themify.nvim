@@ -2,7 +2,7 @@ local Pipeline = require('themify.core.pipeline')
 
 local M = {}
 
---- Create A Fetch Task
+--- Create a fetch task.
 --- @param cwd string
 --- @param branch string
 --- @param callback function?
@@ -14,7 +14,7 @@ function M.fetch(cwd, branch, callback)
   return Pipeline.create_task(cwd, 'git', {'fetch', 'origin', branch})
 end
 
---- Create A Task To Get The Commit
+--- Create a task to get the commit.
 --- @param cwd string
 --- @param target string
 --- @param callback function
@@ -24,7 +24,7 @@ function M.get_commit(cwd, target, callback)
   end)
 end
 
---- Create A Pull Task
+--- Create a pull task.
 --- @param cwd string
 --- @param branch string
 --- @param callback function?
@@ -36,7 +36,7 @@ function M.pull(cwd, branch, callback)
   return Pipeline.create_task(cwd, 'git', {'pull', '-X', 'theirs', 'origin', branch, '--progress'})
 end
 
---- Create A Clone Task
+--- Create a clone task.
 --- @param cwd string
 --- @param source string
 --- @param branch string
@@ -58,7 +58,7 @@ function M.clone(cwd, source, branch, path, callback)
   end)
 end
 
---- Create A Checkout Task
+--- Create a checkout task.
 --- @param cwd string
 --- @param branch string
 --- @param callback function?
@@ -70,7 +70,7 @@ function M.checkout(cwd, branch, callback)
   return Pipeline.create_task(cwd, 'git', {'checkout', branch})
 end
 
---- Create A Reset Task
+--- Create a reset task.
 --- @param cwd string
 --- @param branch string
 --- @param callback function?

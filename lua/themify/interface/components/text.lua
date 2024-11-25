@@ -6,7 +6,7 @@ Text.__index = Text
 
 local namespace = vim.api.nvim_create_namespace('themify')
 
---- Combine The Texts
+--- Combine the texts.
 --- @param texts Text[]
 function Text.combine(texts)
   local text = Text:new()
@@ -18,7 +18,7 @@ function Text.combine(texts)
   return text
 end
 
---- Create A New Text
+--- Create a new text.
 --- @param content string?
 --- @param hightlight_group string?
 function Text:new(content, hightlight_group)
@@ -29,7 +29,7 @@ function Text:new(content, hightlight_group)
   return self
 end
 
---- Center The Text
+--- Center the text.
 --- @param width number
 function Text:center(width)
   local text_width = 0
@@ -44,7 +44,7 @@ function Text:center(width)
   return self
 end
 
---- Render The Text
+--- Render the text.
 --- @param buffer integer
 --- @param line number
 --- @return nil
@@ -72,7 +72,7 @@ function Text:render(buffer, line)
     current_x = current_x + string.len(part.content)
   end
 
-  -- If the lines in the buffer does not reach the line (y) of the text, add more lines.
+  -- If the lines in the buffer does not reach the line (y) of the text, insert more lines.
 
   local lines = #vim.api.nvim_buf_get_lines(buffer, 0, -1, false)
 

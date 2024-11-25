@@ -18,18 +18,19 @@ local mapping = {
   ['<S-Down>'] = 'move_cursor("bottom")',
   ['<CR>'] = 'select()',
 
+  h = 'switch_page("left")',
   ['<Left>'] = 'switch_page("left")',
+  l = 'switch_page("right")',
   ['<Right>'] = 'switch_page("right")',
 
   I = 'install_colorschemes()',
   U = 'update_colorschemes()',
   C = 'check_colorschemes()',
 
-  q = 'close()',
-  ['<ESC>'] = 'close()'
+  q = 'close()'
 }
 
---- Create A New Control
+--- Create a new control.
 --- @param window integer
 function Control:new(window)
   self = setmetatable({}, Control)
@@ -55,7 +56,7 @@ function Control:new(window)
   return self
 end
 
---- Get Page Control
+--- Get the control of a page.
 --- @param page string
 --- @return { cursor_y: number, scroll_y: number }
 function Control:get_page_control(page)
@@ -64,7 +65,7 @@ function Control:get_page_control(page)
   return self.pages[page]
 end
 
---- Move The Cursor
+--- Move the cursor.
 --- @param page string
 --- @param direction 'up'|'down'
 --- @return boolean
@@ -125,7 +126,7 @@ function Control:move_cursor(page, direction)
   return false
 end
 
---- Check The Cursor
+--- Check the cursor.
 --- @param page string
 --- @return nil
 function Control:check_cursor(page)
@@ -139,7 +140,7 @@ function Control:check_cursor(page)
   end
 end
 
---- Check The Scrolling
+--- Check the scrolling.
 --- @param page string
 --- @return nil
 function Control:check_scroll(page)
@@ -150,7 +151,7 @@ function Control:check_scroll(page)
   end
 end
 
---- Switch The Page
+--- Switch a page.
 --- @param page string
 --- @param direction 'left'|'right'
 --- @return nil
@@ -162,7 +163,7 @@ function Control:switch_page(page, direction)
   return new_page
 end
 
---- Enter A Page
+--- Enter a page.
 --- @param old_page nil|string
 --- @param new_page string
 --- @return string

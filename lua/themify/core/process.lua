@@ -8,7 +8,7 @@ local Process = {}
 
 Process.__index = Process
 
---- Execute A Command
+--- Execute a command.
 --- @param command string
 --- @return any
 function Process.execute(command)
@@ -22,7 +22,7 @@ function Process.execute(command)
   return result
 end
 
---- Execute A Command Asynchrony
+--- Execute a command asynchrony.
 --- @param cwd string
 --- @param command string
 --- @param args string[]
@@ -46,7 +46,7 @@ function Process.execute_async(cwd, command, args, callback)
 end
 
 
---- Create A New Process
+--- Create a new process.
 --- @param cwd string
 --- @param command string
 --- @param args string[]
@@ -73,7 +73,7 @@ function Process:new(cwd, command, args, callback)
   return self
 end
 
---- Listen To The Output
+--- Listen to the output.
 --- @param callback function
 --- @return nil
 function Process:listen(callback)

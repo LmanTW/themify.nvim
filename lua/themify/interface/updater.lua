@@ -7,7 +7,7 @@ local Utilities = require('themify.utilities')
 local Updater = {}
 Updater.__index = Updater
 
---- Create A New Updater
+--- Create a new updater.
 --- @param callback function
 function Updater:new(callback)
   self = setmetatable({}, Updater)
@@ -39,7 +39,7 @@ function Updater:new(callback)
   return self
 end
 
---- Update
+--- Update.
 --- @return nil
 function Updater:update()
   if self.timer ~= nil then
@@ -47,7 +47,7 @@ function Updater:update()
   end
 end
 
---- Stop The Updater
+--- Stop the updater.
 --- @return nil
 function Updater:stop()
   Utilities.error(self.timer == nil, {'Themify: The updater is already stopped'})

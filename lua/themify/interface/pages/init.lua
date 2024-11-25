@@ -34,7 +34,6 @@ function M.load_pages()
   if not loaded then
     require('themify.interface.pages.home')
     require('themify.interface.pages.manage')
-    require('themify.interface.pages.explore')
 
     loaded = true
   end

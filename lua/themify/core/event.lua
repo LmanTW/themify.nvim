@@ -3,7 +3,7 @@ local M = {
   listeners = {}
 }
 
---- Listen To An Event
+--- Listen to an event.
 --- @param event string
 --- @param callback function
 --- @return nil
@@ -17,7 +17,7 @@ function M.listen(event, callback)
   group[#group + 1] = callback
 end
 
---- Emit An Event
+--- Emit an event.
 --- @param event string
 function M.emit(event)
   if M.listeners[event] ~= nil then

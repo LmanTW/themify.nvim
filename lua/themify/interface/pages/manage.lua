@@ -65,45 +65,47 @@ Pages.create_page({
       colorscheme_id = Manager.colorschemes_id[i]
       colorscheme_data = Manager.colorschemes_data[colorscheme_id]
 
-      if colorscheme_data.status == 'not_installed' then
-        list:add_item(colorscheme_data.status, { content = Text.combine({
-          Text:new('    '),
-          Text:new('󱑥 ', Colors.icon),
-          Text:new(colorscheme_id)
-        }), tags = {'selectable', 'install'}, extra = colorscheme_id })
-      elseif colorscheme_data.status == 'failed' then
-        list:add_item('failed', { content = Text.combine({
-          Text:new('    '),
-          Text:new('󰗖 ', Colors.icon),
-          Text:new(colorscheme_id)
-        }), tags = {'selectable', 'check'}, extra = colorscheme_id })
-        list:add_item('failed', { content = Text.combine({
-          Text:new('     '),
-          Text:new(table.concat({' ', colorscheme_data.info, ' '}), Colors.error)
-        }), tags = {} })
-      elseif colorscheme_data.status == 'installing' or colorscheme_data.status == 'updating' then
-        list:add_item(colorscheme_data.status, { content = Text.combine({
-          Text:new('    '),
-          Text:new(get_progress_icon(colorscheme_data.progress), Colors.icon),
-          Text:new(colorscheme_id),
-          Text:new(' '),
-          Text:new(table.concat({' ', colorscheme_data.info, ' '}), Colors.info)
-        }), tags = {} })
-      elseif colorscheme_data.status == 'installed' then
-        local parts = {
-          Text:new('    '),
-          Text:new('󰸡 ', Colors.icon),
-          Text:new(colorscheme_id),
-        }
-
-        if colorscheme_data.info:len() > 0 then
-          vim.list_extend(parts, {
+      if colorscheme_data.type == 'remote' then
+        if colorscheme_data.status == 'not_installed' then
+          list:add_item(colorscheme_data.status, { content = Text.combine({
+            Text:new('    '),
+            Text:new('󱑥 ', Colors.icon),
+            Text:new(colorscheme_id)
+          }), tags = {'selectable', 'install'}, extra = colorscheme_id })
+        elseif colorscheme_data.status == 'failed' then
+          list:add_item('failed', { content = Text.combine({
+            Text:new('    '),
+            Text:new('󰗖 ', Colors.icon),
+            Text:new(colorscheme_id)
+          }), tags = {'selectable', 'check'}, extra = colorscheme_id })
+          list:add_item('failed', { content = Text.combine({
+            Text:new('     '),
+            Text:new(table.concat({' ', colorscheme_data.info, ' '}), Colors.error)
+          }), tags = {} })
+        elseif colorscheme_data.status == 'installing' or colorscheme_data.status == 'updating' then
+          list:add_item(colorscheme_data.status, { content = Text.combine({
+            Text:new('    '),
+            Text:new(get_progress_icon(colorscheme_data.progress), Colors.icon),
+            Text:new(colorscheme_id),
             Text:new(' '),
             Text:new(table.concat({' ', colorscheme_data.info, ' '}), Colors.info)
-          })
+          }), tags = {} })
+        elseif colorscheme_data.status == 'installed' then
+          local parts = {
+            Text:new('    '),
+            Text:new('󰸡 ', Colors.icon),
+            Text:new(colorscheme_id),
+          }
+  
+          if colorscheme_data.info:len() > 0 then
+            vim.list_extend(parts, {
+              Text:new(' '),
+              Text:new(table.concat({' ', colorscheme_data.info, ' '}), Colors.info)
+            })
+          end
+  
+          list:add_item('installed', { content = Text.combine(parts), tags = {'selectable', 'update'}, extra = Manager.colorschemes_id[i] })
         end
-
-        list:add_item('installed', { content = Text.combine(parts), tags = {'selectable', 'update'}, extra = Manager.colorschemes_id[i] })
       end
     end
 

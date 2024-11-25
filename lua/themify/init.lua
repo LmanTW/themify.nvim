@@ -21,7 +21,7 @@ local M = {
   listen = Event.listen
 }
 
---- Throw An Colorscheme Config Error
+--- Throw an colorscheme config error.
 --- @param colorscheme_repository string
 --- @param option_name string
 --- @param type_name string
@@ -30,7 +30,7 @@ local function throw_colorscheme_config_error(colorscheme_repository, option_nam
   error(table.concat({'Themify: The "', option_name, '" option for the colorscheme "', colorscheme_repository, '" must be a <', type_name, '>'}))
 end
 
---- Check The Config Of A Colorscheme
+--- Check the config of a colorscheme.
 --- @param colorscheme_repository string
 --- @param colorscheme Colorscheme
 --- @return nil
@@ -42,7 +42,7 @@ local function check_colorscheme_config(colorscheme_repository, colorscheme)
   if colorscheme.blacklist ~= nil and type(colorscheme.blacklist) ~= 'table' then throw_colorscheme_config_error(colorscheme_repository, 'blacklist', 'table') end
 end
 
---- Load The State
+--- Load the state.
 --- @return nil
 local function load_state()
   local state = Data.read_state_data()
@@ -65,7 +65,7 @@ local function load_state()
   end
 end
 
---- Setup Themify
+--- Setup Themify.
 --- @param config Colorscheme[]|table<string, boolean>
 --- @return nil
 function M.setup(config)
