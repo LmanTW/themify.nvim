@@ -1,12 +1,12 @@
 # 🛠 API Documentation
 
-Themify exposes an API that allows developers to interact with the Themify core.
+Themify exposes an API that allows developers to easialy interact with thThemify.
 
 - [Themify](#themify)
   - [colorschemes_data](#colorschemes_data)
   - [colorschemes_repository](#colorschemes_repository)
   - [add_colorscheme(colorscheme_source, colorscheme_info)](#add_colorschemecolorscheme_source-colorscheme_info)
-  - [load_theme(colorscheme_id, theme)](#load_themecolorscheme_id- theme)
+  - [load_theme(colorscheme_id, theme)](#load_themecolorscheme_id-theme)
   - [clean_colorschemes()](#clean_colorschemes)
   - [check_colorschemes()](#check_colorschemes)
   - [check_colorscheme(colorscheme_id)](#check_colorschemecolorscheme_id)
@@ -26,7 +26,7 @@ Themify exposes an API that allows developers to interact with the Themify core.
 # Themify
 
 ```lua
-local Themify = require('themify')
+local Themify = require('themify.api')
 ```
 
 ## colorschemes_data
