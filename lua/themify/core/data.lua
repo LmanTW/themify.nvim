@@ -1,4 +1,4 @@
---- @alias StateData vim.NIL|{ colorscheme_id: string, theme: string }
+--- @alias State_Data vim.NIL|{ colorscheme_id: string, theme: string }
 
 local Utilities = require('themify.utilities')
 
@@ -28,7 +28,7 @@ function M.check_data_files()
 end
 
 --- Read the state data.
---- @return StateData
+--- @return State_Data
 function M.read_state_data()
   M.check_data_files()
 
@@ -47,7 +47,7 @@ function M.read_state_data()
 end
 
 --- Write the state data.
---- @param data StateData
+--- @param data State_Data
 --- @return nil
 function M.write_state_data(data)
   local json = vim.json.encode(data)

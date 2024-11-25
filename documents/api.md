@@ -5,20 +5,23 @@ Themify exposes an API that allows developers to interact with the Themify core.
 - [Themify](#themify)
   - [colorschemes_data](#colorschemes_data)
   - [colorschemes_repository](#colorschemes_repository)
-  - [add_colorscheme()](#add_colorscheme)
-  - [load_theme()](#load_theme)
+  - [add_colorscheme(colorscheme_source, colorscheme_info)](#add_colorschemecolorscheme_source-colorscheme_info)
+  - [load_theme(colorscheme_id, theme)](#load_themecolorscheme_id- theme)
   - [clean_colorschemes()](#clean_colorschemes)
   - [check_colorschemes()](#check_colorschemes)
-  - [check_colorscheme()](#check_colorscheme)
+  - [check_colorscheme(colorscheme_id)](#check_colorschemecolorscheme_id)
   - [install_colorschemes()](#install_colorschemes)
-  - [install_colorscheme()](#install_colorscheme)
+  - [install_colorscheme(colorscheme_id)](#install_colorschemecolorscheme_id)
   - [update_colorschemes()](#update_colorschemes)
-  - [update_colorscheme()](#update_colorscheme)
-  - [listen()](#listen)
+  - [update_colorscheme(colorscheme_repository)](#update_colorschemecolorscheme_repository)
+  - [listen(event, callback)](#listenevent-callback)
+  - [read_state_data()](#read_state_data)
+  - [write_state_data(data)](#write_state_datadata)
 - [Types](#types)
   - [Colorscheme_Info](#colorscheme_info)
   - [Colorscheme_Data](#colorscheme_data)
   - [Repository](#repository)
+  - [State_Data](#state_data)
 
 # Themify
 
@@ -44,7 +47,7 @@ Themify.colorscheme_id
 
 - `string[]`
 
-## add_colorscheme()
+## add_colorscheme(colorscheme_source, colorscheme_info)
 
 ```lua
 --- Add a colorscheme to manage.
@@ -54,7 +57,7 @@ Themify.add_colorscheme(<colorscheme_source>, <colorscheme_info>)
 - `colorscheme_source: string` | The source the colorscheme. `Example: 'folke/tokyonight.nvim' or 'default'`
 - `colorscheme_info: Colorscheme_Info` | The info of the colorscheme.
 
-## load_theme()
+## load_theme(colorscheme_id, theme)
 
 ```lua
 --- Load a theme.
@@ -78,10 +81,10 @@ Themify.clean_colorschemes()
 Themify.check_colorschemes()
 ```
 
-## check_colorscheme()
+## check_colorscheme(colorscheme_id)
 
 ```lua
---- Check a colorscheme (update the state, themes of the colorscheme).
+--- Check a colorscheme. (Update the state, themes of the colorscheme)
 Themify.check_colorscheme(<colorscheme_id>)
 ```
 
@@ -94,7 +97,7 @@ Themify.check_colorscheme(<colorscheme_id>)
 Themify.install_colorschemes()
 ```
 
-## install_colorscheme()
+## install_colorscheme(colorscheme_id)
 
 ```lua
 --- Install a colorscheme.
@@ -110,7 +113,7 @@ Themify.install_colorscheme(<colorscheme_id>)
 Themify.update_colorschemes()
 ```
 
-## update_colorscheme()
+## update_colorscheme(colorscheme_repository)
 
 ```lua
 --- Update a colorscheme.
@@ -118,7 +121,7 @@ Themify.update_colorscheme(<colorscheme_repository>)
 ```
 - `colorscheme_repository: string` | The repository of the colorscheme. `Example: 'folke/tokyonight.nvim' or 'default'`
 
-## listen()
+## listen(event, callback)
 
 ```lua
 --- Listen to an event.
@@ -130,8 +133,27 @@ Themify.listen(<event>, <callback>)
 
 ### Events
 
-- `update` | When something is updated that requires a window update.
-- `state_update` | When the state of any of the colorscheme is updated.
+- `window_update` | When the window is being updated.
+- `state_update` | When the state of any colorscheme is being updated.
+- `theme_load` | When a theme is being loaded.
+
+## read_state_data()
+
+```lua
+--- Read the state data.
+Themify.read_state_data()
+```
+
+> Return `<State_Data>`
+
+## write_state_data(data)
+
+```lua
+--- Write the state data.
+Themify.write_state_data(<data>)
+```
+
+- `data: State_Data` | The state data.
 
 # Types
 
@@ -173,4 +195,10 @@ Some type annotations for Themify.
 --- @field author string
 --- @field name string
 --- @field branch string
+```
+
+## State_Data
+
+```lua
+--- @alias State_Data vim.NIL|{ colorscheme_id: string, theme: string }
 ```

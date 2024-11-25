@@ -45,7 +45,7 @@ vim.api.nvim_create_autocmd('WinClosed', {
   end
 })
 
-Event.listen('update', function()
+Event.listen('window_update', function()
   for id in pairs(windows) do
     windows[id].updater:update()
   end
@@ -61,7 +61,7 @@ function Window.get_window_transformation()
   local height = math.ceil(screen_height * 0.5)
 
   return {
-    -- Yes, I like to use x and y.
+    -- Yes, I use x and y.
 
     x = math.ceil((screen_width - width) / 2),
     y = math.ceil((screen_height - height) / 2),

@@ -137,6 +137,8 @@ function M.load_theme(colorscheme_id, theme)
     if type(colorscheme_data.after) == 'function' then
       pcall(colorscheme_data.after)
     end
+
+    Event.emit('theme_load')
   end
 
   return ok
@@ -266,7 +268,7 @@ function M.install_colorscheme(colorscheme_id)
     colorscheme_data.progress = 0
     colorscheme_data.info = 'Fetching...'
 
-    Event.emit('update')
+    Event.emit('window_update')
     Event.emit('state_update')
 
     local pipeline = Pipeline:new({
@@ -274,13 +276,13 @@ function M.install_colorscheme(colorscheme_id)
         colorscheme_data.progress = progress
         colorscheme_data.info = info
 
-        Event.emit('update')
+        Event.emit('window_update')
       end),
       Tasks.checkout(colorscheme_data.path, colorscheme_data.repository.branch, function()
         colorscheme_data.progress = 100
         colorscheme_data.info = 'Checking Out...'
 
-        Event.emit('update')
+        Event.emit('window_update')
       end)
     })
 
@@ -289,7 +291,7 @@ function M.install_colorscheme(colorscheme_id)
       colorscheme_data.progress = 0
       colorscheme_data.info = code == 0 and '' or vim.split(stderr, '\n')[1]
 
-      Event.emit('update')
+      Event.emit('window_update')
       Event.emit('state_update')
 
       if code == 0 then
@@ -320,11 +322,11 @@ function M.update_colorscheme(colorscheme_id)
     colorscheme_data.progress = 0
     colorscheme_data.info = 'Fetching...'
 
-    Event.emit('update')
+    Event.emit('window_update')
     Event.emit('state_update')
 
     M.check_colorscheme_commit(colorscheme_id, function(error, local_commit, remote_commit)
-      Event.emit('update')
+      Event.emit('window_update')
 
       if error ~= nil then
         colorscheme_data.status = 'failed'
@@ -342,13 +344,13 @@ function M.update_colorscheme(colorscheme_id)
         else
           local pipeline = Pipeline:new({
             Tasks.reset(colorscheme_data.path, colorscheme_data.repository.branch, function()
-              Event.emit('update')
+              Event.emit('window_update')
 
               colorscheme_data.progress = 25
               colorscheme_data.info = 'Reseting...'
             end),
             Tasks.pull(colorscheme_data.path, colorscheme_data.repository.branch, function()
-              Event.emit('update')
+              Event.emit('window_update')
 
               colorscheme_data.progress = 50
               colorscheme_data.info = 'Pulling..'
@@ -366,7 +368,7 @@ function M.update_colorscheme(colorscheme_id)
             end
 
             Event.emit('state_update')
-            Event.emit('update')
+            Event.emit('window_update')
           end)
         end
       end

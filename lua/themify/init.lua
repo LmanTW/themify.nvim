@@ -18,7 +18,9 @@ local M = {
   install_colorscheme = Manager.install_colorscheme,
   update_colorschemes = Manager.update_colorschemes,
   update_colorscheme = Manager.update_colorscheme,
-  listen = Event.listen
+  listen = Event.listen,
+  read_state_data = Data.read_state_data,
+  write_state_data = Data.write_state_data
 }
 
 --- Throw an colorscheme config error.
