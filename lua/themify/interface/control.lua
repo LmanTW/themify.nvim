@@ -12,10 +12,14 @@ Control.__index = Control
 local mapping = {
   k = 'move_cursor("up")',
   ['<Up>'] = 'move_cursor("up")',
-  ['<S-Up>'] = 'move_cursor("top")',
   j = 'move_cursor("down")',
   ['<Down>'] = 'move_cursor("down")',
+
+  gg = 'move_cursor("top")',
+  ['<S-Up>'] = 'move_cursor("top")',
+  G = 'move_cursor("bottom")',
   ['<S-Down>'] = 'move_cursor("bottom")',
+
   ['<CR>'] = 'select()',
 
   h = 'switch_page("left")',
