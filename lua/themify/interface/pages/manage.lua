@@ -1,3 +1,4 @@
+local Cache = require('themify.interface.components.cache')
 local List = require('themify.interface.components.list')
 local Text = require('themify.interface.components.text')
 local Colors = require('themify.interface.colors')
@@ -68,42 +69,42 @@ Pages.create_page({
       if colorscheme_data.type == 'remote' then
         if colorscheme_data.status == 'not_installed' then
           list:add_item(colorscheme_data.status, { content = Text.combine({
-            Text:new('    '),
+            Cache.text_padding_4,
             Text:new('󱑥 ', Colors.icon),
             Text:new(colorscheme_id)
           }), tags = {'selectable', 'install'}, extra = colorscheme_id })
         elseif colorscheme_data.status == 'failed' then
           list:add_item('failed', { content = Text.combine({
-            Text:new('    '),
+            Cache.text_padding_4,
             Text:new('󰗖 ', Colors.icon),
             Text:new(colorscheme_id)
           }), tags = {'selectable', 'check'}, extra = colorscheme_id })
           list:add_item('failed', { content = Text.combine({
-            Text:new('     '),
+            Cache.text_padding_4,
             Text:new(table.concat({' ', colorscheme_data.info, ' '}), Colors.error)
           }), tags = {} })
         elseif colorscheme_data.status == 'installing' or colorscheme_data.status == 'updating' then
           list:add_item(colorscheme_data.status, { content = Text.combine({
-            Text:new('    '),
+            Cache.text_padding_4,
             Text:new(get_progress_icon(colorscheme_data.progress), Colors.icon),
             Text:new(colorscheme_id),
-            Text:new(' '),
+            Cache.text_padding_1,
             Text:new(table.concat({' ', colorscheme_data.info, ' '}), Colors.info)
           }), tags = {} })
         elseif colorscheme_data.status == 'installed' then
           local parts = {
-            Text:new('    '),
+            Cache.text_padding_4,
             Text:new('󰸡 ', Colors.icon),
             Text:new(colorscheme_id),
           }
-  
+
           if colorscheme_data.info:len() > 0 then
             vim.list_extend(parts, {
-              Text:new(' '),
+              Cache.text_padding_1,
               Text:new(table.concat({' ', colorscheme_data.info, ' '}), Colors.info)
             })
           end
-  
+
           list:add_item('installed', { content = Text.combine(parts), tags = {'selectable', 'update'}, extra = Manager.colorschemes_id[i] })
         end
       end

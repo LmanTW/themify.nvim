@@ -7,6 +7,7 @@
 --- @field width number
 --- @field height number
 
+local Cache = require('themify.interface.components.cache')
 local Text = require('themify.interface.components.text')
 local Control = require('themify.interface.control')
 local Updater = require('themify.interface.updater')
@@ -25,7 +26,7 @@ local windows = {}
 --- Get a window.
 --- @param id integer
 function Window.get_window(id)
-  Utilities.error(windows[id] == nil, {'Themify: Window not found: "', tostring(id), '"'})
+  Utilities.error(windows[id] == nil, {'[Themify] Window not found: "', tostring(id), '"'})
 
   return windows[id]
 end
@@ -222,16 +223,18 @@ function Window:update()
 
   -- Render the page tab.
 
-  local left = table.concat({'  < ', Pages.pages[Pages.get_neighbor_page(self.page, -1)].name})
+  local left = table.concat({'< ', Pages.pages[Pages.get_neighbor_page(self.page, -1)].name})
   local current = table.concat({'- ', Pages.pages[self.page].name, ' -'})
-  local right = table.concat({Pages.pages[Pages.get_neighbor_page(self.page, 1)].name, ' >  '})
+  local right = table.concat({Pages.pages[Pages.get_neighbor_page(self.page, 1)].name, ' >'})
 
   Text.combine({
+    Cache.text_padding_2,
     Text:new(left, Colors.description),
-    Text:new(string.rep(' ', math.floor((self.width / 2) - (current:len() / 2)) - left:len())),
+    Text:new(string.rep(' ', math.ceil((self.width / 2) - (current:len() / 2)) - (left:len() + 2))),
     Text:new(current, Colors.title),
-    Text:new(string.rep(' ', math.floor((self.width / 2) - (current:len() / 2)) - right:len())),
-    Text:new(right, Colors.description)
+    Text:new(string.rep(' ', math.floor((self.width / 2) - (current:len() / 2)) - (right:len() + 2))),
+    Text:new(right, Colors.description),
+    Cache.text_padding_2
   }):render(self.buffer, 1)
 
   -- Render the actions and info.
@@ -242,13 +245,13 @@ function Window:update()
   local info = table.concat({amount.installed == nil and '0' or tostring(amount.installed), ' / ', tostring(#Manager.colorschemes_id), '  '})
 
   Text.combine({
-    Text:new('  '),
+    Cache.text_padding_2,
     Text:new('(I) Install', amount.not_installed == nil and Colors.description or nil),
-    Text:new('  '),
+    Cache.text_padding_2,
     Text:new('(U) Update', Colors.description),
-    Text:new('  '),
+    Cache.text_padding_2,
     Text:new('(C) Check', Colors.description),
-    Text:new('  '),
+    Cache.text_padding_2,
     Text:new(string.rep(' ', (self.width - actions:len()) - info:len())),
     Text:new(info)
   }):render(self.buffer, self.height - 2)

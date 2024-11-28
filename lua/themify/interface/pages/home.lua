@@ -1,3 +1,4 @@
+local Cache = require('themify.interface.components.cache')
 local Text = require('themify.interface.components.text')
 local Colors = require('themify.interface.colors')
 local Pages = require('themify.interface.pages')
@@ -15,30 +16,34 @@ Pages.create_page({
     local content = {}
 
     if Manager.colorschemes_amount.installed == nil and Manager.colorschemes_amount.updating == nil then
-      content[#content + 1] = { content = Text:new('  Welcome to Themify!', Colors.description), tags = {'selectable'} }
-      content[#content + 1] = { content = Text:new(''), tags = {} }
-      content[#content + 1] = { content = Text:new('  Use <Up> <Down> to move the cursor, <CR> to select.', Colors.description), tags = {'selectable'} }
-      content[#content + 1] = { content = Text:new('  Use <Left> <Right> to switch between pages.', Colors.description), tags = {'selectable'} }
-      content[#content + 1] = { content = Text:new(''), tags = {} }
-      content[#content + 1] = { content = Text:new('  Finally, use [I] to install the colorschemes!', Colors.description), tags = {'selectable'} }
+      content[#content + 1] = { content = Text.combine({Cache.text_padding_2, Text:new('Welcome to Themify!', Colors.description)}), tags = {'selectable'} }
+      content[#content + 1] = Cache.line_blank
+      content[#content + 1] = { content = Text.combine({Cache.text_padding_2, Text:new('Use <Up> <Down> to move the cursor, <CR> to select.', Colors.description)}), tags = {'selectable'} }
+      content[#content + 1] = { content = Text.combine({Cache.text_padding_2, Text:new('Use <Left> <Right> to switch between pages.', Colors.description)}), tags = {'selectable'} }
+      content[#content + 1] = Cache.line_blank
+      content[#content + 1] = { content = Text.combine({Cache.text_padding_2, Text:new('Finally, use [I] to install the colorschemes!', Colors.description)}), tags = {'selectable'} }
     end
 
     for i = 1, #Manager.colorschemes_id do
       local colorscheme_id = Manager.colorschemes_id[i]
       local colorscheme_data = Manager.colorschemes_data[colorscheme_id]
+      local selected
 
       if colorscheme_data.type == 'remote' then
         if colorscheme_data.status == 'installed' or colorscheme_data.status == 'updating' then
           content[#content + 1] = { content = Text:new(table.concat({'   ', colorscheme_id})), tags = {} }
 
           for i2 = 1, #colorscheme_data.themes do
-            local selected = state ~= vim.NIL and (Manager.colorschemes_id[i] == state.colorscheme_id and colorscheme_data.themes[i2] == state.theme)
+            selected = state ~= vim.NIL and (colorscheme_id == state.colorscheme_id and colorscheme_data.themes[i2] == state.theme)
 
-            content[#content + 1] = { content = Text:new(table.concat({selected and '    > ' or '    - ', colorscheme_data.themes[i2]})), tags = {'selectable', 'theme'}, extra = { colorscheme_id = Manager.colorschemes_id[i], theme = colorscheme_data.themes[i2] }}
+            content[#content + 1] = { content = Text.combine({
+              Cache.text_padding_2,
+              Text:new(table.concat({selected and '  > ' or '  - ', colorscheme_data.themes[i2]}))
+            }), tags = {'selectable', 'theme'}, extra = { colorscheme_id = colorscheme_id, theme = colorscheme_data.themes[i2] }}
           end
         end
       else
-        local selected = state ~= vim.NIL and (state.colorscheme_id == nil and state.theme == colorscheme_id)
+        selected = state ~= vim.NIL and (state.colorscheme_id == nil and state.theme == colorscheme_id)
 
         content[#content + 1] = { content = Text:new(table.concat({selected and '  > ' or '  - ', colorscheme_id})), tags = {'selectable', 'theme'}, extra = { theme = colorscheme_id }}
       end

@@ -2,13 +2,11 @@
 --- @field sections table<string, { title: Line, content: Line[] }>
 --- @field sections_id string[]
 
-local Text = require('themify.interface.components.text')
+local Cache = require('themify.interface.components.cache')
 local Utilities = require('themify.utilities')
 
 local List = {}
 List.__index = List
-
-local line_blank = { content = Text:new(''), tags = {} }
 
 --- Create a new list.
 function List:new()
@@ -54,7 +52,7 @@ function List:get_content()
     vim.list_extend(content, section.content)
 
     if i < #self.sections_id then
-      content[#content + 1] = line_blank
+      content[#content + 1] = Cache.line_blank
     end
   end
 

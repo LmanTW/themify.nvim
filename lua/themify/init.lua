@@ -13,7 +13,7 @@ local M = {}
 --- @param type_name string
 --- @return nil
 local function throw_colorscheme_config_error(colorscheme_repository, option_name, type_name)
-  error(table.concat({'Themify: The "', option_name, '" option for the colorscheme "', colorscheme_repository, '" must be a <', type_name, '>'}))
+  error(table.concat({'[Themify] The "', option_name, '" option for the colorscheme "', colorscheme_repository, '" must be a <', type_name, '>'}))
 end
 
 --- Check the config of a colorscheme.
@@ -41,7 +41,7 @@ local function load_state()
 
       vim.api.nvim_create_autocmd('UIEnter', {
         callback = function()
-          vim.notify(table.concat({'Themify: Colorscheme not found: "', state.colorscheme_id, '"'}), vim.log.levels.WARN)
+          vim.notify(table.concat({'[Themify] Colorscheme not found: "', state.colorscheme_id == nil and state.theme or state.colorscheme_id, '"'}), vim.log.levels.WARN)
           vim.cmd('Themify')
         end,
 
@@ -55,7 +55,7 @@ end
 --- @param config Colorscheme[]|table<string, boolean>
 --- @return nil
 function M.setup(config)
-  Utilities.error(type(config) ~= 'table', {'Themify: "config" must be a <table>'})
+  Utilities.error(type(config) ~= 'table', {'[Themify] "config" must be a <table>'})
 
   local colorscheme
 
@@ -94,6 +94,15 @@ function M.setup(config)
     Utilities.execute_async(vim.schedule_wrap(load_state))
   else
     load_state()
+  end
+
+  if config.activity then
+    Utilities.execute_async(vim.schedule_wrap(function()
+      local Activity = require('themify.core.activity')
+
+      Activity.check_activity_data()
+      Activity.enable()
+    end))
   end
 end
 

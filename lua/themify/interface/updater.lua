@@ -20,7 +20,7 @@ function Updater:new(callback)
       self.update_cooldown = self.update_cooldown - 1
 
       if self.update_cooldown == 0 or self.update_cooldown > 9 then
-        self.update_cooldown = 0
+        self.update_cooldown = -1
 
         local ok, error = pcall(callback)
 
@@ -50,7 +50,7 @@ end
 --- Stop the updater.
 --- @return nil
 function Updater:stop()
-  Utilities.error(self.timer == nil, {'Themify: The updater is already stopped'})
+  Utilities.error(self.timer == nil, {'[Themify] The updater is already stopped'})
 
   self.timer:stop()
   self.timer:close()

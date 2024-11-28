@@ -14,7 +14,7 @@ Process.__index = Process
 function Process.execute(command)
   local handle = io.popen(command)
 
-  Utilities.error(handle == nil, {'Themify: Failed to execute command "', command, '"'})
+  Utilities.error(handle == nil, {'[Themify] Failed to execute command "', command, '"'})
 
   local result = handle:read('*a')
   handle:close()

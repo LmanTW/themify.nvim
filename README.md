@@ -2,11 +2,11 @@
 
 ![A screenshot of Themify](./documents/assets/screenshot.jpg)
 
-A lightweight colorscheme manager inspired by [Themery.nvim](https://github.com/zaldih/themery.nvim) and [Lazy.nvim](https://github.com/folke/lazy.nvim).
+A lightweight colorscheme manager and switcher inspired by [Themery.nvim](https://github.com/zaldih/themery.nvim) and [Lazy.nvim](https://github.com/folke/lazy.nvim).
 
-- 🎨 Easily install and manage your colorschemes.
-- 🔍 Switch between colorschemes with a live preview.
-- ⚡️ Optimized startup time with lazy-loaded colorschemes.
+- 🎨 Easily install and manage your colorschemes!
+- 🔍 Switch between colorschemes with a live preview!
+- ⚡️ Optimized startup time with lazy-loaded colorschemes!
 
 ## 📦 Installation
 
@@ -88,6 +88,9 @@ require('themery').setup({
 
   ```lua
   {
+    activity = false,
+    -- Enable this would record your colorscheme usage activity.
+
     async = false,
     -- Enable this would load the colorscheme asynchronously, which might improve your startup time.
 

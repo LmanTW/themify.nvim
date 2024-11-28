@@ -64,7 +64,7 @@ end
 --- @param page string
 --- @return { cursor_y: number, scroll_y: number }
 function Control:get_page_control(page)
-  Utilities.error(self.pages[page] == nil, {'Themify: Page not found: "', page, '"'})
+  Utilities.error(self.pages[page] == nil, {'[Themify] Page not found: "', page, '"'})
 
   return self.pages[page]
 end
