@@ -28,7 +28,7 @@ function M.enable()
     end
   })
 
-  vim.uv.new_timer():start(M.update_interval * 60000, M.update_interval * 60000, vim.schedule_wrap(function()
+  vim.uv.new_timer():start(0, M.update_interval * 60000, vim.schedule_wrap(function()
     local state = Data.read_state_data()
 
     if state ~= vim.NIL and active then
