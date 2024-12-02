@@ -16,8 +16,10 @@ function M.handle(args)
     window:install_colorschemes()
   elseif (args.fargs[1] == 'update') then
     window:update_colorschemes()
+  elseif (args.fargs[1] == 'check') then
+    window:check_colorschemes()
   else
-    -- Both <install_colorschemes> and <update_colorschemes> update the window automatically.
+    -- Both <install_colorschemes>, <update_colorschemes> and <check_colorschemes> update the window automatically.
     window:update()
   end
 end
@@ -26,7 +28,7 @@ end
 --- @param lead string
 --- @return string[]
 function M.complete(lead)
-  local options = {'install', 'update'}
+  local options = {'install', 'update', 'check'}
   local matches = {}
 
   for i = 1, #options do

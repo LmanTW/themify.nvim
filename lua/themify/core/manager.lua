@@ -123,7 +123,7 @@ function M.load_theme(colorscheme_id, theme)
 
   if colorscheme_data.type == 'remote' then
     if not vim.list_contains(M.loaded_colorschemes, colorscheme_id) then
-      vim.o.runtimepath = table.concat({vim.o.runtimepath, ',', colorscheme_data.path})
+      vim.opt.rtp:append(colorscheme_data.path)
     end
   end
 

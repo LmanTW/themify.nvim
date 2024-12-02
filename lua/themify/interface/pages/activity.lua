@@ -55,7 +55,7 @@ Pages.create_page({
                 }), tags = {} }
                 content[#content + 1] = { content = Text.combine({
                   Cache.text_padding_6,
-                  Text:new(table.concat({'| Last: ', os.date('%Y/%m/%d', theme_usage.last_active)}), Colors.description)
+                  Text:new(table.concat({'| Last: ', os.date('%Y/%m/%d (%H:%M)', theme_usage.last_active)}), Colors.description)
                 }), tags = {} }
               end
             end
@@ -73,7 +73,7 @@ Pages.create_page({
             }), tags = {} }
             content[#content + 1] = { content = Text.combine({
               Cache.text_padding_4,
-              Text:new(table.concat({'| Last: ', os.date('%Y/%m/%d', theme_usage.last_active)}), Colors.description)
+              Text:new(table.concat({'| Last: ', os.date('%Y/%m/%d (%H:%M)', theme_usage.last_active)}), Colors.description)
             }), tags = {} }
           end
         end

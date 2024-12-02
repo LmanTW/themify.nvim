@@ -116,7 +116,6 @@ require('themery').setup({
 
 ## 📎 Other
 
-- [API Documentation](./documents/api.md)
 - [Highlight Groups](./documents/highlight.md)
 
 <a href="https://star-history.com/#LmanTW/themify.nvim&Date">
