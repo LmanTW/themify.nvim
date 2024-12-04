@@ -96,6 +96,10 @@ function M.check_activity_data()
   local activity = Data.read_activity_data()
 
   local colorscheme_data
+  local themes
+  local usage
+
+  local timestamp = vim.loop.gettimeofday()
 
   for colorscheme_id, colorscheme_activity in pairs(activity.colorschemes) do
     if colorscheme_activity.type == 'remote' then
@@ -103,12 +107,26 @@ function M.check_activity_data()
 
       if colorscheme_data == nil or colorscheme_data.type ~= 'remote' then
         activity.colorschemes[colorscheme_id] = nil
+      else
+        themes = colorscheme_activity.themes
+
+        for _, theme_usage in pairs(themes) do
+          if os.date('%d', timestamp) ~= os.date('%d', theme_usage.last_active) then
+            theme_usage.today_minutes = 0
+          end
+        end
       end
     else
       colorscheme_data = Manager.colorschemes_data[colorscheme_id]
 
-      if colorscheme_data == nil or colorscheme_data.type ~= 'remote' then
+      if colorscheme_data == nil or colorscheme_data.type ~= 'local' then
         activity.colorschemes[colorscheme_id] = nil
+      else
+        usage = colorscheme_activity.usage
+
+        if os.date('%d', timestamp) ~= os.date('%d', usage.last_active) then
+          usage.today_minutes = 0
+        end
       end
     end
   end

@@ -81,7 +81,7 @@ Pages.create_page({
           }), tags = {'selectable', 'check'}, extra = colorscheme_id })
           list:add_item('failed', { content = Text.combine({
             Cache.text_padding_4,
-            Text:new(table.concat({' ', colorscheme_data.info, ' '}), Colors.error)
+            Text:new(table.concat({'(', colorscheme_data.info, ')'}), Colors.error)
           }), tags = {} })
         elseif colorscheme_data.status == 'installing' or colorscheme_data.status == 'updating' then
           list:add_item(colorscheme_data.status, { content = Text.combine({
@@ -89,7 +89,7 @@ Pages.create_page({
             Text:new(get_progress_icon(colorscheme_data.progress), Colors.icon),
             Text:new(colorscheme_id),
             Cache.text_padding_1,
-            Text:new(table.concat({' ', colorscheme_data.info, ' '}), Colors.info)
+            Text:new(table.concat({'(', colorscheme_data.info, ')'}), Colors.info)
           }), tags = {} })
         elseif colorscheme_data.status == 'installed' then
           local parts = {
@@ -101,7 +101,7 @@ Pages.create_page({
           if colorscheme_data.info:len() > 0 then
             vim.list_extend(parts, {
               Cache.text_padding_1,
-              Text:new(table.concat({' ', colorscheme_data.info, ' '}), Colors.info)
+              Text:new(table.concat({'(', colorscheme_data.info, ')'}), Colors.info)
             })
           end
 

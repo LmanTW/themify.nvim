@@ -4,8 +4,9 @@ You can easily support Themify in your colorscheme by using the highlight groups
 
 | Name               | Default                    |
 | ---                | ---                        |
+| ThemifyIcon        | Operator                   |
 | ThemifyTitle       | Bold                       |
 | ThemifyDescription | Comment                    |
-| ThemifyIcon        | Operator                   |
 | ThemifyInfo        | DiagnosticVirtualTextInfo  | 
+| ThemifyWarn        | DiagnosticVirtualTextWarn  |
 | ThemifyError       | DiagnosticVirtualTextError |

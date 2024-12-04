@@ -21,7 +21,7 @@ Pages.create_page({
       content[#content + 1] = { content = Text.combine({Cache.text_padding_2, Text:new('Use <Up> <Down> to move the cursor, <CR> to select.', Colors.description)}), tags = {'selectable'} }
       content[#content + 1] = { content = Text.combine({Cache.text_padding_2, Text:new('Use <Left> <Right> to switch between pages.', Colors.description)}), tags = {'selectable'} }
       content[#content + 1] = Cache.line_blank
-      content[#content + 1] = { content = Text.combine({Cache.text_padding_2, Text:new('Finally, use [I] to install the colorschemes!', Colors.description)}), tags = {'selectable'} }
+      content[#content + 1] = { content = Text.combine({Cache.text_padding_2, Text:new('Finally, use <I> to install the colorschemes!', Colors.description)}), tags = {'selectable'} }
     end
 
     for i = 1, #Manager.colorschemes_id do
