@@ -34,8 +34,8 @@ function M.read_state_data()
 
   local data = vim.json.decode(Utilities.read_file(M.state_data_path))
 
-  --- Just for backward compatibility, might remove this later.
-  --- Added at 2024/9/14.
+  --- Just for backward compatibility, remove this later.
+  --- Added: 2024/9/14.
 
   if data ~= vim.NIL and data.colorscheme_repository ~= nil then
     M.write_state_data({ colorscheme_id = data.colorscheme_repository, theme = data.theme })

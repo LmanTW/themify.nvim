@@ -105,6 +105,10 @@ function M.check_activity_data()
 
   local timestamp = vim.loop.gettimeofday()
 
+  if activity == vim.NIL then
+    activity = { last_update = timestamp - M.update_interval, colorschemes = {} }
+  end
+
   for colorscheme_id, colorscheme_activity in pairs(activity.colorschemes) do
     if colorscheme_activity.type == 'remote' then
       colorscheme_data = Manager.colorschemes_data[colorscheme_id]
