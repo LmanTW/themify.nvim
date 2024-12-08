@@ -24,7 +24,11 @@ function M.enable()
 
   vim.api.nvim_create_autocmd({'CursorMoved', 'CursorMovedI', 'InsertEnter'}, {
     callback = function()
-      active = true
+      local buffer = vim.bo[vim.api.nvim_get_current_buf()].buftype
+
+      if buffer == '' then
+        active = true
+      end
     end
   })
 
