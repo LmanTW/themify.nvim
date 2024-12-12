@@ -414,15 +414,16 @@ function M.count_colorscheme_amount()
   for i = 1, #M.colorschemes_id do
     colorscheme_data = M.colorschemes_data[M.colorschemes_id[i]]
 
-    if (colorscheme_data.type == 'remote') then
+    if colorscheme_data.type == 'remote' then
       colorscheme_status = colorscheme_data.status
 
       M.colorschemes_amount[colorscheme_status] = M.colorschemes_amount[colorscheme_status] == nil and 1 or M.colorschemes_amount[colorscheme_status] + 1
+    elseif colorscheme_data.type == 'local' then
+      M.colorschemes_amount['local'] = M.colorschemes_amount['local'] == nil and 1 or M.colorschemes_amount['local'] + 1
     end
   end
 end
 
-M.count_colorscheme_amount()
 Event.listen('state_update', M.count_colorscheme_amount)
 
 return M

@@ -239,10 +239,11 @@ function Window:update()
 
   -- Render the actions and info.
 
+  local total = 0
   local amount = Manager.colorschemes_amount
 
   local actions = '  (I) Install  (U) Update  (C) Check  '
-  local info = table.concat({amount.installed == nil and '0' or tostring(amount.installed), ' / ', tostring(#Manager.colorschemes_id), '  '})
+  local info = table.concat({(amount.installed == nil and 0 or amount.installed) + (amount['local'] == nil and 0 or amount['local']), ' / ', tostring(#Manager.colorschemes_id), '  '})
 
   Text.combine({
     Cache.text_padding_2,

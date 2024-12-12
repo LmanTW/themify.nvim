@@ -15,7 +15,7 @@ Pages.create_page({
   update = function()
     local content = {}
 
-    if Manager.colorschemes_amount.installed == nil and Manager.colorschemes_amount.updating == nil then
+    if Manager.colorschemes_amount.installed == nil and Manager.colorschemes_amount.updating == nil and Manager.colorschemes_amount['local'] == nil then
       content[#content + 1] = { content = Text.combine({Cache.text_padding_2, Text:new('Welcome to Themify!', Colors.description)}), tags = {'selectable'} }
       content[#content + 1] = Cache.line_blank
       content[#content + 1] = { content = Text.combine({Cache.text_padding_2, Text:new('Use <Up> <Down> to move the cursor, <CR> to select.', Colors.description)}), tags = {'selectable'} }
