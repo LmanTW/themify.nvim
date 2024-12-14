@@ -131,6 +131,8 @@ function M.load_theme(colorscheme_id, theme)
     pcall(colorscheme_data.before)
   end
 
+  vim.cmd.colorscheme(theme)
+
   local ok = pcall(vim.cmd.colorscheme, theme)
 
   if ok then
@@ -192,7 +194,7 @@ end
 
 --- Check the colorschemes.
 function M.check_colorschemes()
-  Data.check_data_files()
+  Data.check_files()
   M.clean_colorschemes()
 
   for i = 1, #M.colorschemes_id do
@@ -248,7 +250,7 @@ end
 --- Install the colorschemes.
 --- @return nil
 function M.install_colorschemes()
-  Data.check_data_files()
+  Data.check_files()
 
   for i = 1, #M.colorschemes_id do
     M.install_colorscheme(M.colorschemes_id[i])

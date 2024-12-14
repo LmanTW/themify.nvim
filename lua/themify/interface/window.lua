@@ -64,8 +64,8 @@ function Window.get_window_transformation()
   return {
     -- Yes, I use x and y.
 
-    x = math.ceil((screen_width - width) / 2),
-    y = math.ceil((screen_height - height) / 2),
+    x = math.floor((screen_width - width) / 2),
+    y = math.floor((screen_height - height) / 2),
     width = width,
     height = height
   }
@@ -88,7 +88,7 @@ function Window:new()
     style = 'minimal',
     border = 'rounded',
 
-    zindex = 998
+    zindex = 999
   })
 
   self.page = 'home'
@@ -249,10 +249,9 @@ function Window:update()
     Cache.text_padding_2,
     Text:new('(I) Install', amount.not_installed == nil and Colors.description or nil),
     Cache.text_padding_2,
-    Text:new('(U) Update', Colors.description),
+    Cache.text_update,
     Cache.text_padding_2,
-    Text:new('(C) Check', Colors.description),
-    Cache.text_padding_2,
+    Cache.text_check,
     Text:new(string.rep(' ', (self.width - actions:len()) - info:len())),
     Text:new(info)
   }):render(self.buffer, self.height - 2)

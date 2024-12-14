@@ -18,11 +18,11 @@ local M = {
   activity_data_path = vim.fs.joinpath(data_path, 'themify', 'activity.json')
 }
 
---- Check the data files.
+--- Check the files.
 --- @return nil
-function M.check_data_files()
-  if not Utilities.path_exist(M.themify_path) then vim.fn.mkdir(M.themify_path, 'p') end
-  if not Utilities.path_exist(M.colorschemes_path) then vim.fn.mkdir(M.colorschemes_path, 'p') end
+function M.check_files()
+  if not Utilities.path_exist(M.themify_path) then vim.fn.mkdir(M.themify_path) end
+  if not Utilities.path_exist(M.colorschemes_path) then vim.fn.mkdir(M.colorschemes_path) end
   if not Utilities.path_exist(M.state_data_path) then M.write_state_data(vim.NIL) end
   if not Utilities.path_exist(M.activity_data_path) then M.write_activity_data(vim.NIL) end
 end
@@ -30,7 +30,7 @@ end
 --- Read the state data.
 --- @return State_Data
 function M.read_state_data()
-  M.check_data_files()
+  M.check_files()
 
   local data = vim.json.decode(Utilities.read_file(M.state_data_path))
 
@@ -49,7 +49,7 @@ end
 --- Read the activity data.
 --- @return Activity_Data
 function M.read_activity_data()
-  M.check_data_files()
+  M.check_files()
 
   return vim.json.decode(Utilities.read_file(M.activity_data_path))
 end
