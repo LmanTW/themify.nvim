@@ -60,7 +60,7 @@ use {
 
 ## 🛠 Configuration
 
-To configuration Themify, call the `setup` function (or use the `config` option in your package manager) and add the colorschemes you want to install / manage:
+To configure Themify, call the `setup` function (or use the `config` option in your package manager) and add the colorschemes you want to install / manage:
 
 ```lua
 require('themery').setup({
