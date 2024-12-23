@@ -60,7 +60,7 @@ use {
 
 ## 🛠 Configuration
 
-The configuration for Themify is really easy and stright forward, just call the `setup` function (or use the `config` option in your package manager) and add the colorschemes you want to install / manage:
+To configuration Themify, call the `setup` function (or use the `config` option in your package manager) and add the colorschemes you want to install / manage:
 
 ```lua
 require('themery').setup({
@@ -89,7 +89,7 @@ require('themery').setup({
   ```lua
   {
     activity = false,
-    -- Enable this would record your colorscheme usage activity.
+    -- Enable this would track your colorscheme usage activity.
 
     async = false,
     -- Enable this would load the colorscheme asynchronously, which might improve your startup time.
