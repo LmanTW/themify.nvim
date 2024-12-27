@@ -63,12 +63,10 @@ function M.setup(config)
     colorscheme = config[i]
 
     if type(colorscheme) == 'string' then
-      Manager.add_colorscheme(colorscheme, {
-        branch = 'main'
-      })
+      Manager.add_colorscheme(colorscheme, {})
     elseif type(colorscheme[1]) == 'string' then
       Manager.add_colorscheme(colorscheme[1], {
-        branch = colorscheme.branch or 'main',
+        branch = colorscheme.branch,
         before = colorscheme.before,
         after = colorscheme.after,
         whitelist = colorscheme.whitelist,

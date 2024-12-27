@@ -1,5 +1,5 @@
 --- @class Colorscheme_Info
---- @field branch string
+--- @field branch? string
 --- @field before? function
 --- @field after? function
 --- @field whitelist? string[]

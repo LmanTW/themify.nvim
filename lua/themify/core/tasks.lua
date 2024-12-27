@@ -5,7 +5,7 @@ local M = {}
 --- Create a fetch task.
 --- @param cwd string
 --- @param branch string
---- @param callback function?
+--- @param callback? function
 function M.fetch(cwd, branch, callback)
   if callback ~= nil then
     callback()
@@ -27,7 +27,7 @@ end
 --- Create a pull task.
 --- @param cwd string
 --- @param branch string
---- @param callback function?
+--- @param callback? function
 function M.pull(cwd, branch, callback)
   if callback ~= nil then
     callback()
@@ -39,11 +39,18 @@ end
 --- Create a clone task.
 --- @param cwd string
 --- @param source string
---- @param branch string
+--- @param branch? string
 --- @param path string
 --- @param callback function
 function M.clone(cwd, source, branch, path, callback)
-  return Pipeline.create_task(cwd, 'git', {'clone', source, path, '-b', branch, '--progress'}, function(_, stderr)
+  local arguments = {'clone', source, path, '--progress'}
+
+  if branch ~= nil then
+    arguments[#arguments + 1] = '-b'
+    arguments[#arguments + 1] = branch
+  end
+
+  return Pipeline.create_task(cwd, 'git', arguments, function(_, stderr)
     if stderr ~= nil then
       if (stderr:sub(0, 24) == 'Counting objects') then
         callback((tonumber(stderr:match('[0-9]*[0-9]')) or 0) / 4, 'Counting Objects...')
@@ -73,7 +80,7 @@ end
 --- Create a reset task.
 --- @param cwd string
 --- @param branch string
---- @param callback function?
+--- @param callback? function
 function M.reset(cwd, branch, callback)
   if callback ~= nil then
     callback()
