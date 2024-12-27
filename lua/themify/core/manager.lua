@@ -158,10 +158,10 @@ local function get_colorscheme_id(folder_name)
 end
 
 --- Normalize a branch name.
---- @param branch string
+--- @param branch? string
 --- @return string
 local function normalize_branch(branch)
-  return branch == 'master' and 'main' or branch
+  return (branch == nil or branch == 'master') and 'main' or branch
 end
 
 --- Clean unused colorschemes.
