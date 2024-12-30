@@ -85,8 +85,8 @@ function M.add_colorscheme(colorscheme_source, colorscheme_info)
     colorscheme_path = table.concat({repository.author, repository.name}, '-')
   end
 
-  Utilities.error(colorscheme_id:len() == 0, {'Themify: Invalid colorscheme source: "', colorscheme_source, '"'})
-  Utilities.error(M.colorschemes_data[colorscheme_id] ~= nil, {'Themify: Duplicate colorscheme: "', colorscheme_id, '"'})
+  Utilities.error(colorscheme_id:len() == 0, {'[Themify] Invalid colorscheme source: "', colorscheme_source, '"'})
+  Utilities.error(M.colorschemes_data[colorscheme_id] ~= nil, {'[Themify] Duplicate colorscheme: "', colorscheme_id, '"'})
 
   M.colorschemes_id[#M.colorschemes_id + 1] = colorscheme_id
   M.colorschemes_data[colorscheme_id] = {
@@ -140,7 +140,7 @@ function M.load_theme(colorscheme_id, theme)
       pcall(colorscheme_data.after)
     end
 
-    Event.emit('theme_load')
+    Event.emit('colorscheme-load')
   end
 
   return ok
@@ -193,6 +193,7 @@ function M.clean_colorschemes()
 end
 
 --- Check the colorschemes.
+--- @return nil
 function M.check_colorschemes()
   Data.check_files()
   M.clean_colorschemes()
@@ -214,7 +215,7 @@ function M.check_colorscheme(colorscheme_id)
     colorscheme_data.status = Utilities.path_exist(colorscheme_data.path) and 'installed' or 'not_installed'
     colorscheme_data.info = ''
 
-    Event.emit('state_update')
+    Event.emit('colorscheme-state-updated', colorscheme_id)
 
     if colorscheme_data.status == 'installed' then
       -- Check all the themes under the colorscheme.
@@ -270,21 +271,21 @@ function M.install_colorscheme(colorscheme_id)
     colorscheme_data.progress = 0
     colorscheme_data.info = 'Fetching...'
 
-    Event.emit('window_update')
-    Event.emit('state_update')
+    Event.emit('colorscheme-state-updated', colorscheme_id)
+    Event.emit('interface-update')
 
     local pipeline = Pipeline:new({
       Tasks.clone(Data.colorschemes_path, colorscheme_data.repository.source, colorscheme_data.repository.branch, table.concat({colorscheme_data.repository.author, colorscheme_data.repository.name}, '-'), function(progress, info)
         colorscheme_data.progress = progress
         colorscheme_data.info = info
 
-        Event.emit('window_update')
+        Event.emit('interface-update')
       end),
       Tasks.checkout(colorscheme_data.path, colorscheme_data.repository.branch, function()
         colorscheme_data.progress = 100
         colorscheme_data.info = 'Checking Out...'
 
-        Event.emit('window_update')
+        Event.emit('interface-update')
       end)
     })
 
@@ -293,8 +294,9 @@ function M.install_colorscheme(colorscheme_id)
       colorscheme_data.progress = 0
       colorscheme_data.info = code == 0 and '' or vim.split(stderr, '\n')[1]
 
-      Event.emit('window_update')
-      Event.emit('state_update')
+      Event.emit('colorscheme-state-updated', colorscheme_id)
+      Event.emit('colorscheme-installed', colorscheme_id)
+      Event.emit('interface-update')
 
       if code == 0 then
         M.check_colorscheme(colorscheme_id)
@@ -324,35 +326,35 @@ function M.update_colorscheme(colorscheme_id)
     colorscheme_data.progress = 0
     colorscheme_data.info = 'Fetching...'
 
-    Event.emit('window_update')
-    Event.emit('state_update')
+    Event.emit('colorscheme-state-updated', colorscheme_id)
+    Event.emit('interface-update')
 
     M.check_colorscheme_commit(colorscheme_id, function(error, local_commit, remote_commit)
-      Event.emit('window_update')
+      Event.emit('interface-update')
 
       if error ~= nil then
         colorscheme_data.status = 'failed'
         colorscheme_data.progress = 0
         colorscheme_data.info = error
 
-        Event.emit('state_update')
+        Event.emit('colorscheme-state-updated', colorscheme_id)
       else
         if local_commit == remote_commit then
           colorscheme_data.status = 'installed'
           colorscheme_data.progress = 0
           colorscheme_data.info = 'Up To Date'
 
-          Event.emit('state_update')
+          Event.emit('colorscheme-state-updated', colorscheme_id)
         else
           local pipeline = Pipeline:new({
             Tasks.reset(colorscheme_data.path, colorscheme_data.repository.branch, function()
-              Event.emit('window_update')
+              Event.emit('interface-update')
 
               colorscheme_data.progress = 25
               colorscheme_data.info = 'Reseting...'
             end),
             Tasks.pull(colorscheme_data.path, colorscheme_data.repository.branch, function()
-              Event.emit('window_update')
+              Event.emit('interface-update')
 
               colorscheme_data.progress = 50
               colorscheme_data.info = 'Pulling..'
@@ -369,8 +371,9 @@ function M.update_colorscheme(colorscheme_id)
               colorscheme_data.info = vim.split(stderr, '\n')[1]
             end
 
-            Event.emit('state_update')
-            Event.emit('window_update')
+            Event.emit('colorscheme-state-updated', colorscheme_id)
+            Event.emit('colorscheme-updated', colorscheme_id)
+            Event.emit('interface-update')
           end)
         end
       end
@@ -426,6 +429,6 @@ function M.count_colorscheme_amount()
   end
 end
 
-Event.listen('state_update', M.count_colorscheme_amount)
+Event.listen('colorscheme-state-updated', M.count_colorscheme_amount)
 
 return M

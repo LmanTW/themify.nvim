@@ -1,4 +1,4 @@
---- @alias State_Data vim.NIL|{ colorscheme_id: string, theme: string }
+--- @alias State_Data vim.NIL|{ colorscheme_id: nil|string, theme: string }
 --- @alias Activity_Data vim.NIL|{ last_update: number, colorschemes: table<string, { type: 'remote', themes: table<string, Usage_Data> }|{ type: 'local', usage: Usage_Data }> }
 --- @alias Usage_Data { last_active: number, total_minutes: number, today_minutes: number }
 
@@ -32,18 +32,7 @@ end
 function M.read_state_data()
   M.check_files()
 
-  local data = vim.json.decode(Utilities.read_file(M.state_data_path))
-
-  --- Just for backward compatibility, remove this later.
-  --- Added: 2024/9/14.
-
-  if data ~= vim.NIL and data.colorscheme_repository ~= nil then
-    M.write_state_data({ colorscheme_id = data.colorscheme_repository, theme = data.theme })
-
-    return { colorscheme_id = data.colorscheme_repository, theme = data.theme }
-  end
-
-  return data
+  return vim.json.decode(Utilities.read_file(M.state_data_path))
 end
 
 --- Read the activity data.

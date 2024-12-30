@@ -19,12 +19,13 @@ end
 
 --- Emit an event.
 --- @param event string
-function M.emit(event)
+--- @param ... any
+function M.emit(event, ...)
   if M.listeners[event] ~= nil then
     local group = M.listeners[event]
 
     for i = 1, #group do
-      group[i]()
+      group[i](...)
     end
   end
 end

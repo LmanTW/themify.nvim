@@ -2,6 +2,7 @@
 
 local Manager = require('themify.core.manager')
 local Utilities = require('themify.utilities')
+local Event = require('themify.core.event')
 local Command = require('themify.command')
 local Data = require('themify.core.data')
 
@@ -49,6 +50,8 @@ local function load_state()
       })
     end
   end
+
+  Event.emit('startup')
 end
 
 --- Setup Themify.

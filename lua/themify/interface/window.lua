@@ -46,7 +46,7 @@ vim.api.nvim_create_autocmd('WinClosed', {
   end
 })
 
-Event.listen('window_update', function()
+Event.listen('interface-update', function()
   for id in pairs(windows) do
     windows[id].updater:update()
   end
@@ -115,6 +115,8 @@ function Window:new()
   if content[control.cursor_y] ~= nil and vim.list_contains(content[control.cursor_y].tags, 'selectable') then
     Pages.get_page(self.page).hover(content[control.cursor_y])
   end
+
+  Event.emit('interface-open', self.window)
 
   return self
 end
@@ -265,6 +267,8 @@ end
 -- Close The Window.
 function Window:close()
   vim.api.nvim_win_close(self.window, false)
+
+  Event.emit('interface-close')
 end
 
 return Window
