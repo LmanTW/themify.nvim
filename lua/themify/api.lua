@@ -29,7 +29,7 @@ local M = {
     --- @param colorscheme_id string
     --- @return Colorscheme_Data
     get = function(colorscheme_id)
-      Utilities.error(Manager.colorschemes_data[colorscheme_id] == nil, {'[Themify] Colorscheme not found: "', colorscheme_id, '"'})
+      Manager.check_colorscheme(colorscheme_id)
 
       return Manager.colorschemes_data[colorscheme_id]
     end,

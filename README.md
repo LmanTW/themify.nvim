@@ -67,12 +67,12 @@ require('themery').setup({
   -- Your list of colorschemes.
 
   'folke/tokyonight.nvim',
-  'Yazeed1s/minimal.nvim',
+  'sho-87/kanagawa-paper.nvim',
   {
-    'sho-87/kanagawa-paper.nvim',
+    'comfysage/evergarden',
 
-     branch = 'master'
-  },
+    branch = 'mega'
+  }
 
   -- Built-in colorschemes are also supported.
   -- (Also works with any colorschemes that are installed via other plugin manager, just make sure the colorscheme is loaded before Themify is loaded.)
@@ -88,11 +88,11 @@ require('themery').setup({
 
   ```lua
   {
-    activity = false,
-    -- Enabling this would track your colorscheme usage activity.
-
     async = false,
     -- Enabling this would load the colorscheme asynchronously, which might improve your startup time.
+
+    activity = false,
+    -- Enabling this would track your colorscheme usage activity.
 
     {
       'folke/tokyonight.nvim',
@@ -124,5 +124,5 @@ require('themery').setup({
    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=LmanTW/themify.nvim&type=Date&theme=dark"/>
    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=LmanTW/themify.nvim&type=Date"/>
    <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=LmanTW/themify.nvim&type=Date"/>
- </picture>
+< </picture>
 </a>
