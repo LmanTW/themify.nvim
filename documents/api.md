@@ -55,7 +55,7 @@ Themify.set_current(nil, 'default')
 > [!NOTE]
 > The corresponding module is `themify.core.manager`.
 
-## colorschemes_id
+## colorschemes
 
 ```lua
 --- A list of id of the colorschemes in order.
@@ -83,6 +83,9 @@ Themify.Manager.get(<colorscheme_id>)
 --- @field whitelist? string[]
 --- @field blacklist? string[]
 --- @field path string
+
+--- Example
+Themify.Manager.get('folke/tokyonight.nvim')
 ```
 
 ## add()

@@ -63,7 +63,7 @@ use {
 To configure Themify, call the `setup` function (or use the `config` option in your package manager) and add the colorschemes you want to install / manage:
 
 ```lua
-require('themery').setup({
+require('themify').setup({
   -- Your list of colorschemes.
 
   'folke/tokyonight.nvim',
