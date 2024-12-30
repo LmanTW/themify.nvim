@@ -60,7 +60,7 @@ Themify.set_current(nil, 'default')
 ```lua
 --- A list of id of the colorschemes in order.
 --- @type string[]
-colorschemes_id
+colorschemes
 ```
 
 ## get()
@@ -146,8 +146,8 @@ Themify.Event.listen(<event>, <callback>)
 | Event                     | Description                                   | Arguments        |
 | ---                       | ---                                           | ---              |
 | colorscheme-state-updated | When the state of the colorscheme is updated. | (colorscheme_id) |
-| colorscheme-updated       | When a colorscheme is updated.                | (colorscheme_id) |
 | colorscheme-installed     | When a colorscheme is installed.              | (colorscheme_id) |
+| colorscheme-updated       | When a colorscheme is updated.                | (colorscheme_id) |
 | interface-open            | When an interface is opened.                  | (window)         |
 | interface-close           | When an interface is closed.                  | ()               |
 | interface-update          | When an interface is being updated.           | ()
