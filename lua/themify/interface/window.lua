@@ -46,6 +46,28 @@ vim.api.nvim_create_autocmd('WinClosed', {
   end
 })
 
+vim.api.nvim_create_autocmd('VimResized', {
+  callback = function(args)
+    local transformation = Window.get_window_transformation()
+
+    for id in pairs(windows) do
+      vim.api.nvim_win_set_config(id, {
+        relative = 'editor',
+
+        col = transformation.x,
+        row = transformation.y,
+        width = transformation.width,
+        height = transformation.height
+      })
+
+      windows[id].width = transformation.width
+      windows[id].height = transformation.height
+
+      windows[id]:update()
+    end    
+  end
+})
+
 Event.listen('interface-update', function()
   for id in pairs(windows) do
     windows[id].updater:update()
@@ -80,6 +102,7 @@ function Window:new()
   self.buffer = vim.api.nvim_create_buf(false, true)
   self.window = vim.api.nvim_open_win(self.buffer, true, {
     relative = 'editor',
+
     col = transformation.x,
     row = transformation.y,
     width = transformation.width,
