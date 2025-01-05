@@ -99,10 +99,10 @@ require('themify').setup({
 
       branch = 'main',
 
-      before = function()
+      before = function(theme)
         -- The function run before the colorscheme is loaded.
       end,
-      after = function()
+      after = function(theme)
         -- The function run after the colorscheme is loaded.
       end,
 

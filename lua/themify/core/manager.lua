@@ -128,7 +128,7 @@ function M.load_theme(colorscheme_id, theme)
   end
 
   if type(colorscheme_data.before) == 'function' then
-    pcall(colorscheme_data.before)
+    pcall(colorscheme_data.before, theme)
   end
 
   vim.cmd.colorscheme(theme)
@@ -137,7 +137,7 @@ function M.load_theme(colorscheme_id, theme)
 
   if ok then
     if type(colorscheme_data.after) == 'function' then
-      pcall(colorscheme_data.after)
+      pcall(colorscheme_data.after, theme)
     end
 
     Event.emit('colorscheme-load')

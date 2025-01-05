@@ -103,6 +103,11 @@ Themify.Manager.add(<colorscheme_source>, <colorscheme_info>)
 --- @field after? function
 --- @field whitelist? string[]
 --- @field blacklist? string[]
+
+--- Example
+Themify.Manager.add('folke/tokyonight.nvim', {
+  whitelist = {'tokyonight-night', 'tokyonight-day'}
+})
 ```
 
 ## clean()
@@ -153,4 +158,4 @@ Themify.Event.listen(<event>, <callback>)
 | colorscheme-updated       | When a colorscheme is updated.                | (colorscheme_id) |
 | interface-open            | When an interface is opened.                  | (window)         |
 | interface-close           | When an interface is closed.                  | ()               |
-| interface-update          | When an interface is being updated.           | ()
+| interface-update          | When an interface is being updated.           | ()               |
