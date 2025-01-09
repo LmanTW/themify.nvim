@@ -62,6 +62,7 @@ vim.api.nvim_create_autocmd('VimResized', {
 
       windows[id].width = transformation.width
       windows[id].height = transformation.height
+      windows[id].control.height = transformation.height
 
       windows[id]:update()
     end    
@@ -264,7 +265,6 @@ function Window:update()
 
   -- Render the actions and info.
 
-  local total = 0
   local amount = Manager.colorschemes_amount
 
   local actions = '  (I) Install  (U) Update  (C) Check  '
