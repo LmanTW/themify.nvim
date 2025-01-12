@@ -4,14 +4,20 @@ local M = {}
 
 --- Create a fetch task.
 --- @param cwd string
---- @param branch string
+--- @param branch? string
 --- @param callback? function
 function M.fetch(cwd, branch, callback)
   if callback ~= nil then
     callback()
   end
 
-  return Pipeline.create_task(cwd, 'git', {'fetch', 'origin', branch})
+  local arguments = {'fetch', 'origin'}
+
+  if branch ~= nil then
+    arguments[#arguments + 1] = branch
+  end
+
+  return Pipeline.create_task(cwd, 'git', arguments)
 end
 
 --- Create a task to get the commit.
@@ -26,14 +32,22 @@ end
 
 --- Create a pull task.
 --- @param cwd string
---- @param branch string
+--- @param branch? string
 --- @param callback? function
 function M.pull(cwd, branch, callback)
   if callback ~= nil then
     callback()
   end
 
-  return Pipeline.create_task(cwd, 'git', {'pull', '-X', 'theirs', 'origin', branch, '--progress'})
+  local arguments = {'pull', '-X', 'theirs', 'origin'}
+
+  if branch ~= nil then
+    arguments[#arguments + 1] = branch
+  end
+
+  arguments[#arguments + 1] = '--progress'
+
+  return Pipeline.create_task(cwd, 'git', arguments)
 end
 
 --- Create a clone task.

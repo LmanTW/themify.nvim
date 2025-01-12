@@ -22,7 +22,7 @@
 --- @field source string
 --- @field author string
 --- @field name string
---- @field branch string
+--- @field branch? string
 
 local Pipeline = require('themify.core.pipeline')
 local Utilities = require('themify.utilities')
