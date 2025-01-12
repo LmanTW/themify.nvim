@@ -157,31 +157,26 @@ local function get_colorscheme_id(folder_name)
   end
 end
 
---- Normalize a branch name.
---- @param branch? string
---- @return string
-local function normalize_branch(branch)
-  return (branch == nil or branch == 'master') and 'main' or branch
-end
-
 --- Clean unused colorschemes.
 --- @return nil
 function M.clean_colorschemes()
   local repository_folders = Utilities.scan_directory(Data.colorschemes_path)
-  local file_name
+  local folder_name
   local colorscheme_id
+  local colorscheme_data
 
   for i = 1, #repository_folders do
-    file_name = repository_folders[i]
+    folder_name = repository_folders[i]
 
-    if file_name:len() > 0 and file_name:sub(0, 1) ~= '.' then
+    if folder_name:len() > 0 and folder_name:sub(0, 1) ~= '.' then
       colorscheme_id = get_colorscheme_id(repository_folders[i])
+      colorscheme_data = M.colorschemes_data[colorscheme_id]
 
       if colorscheme_id == nil
         -- The colorschemes is not being used.
-        or not Utilities.path_exist(table.concat({M.colorschemes_data[colorscheme_id].path, '.git', 'HEAD'}, '/'))
+        or not Utilities.path_exist(table.concat({colorscheme_data.path, '.git', 'HEAD'}, '/'))
         -- The repository is on a different branch.
-        or normalize_branch(M.colorschemes_data[colorscheme_id].repository.branch) ~= normalize_branch(Data.read_colorscheme_repository_head(repository_folders[i]).branch)
+        or (colorscheme_data.repository.branch ~= nil and colorscheme_data.repository.branch ~= Data.read_colorscheme_repository_head(repository_folders[i]).branch)
       then
         -- Remove the colorscheme in async because it might take a long time.
         Utilities.execute_async(function()
