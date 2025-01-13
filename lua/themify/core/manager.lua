@@ -396,9 +396,13 @@ function M.check_colorscheme_commit(colorscheme_id, callback)
 
   pipeline:start(function(code, _, stderr)
     if code == 0 then
-      return callback(nil, local_commit, remote_commit)
+      if local_commit == nil or remote_commit == nil then
+        M.check_colorscheme_commit(colorscheme_id, callback)
+      else
+        callback(nil, local_commit, remote_commit)
+      end
     else
-      return callback(vim.split(stderr, '\n')[1])
+      callback(vim.split(stderr, '\n')[1])
     end
   end)
 end

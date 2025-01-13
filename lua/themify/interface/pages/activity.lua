@@ -20,7 +20,7 @@ Pages.create_page({
       content[#content + 1] = Cache.line_blank
     end
 
-    if Activity.data == vim.NIL then
+    if vim.tbl_count(Activity.data.colorschemes) == 0 then
       content[#content + 1] = { content = Text.combine({Cache.text_padding_2, Text:new('No activity data available. Please come back later!', Colors.description)}), tags = {'selectable'} }
     else
       local colorscheme_id
@@ -101,9 +101,9 @@ Pages.create_page({
   leave = function()
   end,
 
-  hover = function(line)
+  hover = function()
   end,
-  select = function(line)
+  select = function()
     return {}
   end
 })

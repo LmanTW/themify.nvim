@@ -81,14 +81,20 @@ end
 
 --- Create a checkout task.
 --- @param cwd string
---- @param branch string
---- @param callback function?
+--- @param branch? string
+--- @param callback? function
 function M.checkout(cwd, branch, callback)
   if callback ~= nil then
     callback()
   end
 
-  return Pipeline.create_task(cwd, 'git', {'checkout', branch})
+  local arguments = {'checkout'}
+
+  if branch ~= nil then
+    arguments[#arguments + 1] = branch
+  end
+
+  return Pipeline.create_task(cwd, 'git', arguments)
 end
 
 --- Create a reset task.

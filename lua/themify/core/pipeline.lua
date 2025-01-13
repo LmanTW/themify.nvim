@@ -36,10 +36,9 @@ function Pipeline:start(callback)
   local function next()
     current_task = current_task + 1
 
+    local task = self.tasks[current_task]
     local stdout_output
     local stderr_output
-
-    local task = self.tasks[current_task]
 
     local process = Process:new(task.cwd, task.command, task.args, function(code)
       if code == 0 and current_task < #self.tasks then
