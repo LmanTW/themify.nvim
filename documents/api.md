@@ -19,6 +19,8 @@ local Themify = require('themify.api')
   - [clean()](#clean)
   - [install()](#install)
   - [update()](#update)
+- [Activity](#activity)
+  - [get()](#get-1)
 - [Event](#event)
   - [listen()](#listen)
 
@@ -60,7 +62,7 @@ Themify.set_current(nil, 'default')
 ```lua
 --- A list of id of the colorschemes in order.
 --- @type string[]
-colorschemes
+Themify.Manager.colorschemes
 ```
 
 ## get()
@@ -134,6 +136,23 @@ Themify.Manager.install()
 Themify.Manager.update()
 ```
 
+# Activity
+
+> [!NOTE]
+> The corresponding module is `themify.core.activity`.
+
+```lua
+--- Get the activity of a skin.
+--- @param colorscheme nil|string
+--- @param theme string
+--- @return nil|{ last_active: number, total_minutes: number, today_minutes: number }
+Themify.Activity.get(<colorscheme>, <theme>)
+
+--- Example
+Themify.Activity.get('folke/tokyonight.nvim', 'tokyonight-night')
+Themify.Activity.get(nil, 'default')
+```
+
 # Event
 
 > [!NOTE]
@@ -141,7 +160,7 @@ Themify.Manager.update()
 
 ## listen()
 
-```
+```lua
 --- Listen to an event.
 --- @param event string
 --- @param callback function
@@ -153,9 +172,10 @@ Themify.Event.listen(<event>, <callback>)
 
 | Event                     | Description                                   | Arguments        |
 | ---                       | ---                                           | ---              |
-| colorscheme-state-updated | When the state of the colorscheme is updated. | (colorscheme_id) |
+| colorscheme-state-updated | When the state of a colorscheme is updated.   | (colorscheme_id) |
 | colorscheme-installed     | When a colorscheme is installed.              | (colorscheme_id) |
 | colorscheme-updated       | When a colorscheme is updated.                | (colorscheme_id) |
+| activity-update           | When the activity is updated.                 | ()               |
 | interface-open            | When an interface is opened.                  | (window)         |
 | interface-close           | When an interface is closed.                  | ()               |
-| interface-update          | When an interface is being updated.           | ()               |
+| interface-update          | When the interfaces are being updated.        | ()               |

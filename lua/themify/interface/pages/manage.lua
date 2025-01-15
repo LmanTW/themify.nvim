@@ -82,7 +82,7 @@ Pages.create_page({
           list:add_item('failed', { content = Text.combine({
             Cache.text_padding_4,
             Text:new(table.concat({'(', colorscheme_data.info, ')'}), Colors.error)
-          }), tags = {} })
+          }), tags = {'selectable'} })
         elseif colorscheme_data.status == 'installing' or colorscheme_data.status == 'updating' then
           list:add_item(colorscheme_data.status, { content = Text.combine({
             Cache.text_padding_4,
@@ -90,7 +90,7 @@ Pages.create_page({
             Text:new(colorscheme_id),
             Cache.text_padding_1,
             Text:new(table.concat({'(', colorscheme_data.info, ')'}), Colors.info)
-          }), tags = {} })
+          }), tags = {'selectable'} })
         elseif colorscheme_data.status == 'installed' then
           local parts = {
             Cache.text_padding_4,

@@ -89,7 +89,8 @@ function M.enable()
         M.data = activity
         Data.write_activity_data(activity)
 
-        Event.emit('window_update')
+        Event.emit('activity_updated')
+        Event.emit('interface_update')
       end
     end
   end))

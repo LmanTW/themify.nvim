@@ -61,6 +61,35 @@ local M = {
     end
   },
 
+  Activity = {
+    --- Get the activity of a skin.
+    --- @param colorscheme nil|string
+    --- @param theme string
+    --- @return nil|Usage_Data
+    get = function(colorscheme, theme)
+      local activity = Data.read_activity_data()
+      local colorscheme_data
+
+      if activity ~= vim.NIL then
+        if colorscheme == nil then
+          if activity.colorschemes[theme] ~= nil and activity.colorschemes[theme].type == 'local' then
+            return activity.colorschemes[theme].usage
+          end
+        else
+          if activity.colorschemes[colorscheme] ~= nil and activity.colorschemes[colorscheme].type == 'remote' then
+            colorscheme_data = activity.colorschemes[colorscheme]
+
+            if colorscheme_data.themes[theme] ~= nil then
+              return colorscheme_data.themes[theme]
+            end
+          end
+        end
+      end
+
+      return nil
+    end
+  },
+
   Event = {
     --- Listen to an event.
     --- @param event string
