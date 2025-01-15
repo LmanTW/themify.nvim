@@ -87,7 +87,7 @@ require('themify').setup({
   <summary>Advance Configuration</summary>
 
   ```lua
-  {
+  require('themify').setup({
     async = false,
     -- Enabling this would load the colorscheme asynchronously, which might improve your startup time.
 
@@ -110,9 +110,16 @@ require('themify').setup({
       whitelist = {'tokyonight-night', 'tokyonight-day'},
       blacklist = {}
     }
-  }
+  })
   ```
 </details>
+
+## 📚 Snippets
+
+You can add extra functionality to Themify by using short snippets of code. You can find snippets in the [Snippet Library](./documents/snippets.md) or write your own using the [Publci API](./documents/api.md) Themify provides.
+
+> [!TIP]
+> You can also add snippets to the [Snippet Library](./documents/snippets.md) by opening a pull request!
 
 ## 📎 Other
 
