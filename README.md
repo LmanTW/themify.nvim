@@ -116,10 +116,10 @@ require('themify').setup({
 
 ## 📚 Snippets
 
-You can add extra functionality to Themify by using short snippets of code. You can find snippets in the [Snippet Library](./documents/snippets.md) or write your own using the [Publci API](./documents/api.md) Themify provides.
+You can add extra functionality to Themify by using short snippets of code. You can find snippets in the [Snippet Library](./documents/snippet.md) or write your own using the [Publci API](./documents/api.md) Themify provides.
 
 > [!TIP]
-> You can also add snippets to the [Snippet Library](./documents/snippets.md) by opening a pull request!
+> You can also request or add snippets to the [Snippet Library](./documents/snippet.md) by opening an issue!
 
 ## 📎 Other
 
