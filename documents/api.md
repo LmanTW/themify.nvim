@@ -148,6 +148,8 @@ Themify.Manager.update()
 > [!NOTE]
 > The corresponding module is `themify.core.activity`.
 
+## get()
+
 ```lua
 --- Get the activity of a skin.
 --- @param colorscheme nil|string
