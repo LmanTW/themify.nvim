@@ -63,8 +63,6 @@ function Process:new(cwd, command, args, callback)
 
     stdio = {nil, self.stdout, self.stderr}
   }, function(code)
-    print(self.stdout:get_write_queue_size(), self.stderr:get_write_queue_size())
-
     self.handle:close()
     self.stdout:close()
     self.stderr:close()
