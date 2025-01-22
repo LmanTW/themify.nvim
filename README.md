@@ -109,7 +109,11 @@ require('themify').setup({
       -- A colorscheme can have multiple themes, you can use the options below to only show the themes you want.
       whitelist = {'tokyonight-night', 'tokyonight-day'},
       blacklist = {}
-    }
+    },
+
+    -- The loader loads the colorscheme on startup, you can use the option below to replace it with a custom one.
+    loader = function()
+    end
   })
   ```
 </details>

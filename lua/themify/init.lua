@@ -50,12 +50,10 @@ local function load_state()
       })
     end
   end
-
-  Event.emit('startup')
 end
 
 --- Setup Themify.
---- @param config Colorscheme[]|table<string, boolean>
+--- @param config Colorscheme[]|table<string, any>
 --- @return nil
 function M.setup(config)
   Utilities.error(type(config) ~= 'table', {'[Themify] "config" must be a <table>'})
@@ -91,10 +89,34 @@ function M.setup(config)
     Manager.check_colorschemes()
   end))
 
+  --- Replace the loader with the default state loader if not found.
+  if type(config.loader) ~= 'function' then
+    config.loader = function()
+      local state = Data.read_state_data()
+
+      if state ~= vim.NIL then
+        local ok = Manager.load_theme(state.colorscheme_id, state.theme)
+
+        if not ok then
+          Data.write_state_data(vim.NIL)
+
+          vim.api.nvim_create_autocmd('UIEnter', {
+            callback = function()
+              vim.notify(table.concat({'[Themify] Colorscheme not found: "', state.colorscheme_id == nil and state.theme or state.colorscheme_id, '"'}), vim.log.levels.WARN)
+              vim.cmd('Themify')
+            end,
+
+            once = true
+          })
+        end
+      end
+    end
+  end
+
   if config.async then
-    Utilities.execute_async(vim.schedule_wrap(load_state))
+    Utilities.execute_async(vim.schedule_wrap(config.loader))
   else
-    load_state()
+    config.loader()
   end
 
   if config.activity then
