@@ -179,12 +179,13 @@ Themify.Event.listen(<event>, <callback>)
 
 ### List of all the events
 
-| Event                     | Description                                   | Arguments        |
-| ---                       | ---                                           | ---              |
-| colorscheme-state-updated | When the state of a colorscheme is updated.   | (colorscheme_id) |
-| colorscheme-installed     | When a colorscheme is installed.              | (colorscheme_id) |
-| colorscheme-updated       | When a colorscheme is updated.                | (colorscheme_id) |
-| activity-update           | When the activity is updated.                 | ()               |
-| interface-open            | When an interface is opened.                  | (window)         |
-| interface-close           | When an interface is closed.                  | ()               |
-| interface-update          | When the interfaces are being updated.        | ()               |
+| Event                     | Description                                   | Arguments               |
+| ---                       | ---                                           | ---                     |
+| colorscheme-loaded        | When a colorscheme is loaded.                 | (colorscheme_id, theme) |
+| colorscheme-state-updated | When the state of a colorscheme is updated.   | (colorscheme_id)        |
+| colorscheme-installed     | When a colorscheme is installed.              | (colorscheme_id)        |
+| colorscheme-updated       | When a colorscheme is updated.                | (colorscheme_id)        |
+| activity-update           | When the activity is updated.                 | ()                      |
+| interface-open            | When an interface is opened.                  | (window)                |
+| interface-close           | When an interface is closed.                  | ()                      |
+| interface-update          | When the interfaces are being updated.        | ()                      |

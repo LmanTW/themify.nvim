@@ -140,7 +140,7 @@ function M.load_theme(colorscheme_id, theme)
       pcall(colorscheme_data.after, theme)
     end
 
-    Event.emit('colorscheme-load')
+    Event.emit('colorscheme-loaded', colorscheme_id, theme)
   end
 
   return ok
