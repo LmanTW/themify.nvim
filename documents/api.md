@@ -186,6 +186,6 @@ Themify.Event.listen(<event>, <callback>)
 | colorscheme-installed     | When a colorscheme is installed.              | (colorscheme_id)        |
 | colorscheme-updated       | When a colorscheme is updated.                | (colorscheme_id)        |
 | activity-update           | When the activity is updated.                 | ()                      |
-| interface-open            | When an interface is opened.                  | (window)                |
-| interface-close           | When an interface is closed.                  | ()                      |
+| interface-opened          | When an interface is opened.                  | (window)                |
+| interface-closed          | When an interface is closed.                  | ()                      |
 | interface-update          | When the interfaces are being updated.        | ()                      |

@@ -1,6 +1,7 @@
 --- @type table<string, string>
 local M = {
   icon = 'ThemifyIcon',
+
   title = 'ThemifyTitle',
   description = 'ThemifyDescription',
 
@@ -11,17 +12,18 @@ local M = {
 
 --- @type table<string, string>
 local highlight_groups = {
-  Icon = 'Operator',
-  Title = 'Bold',
-  Description = 'Comment',
+  ThemifyIcon = 'Operator',
 
-  Info = 'DiagnosticVirtualTextInfo',
-  Warn = 'DiagnosticVirtualTextWarn',
-  Error = 'DiagnosticVirtualTextError'
+  ThemifyTitle = 'Bold',
+  ThemifyDescription = 'Comment',
+
+  ThemifyInfo = 'DiagnosticVirtualTextInfo',
+  ThemifyWarn = 'DiagnosticVirtualTextWarn',
+  ThemifyError = 'DiagnosticVirtualTextError'
 }
 
 for highlight_group, link in pairs(highlight_groups) do
-  vim.api.nvim_set_hl(0, 'Themify' .. highlight_group, { link = link, default = true })
+  vim.api.nvim_set_hl(0, highlight_group, { link = link, default = true })
 end
 
 return M

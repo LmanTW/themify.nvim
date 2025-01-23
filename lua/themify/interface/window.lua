@@ -140,7 +140,7 @@ function Window:new()
     Pages.get_page(self.page).hover(content[control.cursor_y])
   end
 
-  Event.emit('interface-open', self.window)
+  Event.emit('interface-opened', self.window)
 
   return self
 end
@@ -291,7 +291,7 @@ end
 function Window:close()
   vim.api.nvim_win_close(self.window, false)
 
-  Event.emit('interface-close')
+  Event.emit('interface-closed')
 end
 
 return Window

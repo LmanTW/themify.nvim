@@ -2,7 +2,6 @@
 
 local Manager = require('themify.core.manager')
 local Utilities = require('themify.utilities')
-local Event = require('themify.core.event')
 local Command = require('themify.command')
 local Data = require('themify.core.data')
 
@@ -27,29 +26,6 @@ local function check_colorscheme_config(colorscheme_repository, colorscheme)
   if colorscheme.after ~= nil and type(colorscheme.after) ~= 'function' then throw_colorscheme_config_error(colorscheme_repository, 'after', 'function') end
   if colorscheme.whitelist ~= nil and type(colorscheme.whitelist) ~= 'table' then throw_colorscheme_config_error(colorscheme_repository, 'whitelist', 'table') end
   if colorscheme.blacklist ~= nil and type(colorscheme.blacklist) ~= 'table' then throw_colorscheme_config_error(colorscheme_repository, 'blacklist', 'table') end
-end
-
---- Load the state.
---- @return nil
-local function load_state()
-  local state = Data.read_state_data()
-
-  if state ~= vim.NIL then
-    local ok = Manager.load_theme(state.colorscheme_id, state.theme)
-
-    if not ok then
-      Data.write_state_data(vim.NIL)
-
-      vim.api.nvim_create_autocmd('UIEnter', {
-        callback = function()
-          vim.notify(table.concat({'[Themify] Colorscheme not found: "', state.colorscheme_id == nil and state.theme or state.colorscheme_id, '"'}), vim.log.levels.WARN)
-          vim.cmd('Themify')
-        end,
-
-        once = true
-      })
-    end
-  end
 end
 
 --- Setup Themify.

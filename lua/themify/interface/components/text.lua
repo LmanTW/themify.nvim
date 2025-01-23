@@ -19,8 +19,8 @@ function Text.combine(texts)
 end
 
 --- Create a new text.
---- @param content string?
---- @param hightlight_group string?
+--- @param content? string
+--- @param hightlight_group? string
 function Text:new(content, hightlight_group)
   self = setmetatable({}, Text)
 
@@ -31,15 +31,16 @@ end
 
 --- Center the text.
 --- @param width number
-function Text:center(width)
+--- @param hightlight_group? string
+function Text:center(width, hightlight_group)
   local text_width = 0
 
   for i = 1, #self.parts do
     text_width = text_width + string.len(self.parts[i].content)
   end
 
-  table.insert(self.parts, 1, { content = string.rep(' ', (width - text_width) / 2) })
-  self.parts[#self.parts + 1] = { content = string.rep(' ', (width - text_width) / 2) }
+  table.insert(self.parts, 1, { content = string.rep(' ', (width - text_width) / 2), hightlight_group = hightlight_group })
+  self.parts[#self.parts + 1] = { content = string.rep(' ', (width - text_width) / 2), hightlight_group = hightlight_group }
 
   return self
 end
@@ -57,7 +58,6 @@ function Text:render(buffer, line)
 
   for i = 1, #self.parts do
     part = self.parts[i]
-
     content_chunks[#content_chunks + 1] = part.content
 
     if part.hightlight_group ~= nil then

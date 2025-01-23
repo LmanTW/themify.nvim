@@ -16,12 +16,14 @@ Pages.create_page({
     local content = {}
 
     if not Activity.enabled then
-      content[#content + 1] = { content = Text.combine({Cache.text_padding_2, Text:new('󰗖  Activity is not enabled, so your colorscheme usage will not be recorded.', Colors.warn)}), tags = {'selectable'} }
+      content[#content + 1] = { content = Text.combine({Cache.text_padding_2, Text:new('󰗖 Activity is not enabled, your colorscheme usage will not be recorded.', Colors.warn)}), tags = {'selectable'} }
       content[#content + 1] = Cache.line_blank
     end
 
-    if vim.tbl_count(Activity.data.colorschemes) == 0 then
-      content[#content + 1] = { content = Text.combine({Cache.text_padding_2, Text:new('No activity data available. Please come back later!', Colors.description)}), tags = {'selectable'} }
+    if Activity.data == vim.NIL or vim.tbl_count(Activity.data.colorschemes) == 0 then
+      if Activity.enabled then
+        content[#content + 1] = { content = Text.combine({Cache.text_padding_2, Text:new('No activity data available. Please come back later!', Colors.description)}), tags = {'selectable'} }
+      end
     else
       local colorscheme_id
       local colorscheme_activity

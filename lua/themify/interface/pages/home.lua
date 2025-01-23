@@ -38,7 +38,7 @@ Pages.create_page({
 
             content[#content + 1] = { content = Text.combine({
               Cache.text_padding_2,
-              Text:new(table.concat({selected and '  > ' or '  - ', colorscheme_data.themes[i2]}))
+              Text.combine({Cache.text_padding_2, Text:new(table.concat({selected and '> ' or '- ', colorscheme_data.themes[i2]}))})
             }), tags = {'selectable', 'theme'}, extra = { colorscheme_id = colorscheme_id, theme = colorscheme_data.themes[i2] }}
           end
         end
