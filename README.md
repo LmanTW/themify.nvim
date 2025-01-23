@@ -113,6 +113,7 @@ require('themify').setup({
 
     -- The loader loads the colorscheme on startup, you can use the option below to replace it with a custom one.
     loader = function()
+      -- Custom loader logic...
     end
   })
   ```
