@@ -8,6 +8,9 @@ A lightweight colorscheme manager and switcher inspired by [Themery.nvim](https:
 - 🔍 Switch between colorschemes with a live preview!
 - ⚡️ Optimized startup time with lazy-loaded colorschemes!
 
+> [!NOTE]
+> Planning on a rewrite to introduce a job-based system and a more flexible UI system.
+
 ## 📦 Installation
 
 > [!WARNING]

@@ -106,12 +106,10 @@ function M.delete_directory(path)
   --- Replace with "vim.fs.rm" in the future.
 
   for i = 1, #files_name do
-
     file_path = vim.fs.joinpath(path, files_name[i])
 
     local stat = vim.uv.fs_stat(file_path)
     M.error(stat == nil, {'[Themify] Cannot stat the file: "', file_path, '"'})
-
 
     if stat.type == 'directory' then
       M.delete_directory(file_path)
