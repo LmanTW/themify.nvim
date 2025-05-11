@@ -16,7 +16,7 @@ A lightweight colorscheme manager and switcher inspired by [Themery.nvim](https:
 > [!WARNING]
 > Requirements: `Neovim >= 0.10`, `Git`
 
-Use the package manager of your choice to install Theminify:
+Use the package manager of your choice to install Themify:
 
 - [Lazy.nvim](https://github.com/folke/lazy.nvim)
 
@@ -63,7 +63,7 @@ use {
 
 ## 🛠 Configuration
 
-To configure Themify, call the `setup` function (or use the `config` option in your package manager) and add the colorschemes you want to install / manage:
+To configure Themify, call the `setup` function (or use the `config` option in your package manager) and add the colorschemes you want to install/manage:
 
 ```lua
 require('themify').setup({
@@ -124,7 +124,7 @@ require('themify').setup({
 
 ## 📚 Snippets
 
-You can add extra functionality to Themify by using short snippets of code. You can find snippets in the [Snippet Library](./documents/snippet.md) or write your own using the [Publci API](./documents/api.md) Themify provides.
+You can extend the functionality of Themify by using short snippets of code. You can find snippets in the [Snippet Library](./documents/snippet.md) or write your own using the [Publci API](./documents/api.md) Themify provides.
 
 > [!TIP]
 > You can also request or add snippets to the [Snippet Library](./documents/snippet.md) by opening an issue!
