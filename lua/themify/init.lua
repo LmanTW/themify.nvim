@@ -34,6 +34,9 @@ end
 function M.setup(config)
   Utilities.error(type(config) ~= 'table', {'[Themify] "config" must be a <table>'})
 
+  Manager.colorschemes_data = {}
+  Manager.colorschemes_id = {}
+
   local colorscheme
 
   for i = 1, #config do
