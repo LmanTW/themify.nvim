@@ -102,8 +102,10 @@ function M.setup(config)
     Utilities.execute_async(vim.schedule_wrap(function()
       local Activity = require('themify.core.activity')
 
-      Activity.check_activity_data()
-      Activity.enable()
+      if not Activity.enabled then
+        Activity.check_activity_data()
+        Activity.enable()
+      end
     end))
   end
 end
